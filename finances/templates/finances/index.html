@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block Title %}
+    Personal finances
+{% endblock %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+        <h3></h3>
+        <h2 class="text-center mb-4">Operations</h2>
+        <form action="/operations/" method="post" >
+            {% csrf_token %}
+            <p>
+                {{ operation_form }}
+            </p>
+            <p>
+                <label for="datetime-input" class="form-label">Date: </label>
+                <input type="datetime-local" id="datetime-input" name="date" value="{% now "Y-m-d\TH:i" %}">
+                <input type="submit" value="Save">
+            </p>
+        </form>
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col">Account</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Is necessary</th>
+                    <th scope="col">Category</th>
+                    <th scope="col"></th> <!-- This header is for deletion button -->
+                </tr>
+            </thead>
+            {% for operation in operations %}
+                {% if operation.type == 'out' %}
+                    <tr class="table-danger">
+                {% else %}
+                    <tr class="table-success">
+                {% endif %}
+                        <td>{{ operation.type }}</td>
+                        <td>{{ operation.account.name }}</td>
+                        <td>{{ operation.date }}</td>
+                        <td>{{ operation.amount }}</td>
+                        <td>{{ operation.is_necessary }}</td>
+                        <td>
+                            <p>{{ operation.category }}</p>
+                        </td>
+                        <td><button type="submit" onclick="deleteOperation(this)" data-operation-id={{operation.id}}>Delete</button></td>
+                    </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

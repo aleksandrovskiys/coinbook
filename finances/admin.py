@@ -1,4 +1,22 @@
 from django.contrib import admin
-from .models import User
+from . import models
 
-admin.site.register(User)
+
+@admin.register(models.User)
+class UserAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.Account)
+class AccountAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.Operation)
+class OperationAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.Category)
+class CategoryAdmin(admin.ModelAdmin):
+    pass
