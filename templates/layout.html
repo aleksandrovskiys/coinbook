@@ -2,47 +2,62 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block Title %} {% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="{% static 'finances/styles.css' %}" rel="stylesheet">
-    <script src="{% static 'finances/script.js' %}"></script>
-</head>
-<body>
-<div class="container">
-        <h1 class="text-center">Personal finances</h1>
-        <div class="text-right">
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                You're not signed in.
-            {% endif %}
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block Title %} {% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'finances/styles.css' %}" rel="stylesheet">
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}">
+        <script src="{% static 'finances/script.js' %}"></script>
+    </head>
+
+    <body>
+        <div class="background"></div>
+        <div class="header">
+            <img src="{% static 'favicon.png' %}" alt="Personal finances" class="header-icon">
+            <div class="header-nav">
+                <div class="text-right">
+                    {% if user.is_authenticated %}
+                        Signed in as <strong>{{ user.username }}</strong>.
+                    {% else %}
+                        You're not signed in.
+                    {% endif %}
+                </div>
+
+                <ul class="nav text-right">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item ml-auto">
+                            <a class="nav-link" href="{% url 'index' %}">Operations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account-list' %}">Accounts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'category-list' %}">Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ml-auto">
+                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-        <ul class="nav text-right">
-            {% if user.is_authenticated %}
-                <li class="nav-item ml-auto">
-                    <a class="nav-link" href="{% url 'index' %}">Operations</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'category-list' %}">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
-            {% else %}
-                <li class="nav-item ml-auto">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
-        </ul>
-        <hr>
-        {% block body %}
-        {% endblock %}
-    </div>
-</body>
+        <hr class="gradient-hr">
+        <div class="container">
+
+            <div class="content">
+                {% block body %}
+                {% endblock %}
+            </div>
+
+        </div>
+    </body>
 </html>

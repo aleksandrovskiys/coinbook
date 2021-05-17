@@ -1,20 +1,14 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView
 
 from .forms import OperationForm
-from .models import User, Category
+from .models import User
 from . import service
-
-
-class CategoryListView(ListView):
-    model = Category
-    paginate_by = 10
 
 
 @csrf_exempt
@@ -24,10 +18,10 @@ def index(request):
         latest_operation_account = service.get_account_of_latest_operation(request.user)
         operation_form = OperationForm(initial={'account': latest_operation_account,
                                                 'type': 'out'},
-                                                user=request.user)
+                                       user=request.user)
     else:
         operations = []
-        operation_form = OperationForm()
+        operation_form = None
     return render(request, 'finances/index.html', {
         'operations': operations,
         'operation_form': operation_form
@@ -83,6 +77,25 @@ def categories(request, category_id: int):
         service.delete_category(category_id)
 
 
+# Accounts
+@login_required
+def account_list(request):
+    if request.method == 'GET':
+        return render(request, 'finances/account_list.html', {
+            'object_list': request.user.accounts.all()
+        })
+    else:
+        service.create_account(request.user, request.POST.get('name'), request.POST.get('balance'))
+        return HttpResponseRedirect(reverse('account-list'))
+
+
+@csrf_exempt
+@login_required
+def accounts(request, account_id: int):
+    if request.method == 'DELETE':
+        service.delete_account(account_id)
+
+
 # User views
 def login_view(request):
     if request.method == 'POST':
@@ -101,11 +114,6 @@ def login_view(request):
         return render(request, 'finances/login.html')
 
 
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
-
-
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -113,6 +121,7 @@ def register(request):
 
         password = request.POST['password']
         confirmation = request.POST['confirmation']
+
         if password != confirmation:
             return render(request, 'finances/register.html', {
                 'message': 'Passwords must match.'
@@ -129,3 +138,8 @@ def register(request):
         return HttpResponseRedirect(reverse('index'))
     else:
         return render(request, 'finances/register.html')
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))

@@ -13,3 +13,11 @@ let deleteCategory = (element) => {
         location.reload()
     })
 }
+
+let deleteAccount = (element) => {
+    fetch(`/accounts/${element.dataset.accountId}/`, {
+        method: 'DELETE'
+    }).then(response => {
+        location.reload()
+    })
+}

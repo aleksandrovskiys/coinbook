@@ -45,7 +45,7 @@
                         <td>
                             <p>{{ operation.category }}</p>
                         </td>
-                        <td><button type="submit" onclick="deleteOperation(this)" data-operation-id={{operation.id}}>Delete</button></td>
+                        <td><button class="delete-button" type="submit" onclick="deleteOperation(this)" data-operation-id={{operation.id}}>Delete</button></td>
                     </tr>
             {% endfor %}
         </table>

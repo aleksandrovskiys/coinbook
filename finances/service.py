@@ -140,3 +140,16 @@ def delete_category(category_id: int):
         category.delete()
     except Category.DoesNotExist:
         logging.log(logging.ERROR, f'Error while deleting category: category with id {category_id} not found.')
+
+
+def create_account(user: User, name: str, balance: float) -> None:
+    account = Account.objects.create(user=user, name=name, balance=balance)
+    account.save()
+
+
+def delete_account(account_id: int):
+    try:
+        account = Account.objects.get(pk=account_id)
+        account.delete()
+    except Account.DoesNotExist:
+        logging.log(logging.ERROR, f'Error while deleting account: account with id {account_id} not found.')

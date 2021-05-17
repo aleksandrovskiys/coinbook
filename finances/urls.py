@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import CategoryListView
 
 urlpatterns = [
     path('login', views.login_view, name='login'),
@@ -12,6 +11,9 @@ urlpatterns = [
 
     path('categories/<int:category_id>/', views.categories, name='categories'),
     path('categories/', views.category_list, name='category-list'),
+
+    path('accounts/<int:account_id>/', views.accounts, name='accounts'),
+    path('accounts/', views.account_list, name='account-list'),
 
     path('', views.index, name='index'),
 ]
