@@ -4,32 +4,41 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator
 
-from .forms import OperationForm
 from .models import User
 from . import service
 
 
 @csrf_exempt
 def index(request):
-    if request.user.is_authenticated:
-        operations = service.get_user_operations(request.user).order_by('-date', '-id')
-        latest_operation_account = service.get_account_of_latest_operation(request.user)
-        operation_form = OperationForm(initial={'account': latest_operation_account,
-                                                'type': 'out'},
-                                       user=request.user)
-    else:
-        operations = []
-        operation_form = None
-    return render(request, 'finances/index.html', {
-        'operations': operations,
-        'operation_form': operation_form
-    })
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            operations = service.get_user_operations(request.user).order_by('-date', '-id')
+            is_paginated = True
+            paginator = Paginator(operations, 20)
+            try:
+                page_number = request.GET['page']
+            except MultiValueDictKeyError:
+                page_number = 1
+            page = paginator.get_page(page_number)
+            expenses = service.get_this_month_expenses(request.user.id)
+        else:
+            operations = []
+            is_paginated = False
+
+        return render(request, 'finances/index.html', {
+            'operations': page.object_list,
+            'is_paginated': is_paginated,
+            'page_obj': page,
+            'expenses': expenses
+        })
 
 
 # Operations
-@login_required()
+@login_required
 @csrf_exempt
 def operation_view(request, operation_id: int):
     if request.method == 'POST':
@@ -43,10 +52,14 @@ def operation_view(request, operation_id: int):
         service.delete_operation(operation_id)
 
 
+@login_required
 def create_operation_view(request):
     if request.method == 'POST':
         account = service.get_account(request.POST['account'])
-        category = service.get_category(request.POST['category'])
+        try:
+            category = service.get_category(request.POST['category'])
+        except MultiValueDictKeyError:
+            category = None
         is_necessary = True if 'is_necessary' in request.POST else False
         service.add_operation(user=request.user,
                               type=request.POST['type'],

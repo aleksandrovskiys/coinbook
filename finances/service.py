@@ -1,3 +1,4 @@
+import calendar
 import logging
 from datetime import datetime
 from decimal import Decimal
@@ -28,6 +29,8 @@ def add_operation(user: User,
     """
     Creates new operation with specified parameters
     """
+    if type == 'in':
+        category=None
     operation = Operation(user=user, type=type, account=account, category=category,
                           date=date, is_necessary=is_necessary, amount=amount)
 
@@ -70,11 +73,11 @@ def create_operation(user: User,
     :param amount:
     """
     new_operation = Operation(user=user,
-                          type=operation_type,
-                          date=date,
-                          account=account,
-                          is_necessary=is_necessary,
-                          amount=amount)
+                              type=operation_type,
+                              date=date,
+                              account=account,
+                              is_necessary=is_necessary,
+                              amount=amount)
     new_operation.save()
 
 
@@ -185,6 +188,8 @@ def create_account(user: User, name: str, balance: float) -> None:
     :param name:
     :param balance:
     """
+    if not balance:
+        balance = 0
     account = Account.objects.create(user=user, name=name, balance=balance)
     account.save()
 
@@ -199,3 +204,24 @@ def delete_account(account_id: int):
         account.delete()
     except Account.DoesNotExist:
         logging.log(logging.ERROR, f'Error while deleting account: account with id {account_id} not found.')
+
+
+def get_this_month_expenses(user_id: int) -> dict:
+    """
+    Returns a list of dicts with categories as keys and monthly expenses as values
+    :param user_id:
+    """
+    try:
+        user = User.objects.get(pk=user_id)
+        month_range = calendar.monthrange(datetime.today().year, datetime.today().month)
+        month_first_day = datetime.today().replace(day=1).date()
+        month_last_day = datetime.today().replace(day=month_range[1]).date()
+        operations = user.operations.filter(type__exact='out').filter(date__gte=month_first_day).filter(date__lte=month_last_day)
+
+        expenses = {}
+        for operation in operations:
+            expenses[operation.category] = expenses.get(operation.category, 0) + operation.amount
+
+        return expenses
+    except Account.DoesNotExist:
+        logging.log(logging.ERROR, f'Error while getting monthly expenses: account with id {user_id} not found.')
