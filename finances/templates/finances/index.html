@@ -6,48 +6,118 @@
 
 {% block body %}
     {% if user.is_authenticated %}
-        <h3></h3>
-        <h2 class="text-center mb-4">Operations</h2>
-        <form action="/operations/" method="post" >
-            {% csrf_token %}
-            <p>
-                {{ operation_form }}
-            </p>
-            <p>
-                <label for="datetime-input" class="form-label">Date: </label>
-                <input type="datetime-local" id="datetime-input" name="date" value="{% now "Y-m-d\TH:i" %}">
-                <input type="submit" value="Save">
-            </p>
-        </form>
-        <table class="table table-hover">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">Type</th>
-                    <th scope="col">Account</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Is necessary</th>
-                    <th scope="col">Category</th>
-                    <th scope="col"></th> <!-- This header is for deletion button -->
-                </tr>
-            </thead>
-            {% for operation in operations %}
-                {% if operation.type == 'out' %}
-                    <tr class="table-danger">
-                {% else %}
-                    <tr class="table-success">
-                {% endif %}
-                        <td>{{ operation.type }}</td>
-                        <td>{{ operation.account.name }}</td>
-                        <td>{{ operation.date }}</td>
-                        <td>{{ operation.amount }}</td>
-                        <td>{{ operation.is_necessary }}</td>
-                        <td>
-                            <p>{{ operation.category }}</p>
-                        </td>
-                        <td><button class="delete-button" type="submit" onclick="deleteOperation(this)" data-operation-id={{operation.id}}>Delete</button></td>
+        <div class="row">
+            <div class="col-3">
+                <h3 class="text-center mb-4">Accounts</h3>
+                <ul class="list-group">
+                    {% for account in user.accounts.all %}
+                        <li class="list-group-item"><a href="{% url 'accounts' account.id %}">{{ account.name }}</a>: {{ account.balance }} rub.</li>
+                    {% endfor %}
+                </ul>
+
+                <h3 class="text-center mb-4 mt-4">This Month Expenses</h3>
+                <ul class="list-group">
+                    {% for category, amount in expenses.items %}
+                        <li class="list-group-item">{{ category }}: {{ amount }} rub.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-9">
+                <h2 class="text-center mb-4">Operations</h2>
+                <form action="/operations/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" id="user_id" value="{{ user.id }}">
+                    <div class="input-group">
+                        <select name="type" id="type_selector" class="form-select" aria-label="Operation type" required>
+                            <option value="out" selected>Outcome</option>
+                            <option value="in">Income</option>
+                        </select>
+                        <select name="account" id="account_selector" class="form-select" aria-label="Account" required>
+                            {% for account in user.accounts.all %}
+                                <option value="{{ account.id }}">{{ account.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="category" id="category_selector" class="form-select" aria-label="Category">
+                            {% for category in user.categories.all %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="amount" id="amount" class="form-control" required>
+                        <input type="datetime-local" id="datetime-input" name="date" value="{% now "Y-m-d\TH:i" %}"
+                               class="form-control">
+                        <div class="input-group-text">
+                            <label for="is-necessary">Is necessary</label>
+                            <input class="form-check-input mt-0 ms-2" type="checkbox" value=""
+                                   aria-label="Is necessary" name="is_necessary" id="is-necessary">
+                        </div>
+                        <input type="submit" value="Save" class="btn btn-primary">
+                    </div>
+                </form>
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Type</th>
+                        <th scope="col">Account</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Is necessary</th>
+                        <th scope="col">Category</th>
+                        <th scope="col"></th> <!-- This header is for deletion button -->
                     </tr>
-            {% endfor %}
-        </table>
+                    </thead>
+                    {% for operation in operations %}
+                        {% if operation.type == 'out' %}
+                            <tr class="table-danger">
+                                {% else %}
+                            <tr class="table-success">
+                        {% endif %}
+                    <td>{{ operation.type }}</td>
+                    <td>{{ operation.account.name }}</td>
+                    <td>{{ operation.date }}</td>
+                    <td>{{ operation.amount }}</td>
+                    <td>{{ operation.is_necessary }}</td>
+                    <td>
+                        <p>{{ operation.category }}</p>
+                    </td>
+                    <td>
+                        <button class="delete-button" type="submit" onclick="deleteOperation(this)"
+                                data-operation-id={{ operation.id }}>Delete
+                        </button>
+                    </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% if is_paginated %}
+                    <nav aria-label="Pagination" class="mx-auto">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.number > 2 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{% url 'index' %}?page=1">First</a>
+                                </li>
+                            {% endif %}
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}
+                                of {{ page_obj.paginator.num_pages }}</a></li>
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{% url 'index' %}?page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                            {% endif %}
+                            {% if page_obj.number < page_obj.paginator.num_pages %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{% url 'index' %}?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

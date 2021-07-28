@@ -1,12 +1,14 @@
 appdirs==1.4.4
 asgiref==3.3.1
+autopep8==1.5.7
 cfgv==3.2.0
 distlib==0.3.1
 Django==3.1.5
 filelock==3.0.12
 identify==2.1.2
 nodeenv==1.5.0
-psycopg2==2.8.6
+psycopg2-binary==2.9.1
+pycodestyle==2.7.0
 pytz==2020.5
 PyYAML==5.4.1
 six==1.15.0
