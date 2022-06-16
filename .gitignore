@@ -1,5 +1,5 @@
 .idea
 __pycache__
-venv
-.vscode
+/venv/
 log.txt
+.env
