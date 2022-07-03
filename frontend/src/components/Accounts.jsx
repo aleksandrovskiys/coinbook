@@ -4,7 +4,7 @@ export const Accounts = () => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <h1>This is accounts page</h1>
+      <h1>Accounts page</h1>
     </Container>
   );
 };
