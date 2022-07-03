@@ -44,6 +44,10 @@ const ResponsiveAppBar = () => {
     navigate(APPLICATION_URLS.register);
   };
 
+  const login = () => {
+    navigate(APPLICATION_URLS.login);
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -71,6 +75,7 @@ const ResponsiveAppBar = () => {
           <NavigationItem onClick={accounts} text="Accounts" />
           <NavigationItem onClick={categories} text="Categories" />
           <NavigationItem onClick={register} text="Register" />
+          <NavigationItem onClick={login} text="Login" />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

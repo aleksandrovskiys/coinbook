@@ -5,4 +5,5 @@ export const APPLICATION_URLS = {
   settings: "/settings",
   logout: "/logout",
   register: "/register",
+  login: "/login",
 };
