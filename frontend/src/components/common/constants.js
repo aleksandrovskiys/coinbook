@@ -4,4 +4,5 @@ export const APPLICATION_URLS = {
   profile: "/profile",
   settings: "/settings",
   logout: "/logout",
+  register: "/register",
 };
