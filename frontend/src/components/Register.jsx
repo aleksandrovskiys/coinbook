@@ -12,6 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { api } from "../api";
 
 const theme = createTheme();
 
@@ -19,10 +20,7 @@ export function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    api.register(data.get("firstName"), data.get("lastName"), data.get("email"), data.get("password"));
   };
 
   return (
