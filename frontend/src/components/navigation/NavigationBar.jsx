@@ -10,17 +10,9 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { NavigationItem } from "./NavigationItem";
-import { APPLICATION_URLS } from "../common/constants";
-
-const APPLICATION_LINKS = {};
-
-for (const key in APPLICATION_URLS) {
-  APPLICATION_LINKS[key] = React.forwardRef((props, ref) => (
-    <RouterLink ref={ref} to={APPLICATION_URLS[key]} {...props} role={undefined} />
-  ));
-}
+import { APPLICATION_LINKS } from "../common/links";
 
 const settings = ["Profile", "Settings", "Logout"];
 

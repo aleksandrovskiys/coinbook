@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 from pydantic import EmailStr
+from pydantic import Field
 
 
 class UserBase(BaseModel):
@@ -13,6 +14,8 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     email: EmailStr
     password: str
+    first_name: constr(min_length=1, strip_whitespace=True)
+    last_name: constr(min_length=1, strip_whitespace=True)
 
 
 class UserInDBBase(UserBase):
