@@ -8,6 +8,7 @@ psycopg2-binary = "*"
 django = "*"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
+sqlalchemy = "*"
 
 [dev-packages]
 bandit = "*"
