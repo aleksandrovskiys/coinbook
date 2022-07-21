@@ -2,5 +2,13 @@
   "files.exclude": {
     "**/__pycache__": true
   },
-  "prettier.printWidth": 120
+  "prettier.printWidth": 99,
+  "[python]": {
+    "editor.wordBasedSuggestions": true,
+
+    "editor.formatOnSaveMode": "file",
+    "editor.formatOnSave": true,
+
+    "editor.codeActionsOnSave": { "source.organizeImports": true }
+  }
 }
