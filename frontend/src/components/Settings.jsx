@@ -1,5 +1,10 @@
+import { Container, CssBaseline } from "@mui/material";
+
 export default function Settings() {
-    return (
-        <h2>Settings</h2>
-    )
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <h1>Settings page</h1>
+    </Container>
+  );
 }
