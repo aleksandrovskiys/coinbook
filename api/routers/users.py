@@ -41,5 +41,7 @@ def login(session: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequ
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return {
         "token": create_access_token(subject=user.id, expires_delta=access_token_expires),
+        "id": user.id,
+        "name": user.full_name,
         "token_type": "bearer",
     }

@@ -8,17 +8,21 @@ import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import { useNavigate } from "react-router-dom";
 import { NavigationItem } from "./NavigationItem";
 import { APPLICATION_LINKS } from "../common/links";
-
-const settings = ["Profile", "Settings", "Logout"];
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectLoggedIn } from "src/redux/features/users/usersSlice";
+import NavigationMenuItem from "src/components/navigation/NavigationMenuItem";
+import { useNavigate } from "react-router-dom";
 
 const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
   const navigate = useNavigate();
+
+  const isLoggedIn = useSelector(selectLoggedIn);
+  const dispatch = useDispatch();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -50,18 +54,28 @@ const ResponsiveAppBar = () => {
           >
             Finance
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: "flex" }}>
-            <NavigationItem component={APPLICATION_LINKS.accounts} text="Accounts" />
-            <NavigationItem component={APPLICATION_LINKS.categories} text="Categories" />
+            {isLoggedIn && (
+              <NavigationItem component={APPLICATION_LINKS.accounts} text="Accounts" />
+            )}
+            {isLoggedIn && (
+              <NavigationItem component={APPLICATION_LINKS.categories} text="Categories" />
+            )}
           </Box>
+
           <Box sx={{ flexGrow: 0, display: "flex" }}>
-            <NavigationItem component={APPLICATION_LINKS.register} text="Register" />
-            <NavigationItem component={APPLICATION_LINKS.login} text="Login" />
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
+            {!isLoggedIn && (
+              <NavigationItem component={APPLICATION_LINKS.register} text="Register" />
+            )}
+            {!isLoggedIn && <NavigationItem component={APPLICATION_LINKS.login} text="Login" />}
+            {isLoggedIn && (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+            )}
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -78,20 +92,28 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting}
-                  data-pointer={setting.toLowerCase()}
-                  onClick={(e) => {
-                    handleCloseUserMenu();
-                    navigate(e.target.dataset.pointer);
-                  }}
-                >
-                  <Typography textAlign="center" data-pointer={setting.toLowerCase()}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
+              <NavigationMenuItem
+                setting="Profile"
+                onClick={(e) => {
+                  handleCloseUserMenu();
+                  navigate(e.target.dataset.pointer);
+                }}
+              />
+              <NavigationMenuItem
+                setting="Settings"
+                onClick={(e) => {
+                  handleCloseUserMenu();
+                  navigate(e.target.dataset.pointer);
+                }}
+              />
+              <NavigationMenuItem
+                setting="Logout"
+                onClick={(e) => {
+                  handleCloseUserMenu();
+                  dispatch(logout());
+                  navigate("");
+                }}
+              />
             </Menu>
           </Box>
         </Toolbar>
@@ -99,4 +121,5 @@ const ResponsiveAppBar = () => {
     </AppBar>
   );
 };
+
 export default ResponsiveAppBar;

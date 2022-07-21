@@ -16,3 +16,7 @@ class User(Base):
     first_name = Column("first_name", String)
     last_name = Column("last_name", String)
     is_superuser = Column(Boolean(), default=False)
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}"

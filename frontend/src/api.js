@@ -51,6 +51,36 @@ class ApiClient {
         setError(error.message);
       });
   }
+
+  async login(username, password) {
+    const loginInfo = {
+      username: username,
+      password: password,
+    };
+
+    let formBody = [];
+    for (const property in loginInfo) {
+      const encodedKey = encodeURIComponent(property);
+      const encodedValue = encodeURIComponent(loginInfo[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+    const response = await this.secureFetch(APPLICATION_URLS.getToken, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: formBody,
+    })
+      .then((resp) => {
+        return resp.json();
+      })
+      .catch((error) => {
+        return { error: error };
+      });
+
+    return response;
+  }
 }
 
 export const api = new ApiClient();

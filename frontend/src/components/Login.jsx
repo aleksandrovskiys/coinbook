@@ -11,21 +11,31 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Link as RouterLink } from "react-router-dom";
-import { APPLICATION_URLS } from "./common/constants";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { APPLICATION_URLS } from "src/components/common/constants";
+import { api } from "src/api";
+import { login } from "src/redux/features/users/usersSlice";
 
 const LinkBehavior = React.forwardRef((props, ref) => (
   <RouterLink ref={ref} to={APPLICATION_URLS.register} {...props} role={undefined} />
 ));
 
 export default function Login() {
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const loginResult = await api.login(data.get("email"), data.get("password"));
+    if (!("error" in loginResult)) {
+      dispatch(login(loginResult));
+      navigate(APPLICATION_URLS.home, { replace: true });
+    } else {
+      console.log(loginResult.error);
+    }
   };
 
   return (
@@ -66,7 +76,10 @@ export default function Login() {
             id="password"
             autoComplete="current-password"
           />
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In
           </Button>
