@@ -89,7 +89,11 @@ const RegistrationBox = ({ handleSubmit, error }) => {
           Sign Up
         </Button>
         {error !== ""
-          ? error.split(";").map((element) => <Alert severity="error">{element}</Alert>)
+          ? error.split(";").map((element, index) => (
+              <Alert key={index} severity="error">
+                {element}
+              </Alert>
+            ))
           : ""}
         <Grid container justifyContent="flex-end">
           <Grid item>
