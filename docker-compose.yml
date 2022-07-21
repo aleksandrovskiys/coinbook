@@ -24,7 +24,7 @@ services:
       dockerfile: docker/app_Dockerfile
     environment:
       - STATIC_ROOT=/opt/project/personal_finances/staticroot
-      - POSTGRES_URL=personal-finances-db
+      - POSTGRES_HOST=personal-finances-db
       - POSTGRES_PORT=5432
     volumes:
       - ./docker/entrypoint.sh:/entrypoint.sh
