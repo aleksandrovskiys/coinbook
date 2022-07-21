@@ -53,7 +53,7 @@ WSGI_APPLICATION = 'PersonalFinances.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'PersonalFinances',
+        'NAME': 'finances',
         'USER': os.getenv('PSQL_USER'),
         'PASSWORD': os.getenv('PSQL_PASSWORD'),
         'HOST': '127.0.0.1',
