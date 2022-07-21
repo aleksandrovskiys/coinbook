@@ -10,9 +10,17 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { NavigationItem } from "./NavigationItem";
 import { APPLICATION_URLS } from "../common/constants";
+
+const APPLICATION_LINKS = {};
+
+for (const key in APPLICATION_URLS) {
+  APPLICATION_LINKS[key] = React.forwardRef((props, ref) => (
+    <RouterLink ref={ref} to={APPLICATION_URLS[key]} {...props} role={undefined} />
+  ));
+}
 
 const settings = ["Profile", "Settings", "Logout"];
 
@@ -28,40 +36,18 @@ const ResponsiveAppBar = () => {
     setAnchorElUser(null);
   };
 
-  const goHome = () => {
-    navigate("/");
-  };
-
-  const accounts = () => {
-    navigate(APPLICATION_URLS.accounts);
-  };
-
-  const categories = () => {
-    navigate(APPLICATION_URLS.categories);
-  };
-
-  const register = () => {
-    navigate(APPLICATION_URLS.register);
-  };
-
-  const login = () => {
-    navigate(APPLICATION_URLS.login);
-  };
-
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <CurrencyExchangeIcon sx={{ mr: 1, display: "flex", cursor: "pointer" }} onClick={goHome} />
+          <CurrencyExchangeIcon sx={{ mr: 1, display: "flex" }} />
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            onClick={goHome}
+            component={APPLICATION_LINKS.home}
             sx={{
               mr: 2,
               display: "flex",
-              flexGrow: 1,
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
@@ -72,11 +58,13 @@ const ResponsiveAppBar = () => {
           >
             Finance
           </Typography>
-          <NavigationItem onClick={accounts} text="Accounts" />
-          <NavigationItem onClick={categories} text="Categories" />
-          <NavigationItem onClick={register} text="Register" />
-          <NavigationItem onClick={login} text="Login" />
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 1, display: "flex" }}>
+            <NavigationItem component={APPLICATION_LINKS.accounts} text="Accounts" />
+            <NavigationItem component={APPLICATION_LINKS.categories} text="Categories" />
+          </Box>
+          <Box sx={{ flexGrow: 0, display: "flex" }}>
+            <NavigationItem component={APPLICATION_LINKS.register} text="Register" />
+            <NavigationItem component={APPLICATION_LINKS.login} text="Login" />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

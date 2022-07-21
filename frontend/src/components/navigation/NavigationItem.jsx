@@ -1,22 +1,20 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
-export function NavigationItem({ onClick, text }) {
+export function NavigationItem({ component, text }) {
   return (
-    <Typography
-      variant="h6"
+    <Button
       noWrap
-      component="a"
-      onClick={onClick}
+      component={component}
       sx={{
         mr: 2,
-        display: "flex",
         fontWeight: 700,
         color: "inherit",
         textDecoration: "none",
         cursor: "pointer",
+        display: "block",
       }}
     >
       {text}
-    </Typography>
+    </Button>
   );
 }
