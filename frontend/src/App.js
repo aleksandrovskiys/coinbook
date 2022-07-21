@@ -8,6 +8,7 @@ import { Accounts } from "./components/Accounts";
 import { Categories } from "./components/Categories";
 import { APPLICATION_URLS } from "./components/common/constants";
 import { SignUp } from "./components/Register";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path={APPLICATION_URLS.accounts} element={<Accounts />} />
         <Route path={APPLICATION_URLS.categories} element={<Categories />} />
         <Route path={APPLICATION_URLS.register} element={<SignUp />} />
+        <Route path={APPLICATION_URLS.login} element={<Login />} />
         <Route path="/" element={<MainPage />} />
       </Routes>
     </BrowserRouter>
