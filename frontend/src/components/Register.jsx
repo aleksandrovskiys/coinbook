@@ -15,10 +15,16 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { api } from "../api";
 import { Alert } from "@mui/material";
 import { APPLICATION_LINKS } from "./common/links";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  registrationFinished,
+  setRegistrationError,
+  startRegistration,
+} from "src/redux/features/users/usersSlice";
 
 const theme = createTheme();
 
-const RegistrationBox = ({ handleSubmit, error }) => {
+const RegistrationBox = ({ handleSubmit, errors }) => {
   return (
     <Box
       sx={{
@@ -88,13 +94,11 @@ const RegistrationBox = ({ handleSubmit, error }) => {
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           Sign Up
         </Button>
-        {error !== ""
-          ? error.split(";").map((element, index) => (
-              <Alert key={index} severity="error">
-                {element}
-              </Alert>
-            ))
-          : ""}
+        {errors.map((element, index) => (
+          <Alert key={index} severity="error">
+            {element}
+          </Alert>
+        ))}
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Link variant="body2" component={APPLICATION_LINKS.login}>
@@ -131,33 +135,34 @@ const SuccessfullRegistration = () => {
 };
 
 export function SignUp() {
-  const [registered, setRegistered] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const registeredSuccessfully = useSelector((state) => state.users.registrationSuccessfull);
+  const registrationErrors = useSelector((state) => state.users.registrationErrors);
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setError("");
-    setRegistered(false);
+    dispatch(startRegistration());
 
     const data = new FormData(event.currentTarget);
-    api.register(
-      data.get("firstName"),
-      data.get("lastName"),
-      data.get("email"),
-      data.get("password"),
-      setRegistered,
-      setError
-    );
+    api
+      .register(
+        data.get("firstName"),
+        data.get("lastName"),
+        data.get("email"),
+        data.get("password")
+      )
+      .then(() => dispatch(registrationFinished()))
+      .catch((error) => dispatch(setRegistrationError(error.message)));
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        {registered ? (
+        {registeredSuccessfully ? (
           <SuccessfullRegistration />
         ) : (
-          <RegistrationBox handleSubmit={handleSubmit} error={error} />
+          <RegistrationBox handleSubmit={handleSubmit} errors={registrationErrors} />
         )}
       </Container>
     </ThemeProvider>

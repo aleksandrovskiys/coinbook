@@ -12,7 +12,7 @@ class ApiClient {
           } else {
             let errorMessage = result.detail
               .map((el) => `${el.loc.join(":")} - ${el.msg}`)
-              .join("\n;");
+              .join("\n∆");
             throw new Error(errorMessage);
           }
         }
@@ -27,29 +27,21 @@ class ApiClient {
     return `${API_URL.substr(-1) === "/" ? API_URL.substr(0, -1) : API_URL}${url}`;
   }
 
-  async register(firstName, lastName, email, password, setRegistered, setError) {
+  async register(firstName, lastName, email, password) {
     const userInfo = {
       first_name: firstName,
       last_name: lastName,
       email: email,
       password: password,
     };
-    await this.secureFetch(APPLICATION_URLS.register, {
+
+    return this.secureFetch(APPLICATION_URLS.register, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userInfo),
-    })
-      .then((resp) => {
-        setRegistered(true);
-        return resp.json();
-      })
-      .catch((error) => {
-        console.log(`Error during registration: ${error}`);
-        setRegistered(false);
-        setError(error.message);
-      });
+    });
   }
 
   async login(username, password) {
@@ -65,21 +57,13 @@ class ApiClient {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     formBody = formBody.join("&");
-    const response = await this.secureFetch(APPLICATION_URLS.getToken, {
+    return this.secureFetch(APPLICATION_URLS.getToken, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: formBody,
-    })
-      .then((resp) => {
-        return resp.json();
-      })
-      .catch((error) => {
-        return { error: error };
-      });
-
-    return response;
+    });
   }
 }
 

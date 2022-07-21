@@ -29,13 +29,16 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const loginResult = await api.login(data.get("email"), data.get("password"));
-    if (!("error" in loginResult)) {
-      dispatch(login(loginResult));
-      navigate(APPLICATION_URLS.home, { replace: true });
-    } else {
-      console.log(loginResult.error);
-    }
+    api
+      .login(data.get("email"), data.get("password"))
+      .then((resp) => resp.json())
+      .then((data) => {
+        dispatch(login(data));
+        navigate(APPLICATION_URLS.home, { replace: true });
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
