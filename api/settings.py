@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     postgres_password: str
 
     @property
-    def postgres_url(self):
+    def sqlalchemy_database_uri(self):
         return f"postgresql://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
 
 

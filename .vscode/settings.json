@@ -10,5 +10,14 @@
     "editor.formatOnSave": true,
 
     "editor.codeActionsOnSave": { "source.organizeImports": true }
-  }
+  },
+  "python.sortImports.args": [
+    "--profile",
+    "black",
+    "--sl",
+    "--src",
+    "${workspaceFolder}",
+    "-p",
+    "${workspaceFolder}/"
+  ]
 }
