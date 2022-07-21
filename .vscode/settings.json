@@ -19,5 +19,6 @@
     "${workspaceFolder}",
     "-p",
     "${workspaceFolder}/"
-  ]
+  ],
+  "python.analysis.diagnosticMode": "workspace"
 }

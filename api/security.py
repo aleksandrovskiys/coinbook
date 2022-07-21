@@ -1,7 +1,7 @@
 from datetime import datetime
 from datetime import timedelta
 
-from jose import jwt
+import jwt
 from passlib.context import CryptContext
 
 from api.settings import settings
@@ -23,5 +23,10 @@ def create_access_token(subject: str, expires_delta: timedelta) -> str:
     expires = datetime.utcnow() + expires_delta if expires_delta else timedelta(settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
     to_encode = {"exp": expires, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(
+        payload=to_encode,
+        key=settings.SECRET_KEY,
+        algorithm=ALGORITHM,
+    )
+
     return encoded_jwt
