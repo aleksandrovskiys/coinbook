@@ -40,3 +40,26 @@ services:
       - .env
     depends_on:
       - personal-finances-db
+
+  personal-finances-fastapi-app:
+    container_name: personal-finances-fastapi-app
+    hostname: personal-finances-fastapi-app
+    build:
+      context: ./
+      dockerfile: docker/fastapi_Dockerfile
+    environment:
+      - STATIC_ROOT=/opt/project/personal_finances/staticroot
+      - POSTGRES_URL=personal-finances-db
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./:/opt/personal_finances
+    restart: unless-stopped
+    ports:
+      - target: 8000
+        published: 5050
+        protocol: tcp
+        mode: host
+    env_file:
+      - .env
+    depends_on:
+      - personal-finances-db

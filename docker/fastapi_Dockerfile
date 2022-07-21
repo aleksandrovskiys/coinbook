@@ -1,0 +1,15 @@
+FROM python:3.10
+
+RUN apt-get update && apt-get install -y python-dev 
+RUN pip install pipenv
+
+WORKDIR /opt/personal_finances
+
+COPY Pipfile Pipfile
+COPY Pipfile.lock Pipfile.lock
+
+RUN pipenv install --system --deploy
+
+COPY . .
+
+CMD [ "uvicorn", "api:app", "--host", "0.0.0.0", "--reload" ]

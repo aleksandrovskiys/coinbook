@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+psycopg2-binary = "*"
+django = "*"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+
+[dev-packages]
+bandit = "*"
+mypy = "*"
+flake8 = "*"
+black = "*"
+
+[requires]
+python_version = "3.10"
+
+[pipenv]
+allow_prereleases = true
