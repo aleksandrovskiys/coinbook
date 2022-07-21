@@ -26,13 +26,16 @@ def index(request):
             except MultiValueDictKeyError:
                 page_number = 1
             page = paginator.get_page(page_number)
+            operations = page.object_list
             expenses = service.get_this_month_expenses(request.user.id)
         else:
             operations = []
             is_paginated = False
+            page = None
+            expenses = {}
 
         return render(request, 'finances/index.html', {
-            'operations': page.object_list,
+            'operations': operations,
             'is_paginated': is_paginated,
             'page_obj': page,
             'expenses': expenses

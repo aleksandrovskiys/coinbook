@@ -1,0 +1,40 @@
+version: "3.9"
+   
+services:
+  personal-finances-db:
+    image: postgres:latest
+    container_name: personal-finances-db
+    hostname: personal-finances-db
+    ports:
+      - target: 5432
+        published: 5432
+        protocol: tcp
+        mode: host
+    restart: unless-stopped
+    env_file:
+      - .env
+
+  personal-finances-app:
+    container_name: personal-finances-app
+    hostname: personal-finances-app
+    build:
+      context: ./
+      dockerfile: docker/app_Dockerfile
+    environment:
+      - STATIC_ROOT=/opt/project/personal_finances/staticroot
+      - POSTGRES_URL=personal-finances-db
+      - POSTGRES_PORT=5432
+    volumes:
+      - ./docker/entrypoint.sh:/entrypoint.sh
+      - ./:/opt/personal_finances
+    restart: unless-stopped
+    command: runserver
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
+    env_file:
+      - .env
+    depends_on:
+      - personal-finances-db
