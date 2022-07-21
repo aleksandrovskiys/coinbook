@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Django: migrate",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["migrate"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
       "command": "npm start",
       "name": "Run npm start",
       "request": "launch",

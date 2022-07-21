@@ -1,5 +1,5 @@
 version: "3.9"
-   
+
 services:
   personal-finances-db:
     image: postgres:latest
@@ -13,6 +13,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
 
   personal-finances-app:
     container_name: personal-finances-app
