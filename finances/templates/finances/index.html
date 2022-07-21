@@ -42,7 +42,7 @@
                                 <option value="{{ category.id }}">{{ category.name }}</option>
                             {% endfor %}
                         </select>
-                        <input type="number" name="amount" id="amount" class="form-control" required>
+                        <input type="number" name="amount" id="amount" class="form-control" step="0.01" required>
                         <input type="datetime-local" id="datetime-input" name="date" value="{% now "Y-m-d\TH:i" %}"
                                class="form-control">
                         <div class="input-group-text">
