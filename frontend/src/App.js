@@ -13,9 +13,7 @@ import Login from "./components/Login";
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <NavigationBar />
-      </div>
+      <NavigationBar />
       <Routes>
         <Route path={APPLICATION_URLS.profile} element={<Profile />} />
         <Route path={APPLICATION_URLS.logout} element={<Logout />} />
