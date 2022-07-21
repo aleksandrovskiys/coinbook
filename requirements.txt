@@ -1,5 +1,6 @@
 appdirs==1.4.4
 asgiref==3.3.1
+autopep8==1.5.7
 cfgv==3.2.0
 distlib==0.3.1
 Django==3.1.5
