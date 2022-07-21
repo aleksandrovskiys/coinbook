@@ -1,9 +1,8 @@
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 
 export function NavigationItem({ component, text }) {
   return (
     <Button
-      noWrap
       component={component}
       sx={{
         mr: 2,
