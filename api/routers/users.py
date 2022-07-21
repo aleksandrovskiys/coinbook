@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
-from api.fastapi_models.user import UserModel
+from api.schemas.user import UserSchema
 
 router = APIRouter()
 
 
 @router.post("/register")
-def register(user: UserModel) -> UserModel:
+def register(user: UserSchema) -> UserSchema:
     return user
