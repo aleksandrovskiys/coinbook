@@ -6,7 +6,10 @@ from typing import Union
 
 from django.db.models import QuerySet
 
-from .models import User, Operation, Account, Category
+from .models import Account
+from .models import Category
+from .models import Operation
+from .models import User
 
 
 def get_user_operations(user: User) -> QuerySet:
@@ -19,20 +22,17 @@ def get_user_operations(user: User) -> QuerySet:
     return Operation.objects.none()
 
 
-def add_operation(user: User,
-                  type: Operation.TYPE_CHOICES,
-                  account: Account,
-                  category: Category,
-                  is_necessary: bool,
-                  date: str,
-                  amount: Decimal):
+def add_operation(
+    user: User, type: Operation.TYPE_CHOICES, account: Account, category: Category, is_necessary: bool, date: str, amount: Decimal
+):
     """
     Creates new operation with specified parameters
     """
-    if type == 'in':
-        category=None
-    operation = Operation(user=user, type=type, account=account, category=category,
-                          date=date, is_necessary=is_necessary, amount=amount)
+    if type == "in":
+        category = None
+    operation = Operation(
+        user=user, type=type, account=account, category=category, date=date, is_necessary=is_necessary, amount=amount
+    )
 
     if type == Operation.INCOME:
         account.balance += Decimal(amount)
@@ -57,12 +57,7 @@ def get_operation(operation_id: int) -> Operation:
         return None
 
 
-def create_operation(user: User,
-                     operation_type: str,
-                     account: Account,
-                     date: datetime,
-                     is_necessary: bool,
-                     amount: float):
+def create_operation(user: User, operation_type: str, account: Account, date: datetime, is_necessary: bool, amount: float):
     """
     Creates new operation with specified parameters
     :param user:
@@ -72,12 +67,9 @@ def create_operation(user: User,
     :param is_necessary:
     :param amount:
     """
-    new_operation = Operation(user=user,
-                              type=operation_type,
-                              date=date,
-                              account=account,
-                              is_necessary=is_necessary,
-                              amount=amount)
+    new_operation = Operation(
+        user=user, type=operation_type, date=date, account=account, is_necessary=is_necessary, amount=amount
+    )
     new_operation.save()
 
 
@@ -100,7 +92,7 @@ def delete_operation(id: int):
 
         account.save()
     except Operation.DoesNotExist:
-        logging.log(logging.ERROR, f'Error while deleting operation: operation with id {id} not found.')
+        logging.log(logging.ERROR, f"Error while deleting operation: operation with id {id} not found.")
 
 
 def get_account(account_id: int) -> Union[Account, None]:
@@ -123,7 +115,7 @@ def get_account_of_latest_operation(user: User) -> Union[Account, None]:
     :param user: user object
     :return:
     """
-    operations = user.operations.order_by('-date')
+    operations = user.operations.order_by("-date")
     if len(operations) > 0:
         return operations[0].account
     else:
@@ -178,7 +170,7 @@ def delete_category(category_id: int):
         category = Category.objects.get(pk=category_id)
         category.delete()
     except Category.DoesNotExist:
-        logging.log(logging.ERROR, f'Error while deleting category: category with id {category_id} not found.')
+        logging.log(logging.ERROR, f"Error while deleting category: category with id {category_id} not found.")
 
 
 def create_account(user: User, name: str, balance: float) -> None:
@@ -203,7 +195,7 @@ def delete_account(account_id: int):
         account = Account.objects.get(pk=account_id)
         account.delete()
     except Account.DoesNotExist:
-        logging.log(logging.ERROR, f'Error while deleting account: account with id {account_id} not found.')
+        logging.log(logging.ERROR, f"Error while deleting account: account with id {account_id} not found.")
 
 
 def get_this_month_expenses(user_id: int) -> dict:
@@ -216,12 +208,16 @@ def get_this_month_expenses(user_id: int) -> dict:
         month_range = calendar.monthrange(datetime.today().year, datetime.today().month)
         month_first_day = datetime.today().replace(day=1).date()
         month_last_day = datetime.today().replace(day=month_range[1]).date()
-        operations = user.operations.filter(type__exact='out').filter(date__gte=month_first_day).filter(date__lte=month_last_day)
+        operations = user.operations.filter(type__exact="out").filter(date__gte=month_first_day).filter(date__lte=month_last_day)
+        total = 0
 
         expenses = {}
         for operation in operations:
             expenses[operation.category] = expenses.get(operation.category, 0) + operation.amount
+            total += operation.amount
+
+        expenses["Total"] = total
 
         return expenses
     except Account.DoesNotExist:
-        logging.log(logging.ERROR, f'Error while getting monthly expenses: account with id {user_id} not found.')
+        logging.log(logging.ERROR, f"Error while getting monthly expenses: account with id {user_id} not found.")
