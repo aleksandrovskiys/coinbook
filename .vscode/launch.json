@@ -5,22 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Alembic: Create revision",
-      "type": "python",
-      "request": "launch",
-      "module": "alembic",
-      "args": ["revision", "--autogenerate"],
-      "justMyCode": true
-    },
-    {
-      "name": "Alembic: Upgrade head",
-      "type": "python",
-      "request": "launch",
-      "module": "alembic",
-      "args": ["upgrade", "head"],
-      "justMyCode": true
-    },
-    {
       "name": "FastAPI",
       "type": "python",
       "request": "launch",
