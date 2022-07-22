@@ -33,7 +33,7 @@ class Operation(models.Model):
         (OUTCOME, "Outcome"),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="operations")
-    type = models.CharField(max_length=3, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=3, choices=TYPE_CHOICES)  # noqa
     date = models.DateTimeField(default=datetime.datetime(2021, 1, 1, 0, 0, 0))
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="operations")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="operations", null=True)

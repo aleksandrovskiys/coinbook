@@ -24,7 +24,7 @@ def get_user_operations(user: User) -> QuerySet:
 
 def add_operation(
     user: User,
-    type: Operation.TYPE_CHOICES,
+    _type: Operation.TYPE_CHOICES,
     account: Account,
     category: Category,
     is_necessary: bool,
@@ -34,13 +34,13 @@ def add_operation(
     """
     Creates new operation with specified parameters
     """
-    if type == "in":
+    if _type == "in":
         category = None
     operation = Operation(
-        user=user, type=type, account=account, category=category, date=date, is_necessary=is_necessary, amount=amount
+        user=user, type=_type, account=account, category=category, date=date, is_necessary=is_necessary, amount=amount
     )
 
-    if type == Operation.INCOME:
+    if _type == Operation.INCOME:
         account.balance += Decimal(amount)
     else:
         account.balance -= Decimal(amount)
@@ -81,13 +81,13 @@ def create_operation(
     new_operation.save()
 
 
-def delete_operation(id: int):
+def delete_operation(_id: int):
     """
     Deletes an operation with specified id
     :param id:
     """
     try:
-        operation = Operation.objects.get(pk=id)
+        operation = Operation.objects.get(pk=_id)
         account = operation.account
         if operation.type == Operation.OUTCOME:
             account.balance += Decimal(operation.amount)
@@ -100,7 +100,7 @@ def delete_operation(id: int):
 
         account.save()
     except Operation.DoesNotExist:
-        logging.log(logging.ERROR, f"Error while deleting operation: operation with id {id} not found.")
+        logging.log(logging.ERROR, f"Error while deleting operation: operation with id {_id} not found.")
 
 
 def get_account(account_id: int) -> Union[Account, None]:

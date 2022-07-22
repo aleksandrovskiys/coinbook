@@ -22,5 +22,7 @@
     "--line-length",
     "120"
   ],
-  "python.analysis.diagnosticMode": "workspace"
+  "python.analysis.diagnosticMode": "workspace",
+  "python.linting.mypyEnabled": true,
+  "python.linting.flake8Args": ["--config=.flake8"]
 }

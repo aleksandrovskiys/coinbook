@@ -65,7 +65,7 @@ def create_operation_view(request):
         is_necessary = True if "is_necessary" in request.POST else False
         service.add_operation(
             user=request.user,
-            type=request.POST["type"],
+            _type=request.POST["type"],
             account=account,
             category=category,
             date=request.POST["date"],

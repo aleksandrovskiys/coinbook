@@ -19,7 +19,7 @@ class UserCreate(UserBase):
 
 
 class UserInDBBase(UserBase):
-    id: int
+    id: int  # noqa
 
     class Config:
         orm_mode = True

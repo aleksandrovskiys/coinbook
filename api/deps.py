@@ -15,7 +15,7 @@ from api.db.session import SessionLocal
 from api.schemas.token import TokenPayload
 from api.settings import settings
 
-reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"/users/login/access-token")
+reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/users/login/access-token")
 
 
 def get_db() -> Generator:
@@ -30,13 +30,13 @@ def get_current_user(session: Session = Depends(get_db), token: str = Depends(re
     try:
         payload = jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=[security.ALGORITHM])
         token_data = TokenPayload(**payload)
-    except (jwt.PyJWTError, ValidationError) as error:
+    except (jwt.PyJWTError, ValidationError):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid credentials",
         )
 
-    user = crud.user.get(session=session, id=token_data.sub)
+    user = crud.user.get(session=session, user_id=token_data.sub)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_UNAUTHORIZED, detail="User not found")
 

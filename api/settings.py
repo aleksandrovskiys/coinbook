@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str
 
     @property
-    def SQLALCHEMY_DATABASE_URI(self):
+    def sqlalchemy_database_uri(self):
         return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
 
