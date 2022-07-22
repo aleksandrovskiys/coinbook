@@ -9,38 +9,64 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('finances', '0001_initial'),
+        ("finances", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Account',
+            name="Account",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, verbose_name='Account')),
-                ('balance', models.DecimalField(decimal_places=2, max_digits=15)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='accounts', to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=50, verbose_name="Account")),
+                ("balance", models.DecimalField(decimal_places=2, max_digits=15)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="accounts",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Operation',
+            name="Operation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('in', 'Income'), ('out', 'Outcome')], max_length=3)),
-                ('date', models.DateTimeField(default=datetime.datetime(2021, 1, 1, 0, 0))),
-                ('is_necessary', models.BooleanField(verbose_name='Is necessary')),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=15)),
-                ('account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='operations', to='finances.account')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='operations', to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("type", models.CharField(choices=[("in", "Income"), ("out", "Outcome")], max_length=3)),
+                ("date", models.DateTimeField(default=datetime.datetime(2021, 1, 1, 0, 0))),
+                ("is_necessary", models.BooleanField(verbose_name="Is necessary")),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=15)),
+                (
+                    "account",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="operations", to="finances.account"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="operations",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(default='', max_length=50)),
-                ('operations', models.ManyToManyField(blank=True, related_name='categories', to='finances.Operation')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='categories', to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(default="", max_length=50)),
+                ("operations", models.ManyToManyField(blank=True, related_name="categories", to="finances.Operation")),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="categories",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

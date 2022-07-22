@@ -19,7 +19,10 @@ class UserCrud:
 
     def create(self, session: Session, user: UserCreate) -> User:
         user = self.model(
-            email=user.email, password=get_password_hash(user.password), first_name=user.first_name, last_name=user.last_name
+            email=user.email,
+            password=get_password_hash(user.password),
+            first_name=user.first_name,
+            last_name=user.last_name,
         )
 
         session.add(user)

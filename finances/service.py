@@ -23,7 +23,13 @@ def get_user_operations(user: User) -> QuerySet:
 
 
 def add_operation(
-    user: User, type: Operation.TYPE_CHOICES, account: Account, category: Category, is_necessary: bool, date: str, amount: Decimal
+    user: User,
+    type: Operation.TYPE_CHOICES,
+    account: Account,
+    category: Category,
+    is_necessary: bool,
+    date: str,
+    amount: Decimal,
 ):
     """
     Creates new operation with specified parameters
@@ -57,7 +63,9 @@ def get_operation(operation_id: int) -> Operation:
         return None
 
 
-def create_operation(user: User, operation_type: str, account: Account, date: datetime, is_necessary: bool, amount: float):
+def create_operation(
+    user: User, operation_type: str, account: Account, date: datetime, is_necessary: bool, amount: float
+):
     """
     Creates new operation with specified parameters
     :param user:
@@ -208,7 +216,9 @@ def get_this_month_expenses(user_id: int) -> dict:
         month_range = calendar.monthrange(datetime.today().year, datetime.today().month)
         month_first_day = datetime.today().replace(day=1).date()
         month_last_day = datetime.today().replace(day=month_range[1]).date()
-        operations = user.operations.filter(type__exact="out").filter(date__gte=month_first_day).filter(date__lte=month_last_day)
+        operations = (
+            user.operations.filter(type__exact="out").filter(date__gte=month_first_day).filter(date__lte=month_last_day)
+        )
         total = 0
 
         expenses = {}

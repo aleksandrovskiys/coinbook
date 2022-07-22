@@ -18,7 +18,9 @@
     "--src",
     "${workspaceFolder}",
     "-p",
-    "${workspaceFolder}/"
+    "${workspaceFolder}/",
+    "--line-length",
+    "120"
   ],
   "python.analysis.diagnosticMode": "workspace"
 }
