@@ -1,3 +1,5 @@
+import { addError } from "src/redux/features/errors/errorsSlice";
+import { store } from "src/redux/store";
 import { API_URL, APPLICATION_URLS } from "./components/common/constants";
 
 class ApiClient {
@@ -8,11 +10,14 @@ class ApiClient {
         const result = await response.json();
         if (result.detail) {
           if (typeof result.detail === "string") {
+            store.dispatch(addError(result.detail));
             throw new Error(result.detail);
           } else {
             let errorMessage = result.detail
               .map((el) => `${el.loc.join(":")} - ${el.msg}`)
-              .join("\n∆");
+              .forEach((element) => {
+                store.dispatch(addError(element));
+              });
             throw new Error(errorMessage);
           }
         }

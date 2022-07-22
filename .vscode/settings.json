@@ -7,10 +7,9 @@
     "editor.wordBasedSuggestions": true,
 
     "editor.formatOnSaveMode": "file",
-    "editor.formatOnSave": true,
-
-    "editor.codeActionsOnSave": { "source.organizeImports": true }
+    "editor.formatOnSave": true
   },
+  "editor.codeActionsOnSave": { "source.organizeImports": true },
   "python.sortImports.args": [
     "--profile",
     "black",

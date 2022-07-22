@@ -1,26 +1,26 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { api } from "../api";
-import { Alert } from "@mui/material";
-import { APPLICATION_LINKS } from "./common/links";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { clearErrors } from "src/redux/features/errors/errorsSlice";
 import {
   registrationFinished,
-  setRegistrationError,
+  setRegistrationFailed,
   startRegistration,
 } from "src/redux/features/users/usersSlice";
+import { api } from "../api";
+import { APPLICATION_LINKS } from "./common/links";
 
 const theme = createTheme();
 
@@ -94,11 +94,6 @@ const RegistrationBox = ({ handleSubmit, errors }) => {
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           Sign Up
         </Button>
-        {errors.map((element, index) => (
-          <Alert key={index} severity="error">
-            {element}
-          </Alert>
-        ))}
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Link variant="body2" component={APPLICATION_LINKS.login}>
@@ -142,6 +137,7 @@ export function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(startRegistration());
+    dispatch(clearErrors());
 
     const data = new FormData(event.currentTarget);
     api
@@ -152,7 +148,7 @@ export function SignUp() {
         data.get("password")
       )
       .then(() => dispatch(registrationFinished()))
-      .catch((error) => dispatch(setRegistrationError(error.message)));
+      .catch((error) => dispatch(setRegistrationFailed()));
   };
 
   return (

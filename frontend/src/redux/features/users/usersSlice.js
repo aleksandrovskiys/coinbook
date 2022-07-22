@@ -34,15 +34,19 @@ export const usersSlice = createSlice({
       state.registrationSuccessfull = true;
     },
 
-    setRegistrationError: (state, action) => {
-      action.payload.split("∆").forEach((element) => state.registrationErrors.push(element));
+    setRegistrationFailed: (state) => {
       state.registrationSuccessfull = false;
     },
   },
 });
 
-export const { logout, login, startRegistration, registrationFinished, setRegistrationError } =
-  usersSlice.actions;
+export const {
+  logout,
+  login,
+  startRegistration,
+  registrationFinished,
+  setRegistrationFailed,
+} = usersSlice.actions;
 
 export const selectLoggedIn = (state) => state.users.isLoggedIn;
 
