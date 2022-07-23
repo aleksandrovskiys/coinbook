@@ -3,11 +3,17 @@ export const APPLICATION_URLS = {
   accounts: "/accounts",
   profile: "/profile",
   settings: "/settings",
-  logout: "/users/logout",
+  logout: "/logout",
+  register: "/register",
+  login: "/login",
+  home: "/",
+};
+
+export const API_URLS = {
+  getToken: "/users/login/access-token",
+  userInfo: "/users/me",
   register: "/users/register",
   login: "/users/login",
-  getToken: "/users/login/access-token",
-  home: "/",
 };
 
 export const API_URL = process.env.REACT_APP_APPLICATION_API;

@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getTokenFromStorage } from "src/utils/localStorage";
+
+const userToken = getTokenFromStorage();
 
 const initialState = {
-  isLoggedIn: false,
-  id: null,
-  name: null,
+  userToken,
+  userInfo: null,
 
   registrationSuccessfull: null,
-  registrationErrors: [],
 };
 
 export const usersSlice = createSlice({
@@ -14,19 +15,22 @@ export const usersSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.isLoggedIn = false;
-      state.id = null;
-      state.name = null;
+      localStorage.removeItem("userToken");
+      state.userToken = null;
+      state.userInfo = null;
     },
 
     login: (state, action) => {
-      state.isLoggedIn = true;
-      state.id = action.payload.id;
-      state.name = action.payload.name;
+      localStorage.setItem("userToken", action.payload.token);
+      state.userToken = action.payload.token;
+      state.userInfo = action.payload["user-info"];
+    },
+
+    updateUserInfo: (state, action) => {
+      state.userInfo = action.payload;
     },
 
     startRegistration: (state) => {
-      state.registrationErrors = [];
       state.registrationSuccessfull = null;
     },
 
@@ -40,14 +44,18 @@ export const usersSlice = createSlice({
   },
 });
 
+export const userInfoSelector = (state) => {
+  if (!state.users.userInfo) {
+  }
+};
+
 export const {
   logout,
   login,
+  updateUserInfo,
   startRegistration,
   registrationFinished,
   setRegistrationFailed,
 } = usersSlice.actions;
-
-export const selectLoggedIn = (state) => state.users.isLoggedIn;
 
 export default usersSlice.reducer;

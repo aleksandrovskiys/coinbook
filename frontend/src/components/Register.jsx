@@ -24,7 +24,7 @@ import { APPLICATION_LINKS } from "./common/links";
 
 const theme = createTheme();
 
-const RegistrationBox = ({ handleSubmit, errors }) => {
+const RegistrationBox = ({ handleSubmit }) => {
   return (
     <Box
       sx={{
@@ -131,7 +131,6 @@ const SuccessfullRegistration = () => {
 
 export function SignUp() {
   const registeredSuccessfully = useSelector((state) => state.users.registrationSuccessfull);
-  const registrationErrors = useSelector((state) => state.users.registrationErrors);
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
@@ -158,7 +157,7 @@ export function SignUp() {
         {registeredSuccessfully ? (
           <SuccessfullRegistration />
         ) : (
-          <RegistrationBox handleSubmit={handleSubmit} errors={registrationErrors} />
+          <RegistrationBox handleSubmit={handleSubmit} />
         )}
       </Container>
     </ThemeProvider>

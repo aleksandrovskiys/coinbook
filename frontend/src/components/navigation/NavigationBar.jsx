@@ -1,27 +1,27 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import { NavigationItem } from "./NavigationItem";
-import { APPLICATION_LINKS } from "../common/links";
+import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, selectLoggedIn } from "src/redux/features/users/usersSlice";
-import NavigationMenuItem from "src/components/navigation/NavigationMenuItem";
 import { useNavigate } from "react-router-dom";
+import NavigationMenuItem from "src/components/navigation/NavigationMenuItem";
+import { logout } from "src/redux/features/users/usersSlice";
+import { APPLICATION_LINKS } from "../common/links";
+import { NavigationItem } from "./NavigationItem";
 
 const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const navigate = useNavigate();
 
-  const isLoggedIn = useSelector(selectLoggedIn);
+  const isLoggedIn = useSelector((state) => state.users.userToken);
   const dispatch = useDispatch();
 
   const handleOpenUserMenu = (event) => {

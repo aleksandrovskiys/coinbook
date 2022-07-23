@@ -1,10 +1,17 @@
 import { addError } from "src/redux/features/errors/errorsSlice";
 import { store } from "src/redux/store";
-import { API_URL, APPLICATION_URLS } from "./components/common/constants";
+import { API_URL, API_URLS } from "./components/common/constants";
 
 class ApiClient {
   async secureFetch(url, init) {
-    const response = await fetch(this.buildUrl(url), init);
+    const token = store.getState().users.userToken;
+    const response = await fetch(this.buildUrl(url), {
+      ...init,
+      headers: {
+        ...init.headers,
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       if (response.headers.get("content-type") === "application/json") {
         const result = await response.json();
@@ -40,7 +47,7 @@ class ApiClient {
       password: password,
     };
 
-    return this.secureFetch(APPLICATION_URLS.register, {
+    return this.secureFetch(API_URLS.register, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,13 +69,17 @@ class ApiClient {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     formBody = formBody.join("&");
-    return this.secureFetch(APPLICATION_URLS.getToken, {
+    return this.secureFetch(API_URLS.getToken, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: formBody,
     });
+  }
+
+  async getUserInfo() {
+    return this.secureFetch(API_URLS.userInfo, {});
   }
 }
 
