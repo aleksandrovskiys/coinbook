@@ -9,20 +9,20 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { APPLICATION_URLS } from "src/components/common/constants";
+import { NavigationItem } from "src/components/navigation/NavigationItem";
 import NavigationMenuItem from "src/components/navigation/NavigationMenuItem";
 import { logout } from "src/redux/features/users/usersSlice";
-import { APPLICATION_LINKS } from "../common/links";
-import { NavigationItem } from "./NavigationItem";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const navigate = useNavigate();
 
-  const isLoggedIn = useSelector((state) => state.users.userToken);
-  const dispatch = useDispatch();
+  const isLoggedIn = useAppSelector((state) => state.users.userToken);
+  const dispatch = useAppDispatch();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -40,7 +40,8 @@ const ResponsiveAppBar = () => {
           <Typography
             variant="h5"
             noWrap
-            component={APPLICATION_LINKS.home}
+            component={RouterLink}
+            to={APPLICATION_URLS.home}
             sx={{
               mr: 2,
               display: "flex",
@@ -56,19 +57,13 @@ const ResponsiveAppBar = () => {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: "flex" }}>
-            {isLoggedIn && (
-              <NavigationItem component={APPLICATION_LINKS.accounts} text="Accounts" />
-            )}
-            {isLoggedIn && (
-              <NavigationItem component={APPLICATION_LINKS.categories} text="Categories" />
-            )}
+            {isLoggedIn && <NavigationItem to={APPLICATION_URLS.accounts} text="Accounts" />}
+            {isLoggedIn && <NavigationItem to={APPLICATION_URLS.categories} text="Categories" />}
           </Box>
 
           <Box sx={{ flexGrow: 0, display: "flex" }}>
-            {!isLoggedIn && (
-              <NavigationItem component={APPLICATION_LINKS.register} text="Register" />
-            )}
-            {!isLoggedIn && <NavigationItem component={APPLICATION_LINKS.login} text="Login" />}
+            {!isLoggedIn && <NavigationItem to={APPLICATION_URLS.register} text="Register" />}
+            {!isLoggedIn && <NavigationItem to={APPLICATION_URLS.login} text="Login" />}
             {isLoggedIn && (
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -95,15 +90,17 @@ const ResponsiveAppBar = () => {
               <NavigationMenuItem
                 setting="Profile"
                 onClick={(e) => {
+                  const target = e.target as HTMLButtonElement;
                   handleCloseUserMenu();
-                  navigate(e.target.dataset.pointer);
+                  navigate(target.dataset.pointer as string);
                 }}
               />
               <NavigationMenuItem
                 setting="Settings"
                 onClick={(e) => {
+                  const target = e.target as HTMLButtonElement;
                   handleCloseUserMenu();
-                  navigate(e.target.dataset.pointer);
+                  navigate(target.dataset.pointer as string);
                 }}
               />
               <NavigationMenuItem

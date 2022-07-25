@@ -1,11 +1,11 @@
 import { Alert, Button, Stack } from "@mui/material";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import * as React from "react";
 import { removeError } from "src/redux/features/errors/errorsSlice";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 const ErrorAlerts = () => {
-  const errors = useSelector((state) => state.errors);
-  const dispatch = useDispatch();
+  const errors = useAppSelector((state) => state.errors);
+  const dispatch = useAppDispatch();
   if (!errors.length) return null;
 
   return (
@@ -26,7 +26,8 @@ const ErrorAlerts = () => {
               size="small"
               data-remove={element.id}
               onClick={(e) => {
-                dispatch(removeError(e.target.dataset.remove));
+                const target = e.target as HTMLButtonElement;
+                dispatch(removeError(target.dataset.remove as string));
               }}
             >
               Hide

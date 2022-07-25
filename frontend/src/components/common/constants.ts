@@ -16,4 +16,4 @@ export const API_URLS = {
   login: "/users/login",
 };
 
-export const API_URL = process.env.REACT_APP_APPLICATION_API;
+export const API_URL: string = process.env.REACT_APP_APPLICATION_API as string;

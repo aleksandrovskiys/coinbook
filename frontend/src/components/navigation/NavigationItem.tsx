@@ -1,9 +1,12 @@
 import { Button } from "@mui/material";
+import * as React from "react";
+import { Link as RouterLink } from "react-router-dom";
 
-export function NavigationItem({ component, text }) {
+export function NavigationItem({ to, text }: { to: string; text: string }) {
   return (
     <Button
-      component={component}
+      component={RouterLink}
+      to={to}
       sx={{
         mr: 2,
         fontWeight: 700,

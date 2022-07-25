@@ -1,9 +1,9 @@
 import { addError } from "src/redux/features/errors/errorsSlice";
 import { store } from "src/redux/store";
-import { API_URL, API_URLS } from "./components/common/constants";
+import { API_URL, API_URLS } from "src/components/common/constants";
 
 class ApiClient {
-  async secureFetch(url, init) {
+  async secureFetch(url: string, init: RequestInit): Promise<Response> {
     const token = store.getState().users.userToken;
     const response = await fetch(this.buildUrl(url), {
       ...init,
@@ -35,11 +35,11 @@ class ApiClient {
     return response;
   }
 
-  buildUrl(url) {
-    return `${API_URL.substr(-1) === "/" ? API_URL.substr(0, -1) : API_URL}${url}`;
+  buildUrl(url: string) {
+    return `${API_URL.substring(-1) === "/" ? API_URL.substring(0, -1) : API_URL}${url}`;
   }
 
-  async register(firstName, lastName, email, password) {
+  async register(firstName: string, lastName: string, email: string, password: string) {
     const userInfo = {
       first_name: firstName,
       last_name: lastName,
@@ -56,25 +56,25 @@ class ApiClient {
     });
   }
 
-  async login(username, password) {
+  async login(username: string, password: string) {
     const loginInfo = {
       username: username,
       password: password,
     };
 
-    let formBody = [];
+    let formBody: Array<string> = [];
     for (const property in loginInfo) {
-      const encodedKey = encodeURIComponent(property);
-      const encodedValue = encodeURIComponent(loginInfo[property]);
+      const encodedKey = encodeURIComponent(property) as string;
+      const encodedValue = encodeURIComponent(loginInfo[property]) as string;
       formBody.push(encodedKey + "=" + encodedValue);
     }
-    formBody = formBody.join("&");
+    let formBodyString: string = formBody.join("&");
     return this.secureFetch(API_URLS.getToken, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: formBody,
+      body: formBodyString,
     });
   }
 

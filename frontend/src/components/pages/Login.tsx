@@ -9,26 +9,24 @@ import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { useDispatch } from "react-redux";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 import { api } from "src/api";
 import { APPLICATION_URLS } from "src/components/common/constants";
 import { login } from "src/redux/features/users/usersSlice";
-
-const LinkBehavior = React.forwardRef((props, ref) => (
-  <RouterLink ref={ref} to={APPLICATION_URLS.register} {...props} role={undefined} />
-));
+import { useAppDispatch } from "src/redux/hooks";
 
 export default function Login() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email: string = data.get("email") as string;
+    const password: string = data.get("password") as string;
     api
-      .login(data.get("email"), data.get("password"))
+      .login(email, password)
       .then((resp) => resp.json())
       .then((data) => {
         dispatch(login(data));
@@ -94,7 +92,7 @@ export default function Login() {
               </Link>
             </Grid> */}
             <Grid item>
-              <Link href="#" variant="body2" component={LinkBehavior}>
+              <Link to={APPLICATION_URLS.register} component={RouterLink} variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

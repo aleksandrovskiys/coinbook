@@ -1,19 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuid_v4 } from "uuid";
+
+interface ErrorMessage {
+  id: string,
+  message: string,
+  open: boolean
+}
+
 
 export const errorsSlice = createSlice({
   name: "errors",
-  initialState: [],
+  initialState: [] as Array<ErrorMessage>,
   reducers: {
-    addError: (state, errorAction) => {
-      const error = {
+    addError: (state, errorAction: PayloadAction<string>) => {
+      const error: ErrorMessage = {
         id: uuid_v4(),
         message: errorAction.payload,
         open: true,
       };
       state.push(error);
     },
-    removeError: (state, action) => {
+    removeError: (state, action: PayloadAction<string>) => {
       return state.filter((element) => element.id !== action.payload);
     },
     clearErrors: (state) => {

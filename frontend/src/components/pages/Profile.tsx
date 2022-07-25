@@ -1,8 +1,12 @@
 import { Container, CssBaseline } from "@mui/material";
-import { useSelector } from "react-redux";
+import * as React from "react";
+import { User } from "src/redux/features/users/usersSlice";
+import { useAppSelector } from "src/redux/hooks";
 
 export default function Profile() {
-  const currentUser = useSelector((state) => state.users.userInfo) || {};
+  const currentUser: User | null = useAppSelector((state) => state.users.userInfo);
+
+  if (currentUser == null) return <h1>Loading...</h1>;
 
   return (
     <Container component="main" maxWidth="xs">

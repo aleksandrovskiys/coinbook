@@ -12,15 +12,16 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
+import { api } from "src/api";
+import { APPLICATION_URLS } from "src/components/common/constants";
 import { clearErrors } from "src/redux/features/errors/errorsSlice";
 import {
   registrationFinished,
   setRegistrationFailed,
   startRegistration,
 } from "src/redux/features/users/usersSlice";
-import { api } from "../api";
-import { APPLICATION_LINKS } from "./common/links";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 const theme = createTheme();
 
@@ -96,7 +97,7 @@ const RegistrationBox = ({ handleSubmit }) => {
         </Button>
         <Grid container justifyContent="flex-end">
           <Grid item>
-            <Link variant="body2" component={APPLICATION_LINKS.login}>
+            <Link variant="body2" to={APPLICATION_URLS.login} component={RouterLink}>
               Already have an account? Sign in
             </Link>
           </Grid>
@@ -121,7 +122,8 @@ const SuccessfullRegistration = () => {
         fullWidth
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
-        component={APPLICATION_LINKS.login}
+        to={APPLICATION_URLS.login}
+        component={RouterLink}
       >
         Go to login
       </Button>
@@ -130,8 +132,8 @@ const SuccessfullRegistration = () => {
 };
 
 export function SignUp() {
-  const registeredSuccessfully = useSelector((state) => state.users.registrationSuccessfull);
-  const dispatch = useDispatch();
+  const registeredSuccessfully = useAppSelector((state) => state.users.registrationSuccessfull);
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -141,13 +143,13 @@ export function SignUp() {
     const data = new FormData(event.currentTarget);
     api
       .register(
-        data.get("firstName"),
-        data.get("lastName"),
-        data.get("email"),
-        data.get("password")
+        data.get("firstName") as string,
+        data.get("lastName") as string,
+        data.get("email") as string,
+        data.get("password") as string
       )
       .then(() => dispatch(registrationFinished()))
-      .catch((error) => dispatch(setRegistrationFailed()));
+      .catch(() => dispatch(setRegistrationFailed()));
   };
 
   return (

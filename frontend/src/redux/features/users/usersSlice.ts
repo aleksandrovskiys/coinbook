@@ -3,7 +3,25 @@ import { getTokenFromStorage } from "src/utils/localStorage";
 
 const userToken = getTokenFromStorage();
 
-const initialState = {
+export interface User {
+  id: number,
+
+  first_name: string | null,
+  last_name: string | null,
+  email: string,
+
+  is_active: boolean | null,
+  is_superuser: boolean
+}
+
+interface UsersState {
+  userToken: string | null,
+  userInfo: User | null,
+
+  registrationSuccessfull: boolean | null,
+}
+
+const initialState: UsersState = {
   userToken,
   userInfo: null,
 
@@ -23,7 +41,7 @@ export const usersSlice = createSlice({
     login: (state, action) => {
       localStorage.setItem("userToken", action.payload.token);
       state.userToken = action.payload.token;
-      state.userInfo = action.payload["user-info"];
+      state.userInfo = action.payload["user_info"];
     },
 
     updateUserInfo: (state, action) => {
