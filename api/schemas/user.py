@@ -2,6 +2,8 @@ from pydantic import BaseModel
 from pydantic import EmailStr
 from pydantic import constr
 
+from api.schemas.category import CategoryInDB
+
 
 class UserBase(BaseModel):
     first_name: str | None
@@ -20,6 +22,7 @@ class UserCreate(UserBase):
 
 class UserInDBBase(UserBase):
     id: int  # noqa
+    categories: list[CategoryInDB]
 
     class Config:
         orm_mode = True
@@ -30,4 +33,5 @@ class UserInDB(UserInDBBase):
 
 
 class User(UserBase):
-    ...
+    class Config:
+        orm_mode = True

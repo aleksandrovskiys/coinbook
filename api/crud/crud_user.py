@@ -14,7 +14,7 @@ class UserCrud:
         user = session.query(User).filter(self.model.email == email).first()
         return user
 
-    def get(self, session: Session, user_id: int):
+    def get(self, session: Session, user_id: int) -> User:
         return session.query(self.model).filter(self.model.id == user_id).first()
 
     def create(self, session: Session, user: UserCreate) -> User:

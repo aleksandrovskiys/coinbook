@@ -11,7 +11,6 @@ from api import crud
 from api import deps
 from api.schemas.user import User
 from api.schemas.user import UserCreate
-from api.schemas.user import UserInDBBase
 from api.security import create_access_token
 from api.settings import settings
 
@@ -42,10 +41,10 @@ def login(session: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequ
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return {
         "token": create_access_token(subject=user.id, expires_delta=access_token_expires),
-        "user_info": UserInDBBase.from_orm(user),
+        "user_info": User.from_orm(user),
     }
 
 
 @router.get("/me")
-def get_user(current_user: User = Depends(deps.get_current_user)):
-    return UserInDBBase.from_orm(current_user)
+def get_user(current_user: User = Depends(deps.get_current_user)) -> User:
+    return User.from_orm(current_user)
