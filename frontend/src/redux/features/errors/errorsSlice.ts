@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { v4 as uuid_v4 } from "uuid";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 
 interface ErrorMessage {
   id: string,
@@ -14,7 +13,7 @@ export const errorsSlice = createSlice({
   reducers: {
     addError: (state, errorAction: PayloadAction<string>) => {
       const error: ErrorMessage = {
-        id: uuid_v4(),
+        id: nanoid(),
         message: errorAction.payload,
         open: true,
       };
