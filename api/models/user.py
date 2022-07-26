@@ -2,6 +2,7 @@ from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy.orm import relationship
 
 from api.db.base_class import Base
 
@@ -16,6 +17,8 @@ class User(Base):
     first_name = Column("first_name", String)
     last_name = Column("last_name", String)
     is_superuser = Column(Boolean(), default=False)
+
+    categories = relationship("Category")
 
     @property
     def full_name(self) -> str:

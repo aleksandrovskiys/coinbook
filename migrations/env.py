@@ -1,6 +1,7 @@
 from logging.config import fileConfig
 
 from alembic import context
+from alembic.script import ScriptDirectory
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -27,6 +28,27 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
+
+def process_revision_directives(context, revision, directives):
+    # extract Migration
+    migration_script = directives[0]
+    increase_migration_sequence_by_one(context, migration_script)
+
+
+def increase_migration_sequence_by_one(context, script):
+    # extract current head revision
+    head_revision = ScriptDirectory.from_config(context.config).get_current_head()
+
+    if head_revision is None:
+        # edge case with first migration
+        new_rev_id = 1
+    else:
+        # default branch with incrementation
+        last_rev_id = int(head_revision.lstrip("0"))
+        new_rev_id = last_rev_id + 1
+    # fill zeros up to 4 digits: 1 -> 0001
+    script.rev_id = f"{new_rev_id:05}"
 
 
 def run_migrations_offline() -> None:
@@ -67,7 +89,12 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            process_revision_directives=process_revision_directives,
+            transaction_per_migration=True,
+        )
 
         with context.begin_transaction():
             context.run_migrations()
