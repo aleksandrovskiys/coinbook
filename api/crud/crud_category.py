@@ -1,31 +1,11 @@
-from sqlalchemy.orm import Session
-
+from api.crud.base import CRUDBase
 from api.models.category import Category
-from api.models.user import User
 from api.schemas.category import CategoryBase
+from api.schemas.category import CategoryCreate
 
 
-class CategoryCrud:
-    def __init__(self) -> None:
-        self.model = Category
-
-    def get(self, session: Session, category_id: int) -> Category | None:
-        return session.query(self.model).get(category_id)
-
-    def create(self, session: Session, category: CategoryBase, user: User) -> Category:
-        category = self.model(
-            name=category.name,
-            user_id=user.id,
-        )
-        session.add(category)
-        session.commit()
-        return category
-
-    def update(self, session: Session, category: CategoryBase, category_obj: Category) -> Category:
-        category_obj.name = category.name
-        session.add(category_obj)
-        session.commit()
-        return category_obj
+class CategoryCrud(CRUDBase[Category, CategoryCreate, CategoryBase]):
+    ...
 
 
-category = CategoryCrud()
+category = CategoryCrud(Category)

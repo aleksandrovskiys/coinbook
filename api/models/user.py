@@ -18,7 +18,16 @@ class User(Base):
     last_name = Column("last_name", String)
     is_superuser = Column(Boolean(), default=False)
 
-    categories = relationship("Category")
+    categories = relationship(
+        "Category",
+        cascade="all, delete-orphan",
+        order_by="Category.id",
+    )
+    accounts = relationship(
+        "Account",
+        cascade="all, delete-orphan",
+        order_by="Account.id",
+    )
 
     @property
     def full_name(self) -> str:

@@ -1,16 +1,15 @@
 from pydantic import BaseModel
 
 
-class CategoryBase(BaseModel):
+class AccountBase(BaseModel):
     name: str
 
 
-class CategoryCreate(BaseModel):
-    name: str
+class AccountCreate(AccountBase):
     user_id: int
 
 
-class CategoryInDB(CategoryBase):
+class AccountInDB(AccountBase):
     user_id: int
     id: int  # noqa
 
