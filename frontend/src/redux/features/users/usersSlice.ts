@@ -39,8 +39,8 @@ export const usersSlice = createSlice({
     },
 
     login: (state, action) => {
-      localStorage.setItem("userToken", action.payload.token);
-      state.userToken = action.payload.token;
+      localStorage.setItem("userToken", action.payload.access_token);
+      state.userToken = action.payload.access_token;
       state.userInfo = action.payload["user_info"];
     },
 
