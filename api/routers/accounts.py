@@ -19,7 +19,7 @@ def get_user_accounts(current_user: User = Depends(deps.get_current_user)) -> li
     return [AccountInDB.from_orm(account) for account in current_user.accounts]
 
 
-@router.post("", response_model=AccountInDB)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=AccountInDB)
 def create_account(
     account: AccountBase, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> AccountInDB:

@@ -19,7 +19,7 @@ def get_user_categories(current_user: User = Depends(deps.get_current_user)) -> 
     return [CategoryInDB.from_orm(category) for category in current_user.categories]
 
 
-@router.post("", response_model=CategoryInDB)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=CategoryInDB)
 def create_category(
     category: CategoryBase, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> CategoryInDB:
