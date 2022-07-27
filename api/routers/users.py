@@ -19,7 +19,7 @@ router = APIRouter()
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED, response_model=User)
-def register(
+async def register(
     user: UserCreate,
     session: Session = Depends(deps.get_db),
 ) -> User:
@@ -33,7 +33,7 @@ def register(
 
 
 @router.post("/login/access-token", response_model=UserLoginResponseSchema)
-def login(session: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(session: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()):
     user = crud.user.authenticate(session, email=form_data.username, password=form_data.password)
 
     if not user:
@@ -48,5 +48,5 @@ def login(session: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequ
 
 
 @router.get("/me", response_model=User)
-def get_user(current_user: User = Depends(deps.get_current_user)) -> User:
+async def get_user(current_user: User = Depends(deps.get_current_user)) -> User:
     return User.from_orm(current_user)

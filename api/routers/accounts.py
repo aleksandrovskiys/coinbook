@@ -15,12 +15,12 @@ router = APIRouter()
 
 
 @router.get("", response_model=list[AccountInDB])
-def get_user_accounts(current_user: User = Depends(deps.get_current_user)) -> list[AccountInDB]:
+async def get_user_accounts(current_user: User = Depends(deps.get_current_user)) -> list[AccountInDB]:
     return [AccountInDB.from_orm(account) for account in current_user.accounts]
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=AccountInDB)
-def create_account(
+async def create_account(
     account: AccountBase, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> AccountInDB:
     account_obj = AccountCreate(name=account.name, user_id=current_user.id)
@@ -28,7 +28,7 @@ def create_account(
 
 
 @router.put("/{account_id}", response_model=AccountInDB)
-def update_account(
+async def update_account(
     account_id: int,
     account: AccountBase,
     current_user: User = Depends(deps.get_current_user),
@@ -47,7 +47,7 @@ def update_account(
 
 
 @router.get("/{account_id}", response_model=AccountInDB)
-def get_account(
+async def get_account(
     account_id: int, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> AccountInDB:
     account = crud.account.get(session=session, id=account_id)

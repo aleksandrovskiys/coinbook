@@ -15,12 +15,12 @@ router = APIRouter()
 
 
 @router.get("", response_model=list[CategoryInDB])
-def get_user_categories(current_user: User = Depends(deps.get_current_user)) -> list[CategoryInDB]:
+async def get_user_categories(current_user: User = Depends(deps.get_current_user)) -> list[CategoryInDB]:
     return [CategoryInDB.from_orm(category) for category in current_user.categories]
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=CategoryInDB)
-def create_category(
+async def create_category(
     category: CategoryBase, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> CategoryInDB:
     category_obj = CategoryCreate(name=category.name, user_id=current_user.id)
@@ -28,7 +28,7 @@ def create_category(
 
 
 @router.put("/{category_id}", response_model=CategoryInDB)
-def update_category(
+async def update_category(
     category_id: int,
     category: CategoryBase,
     current_user: User = Depends(deps.get_current_user),
@@ -47,7 +47,7 @@ def update_category(
 
 
 @router.get("/{category_id}", response_model=CategoryInDB)
-def get_category(
+async def get_category(
     category_id: int, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> CategoryInDB:
     category = crud.category.get(session=session, id=category_id)
