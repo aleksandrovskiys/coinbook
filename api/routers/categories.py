@@ -14,12 +14,12 @@ from api.schemas.category import CategoryInDB
 router = APIRouter()
 
 
-@router.get("")
+@router.get("", response_model=list[CategoryInDB])
 def get_user_categories(current_user: User = Depends(deps.get_current_user)) -> list[CategoryInDB]:
     return [CategoryInDB.from_orm(category) for category in current_user.categories]
 
 
-@router.post("")
+@router.post("", response_model=CategoryInDB)
 def create_category(
     category: CategoryBase, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> CategoryInDB:
@@ -27,7 +27,7 @@ def create_category(
     return CategoryInDB.from_orm(crud.category.create(session=session, obj_in=category_obj))
 
 
-@router.put("/{category_id}")
+@router.put("/{category_id}", response_model=CategoryInDB)
 def update_category(
     category_id: int,
     category: CategoryBase,
@@ -46,7 +46,7 @@ def update_category(
     return CategoryInDB.from_orm(crud.category.update(session=session, obj_in=category, db_obj=category_obj))
 
 
-@router.get("/{category_id}")
+@router.get("/{category_id}", response_model=CategoryInDB)
 def get_category(
     category_id: int, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> CategoryInDB:

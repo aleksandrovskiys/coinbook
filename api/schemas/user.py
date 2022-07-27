@@ -35,3 +35,9 @@ class UserInDB(UserInDBBase):
 class User(UserBase):
     class Config:
         orm_mode = True
+
+
+class UserLoginResponseSchema(BaseModel):
+    access_token: str
+    token_type: str
+    user: User

@@ -11,13 +11,14 @@ from api import crud
 from api import deps
 from api.schemas.user import User
 from api.schemas.user import UserCreate
+from api.schemas.user import UserLoginResponseSchema
 from api.security import create_access_token
 from api.settings import settings
 
 router = APIRouter()
 
 
-@router.post("/register", status_code=status.HTTP_201_CREATED)
+@router.post("/register", status_code=status.HTTP_201_CREATED, response_model=User)
 def register(
     user: UserCreate,
     session: Session = Depends(deps.get_db),
@@ -31,7 +32,7 @@ def register(
     return created_user
 
 
-@router.post("/login/access-token")
+@router.post("/login/access-token", response_model=UserLoginResponseSchema)
 def login(session: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()):
     user = crud.user.authenticate(session, email=form_data.username, password=form_data.password)
 
@@ -39,13 +40,13 @@ def login(session: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequ
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password ")
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    return {
-        "access_token": create_access_token(subject=user.id, expires_delta=access_token_expires),
-        "token_type": "bearer",
-        "user_info": User.from_orm(user),
-    }
+    return UserLoginResponseSchema(  # nosec
+        access_token=create_access_token(subject=user.id, expires_delta=access_token_expires),
+        token_type="bearer",
+        user_info=User.from_orm(user),
+    )
 
 
-@router.get("/me")
+@router.get("/me", response_model=User)
 def get_user(current_user: User = Depends(deps.get_current_user)) -> User:
     return User.from_orm(current_user)

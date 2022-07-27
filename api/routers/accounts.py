@@ -14,12 +14,12 @@ from api.schemas.account import AccountInDB
 router = APIRouter()
 
 
-@router.get("")
+@router.get("", response_model=list[AccountInDB])
 def get_user_accounts(current_user: User = Depends(deps.get_current_user)) -> list[AccountInDB]:
     return [AccountInDB.from_orm(account) for account in current_user.accounts]
 
 
-@router.post("")
+@router.post("", response_model=AccountInDB)
 def create_account(
     account: AccountBase, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> AccountInDB:
@@ -27,7 +27,7 @@ def create_account(
     return AccountInDB.from_orm(crud.account.create(session=session, obj_in=account_obj))
 
 
-@router.put("/{account_id}")
+@router.put("/{account_id}", response_model=AccountInDB)
 def update_account(
     account_id: int,
     account: AccountBase,
@@ -46,7 +46,7 @@ def update_account(
     return AccountInDB.from_orm(crud.account.update(session=session, obj_in=account, db_obj=account_obj))
 
 
-@router.get("/{account_id}")
+@router.get("/{account_id}", response_model=AccountInDB)
 def get_account(
     account_id: int, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> AccountInDB:
