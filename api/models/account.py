@@ -12,3 +12,4 @@ class Account(Base):
     id = Column(Integer, primary_key=True, index=True)  # noqa
     name = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
+    currency = Column(String, ForeignKey("currencies.code"))

@@ -1,4 +1,4 @@
-exclude: "venv|node_modules|docs|migrations|.git"
+exclude: "venv|node_modules|.git|env.py"
 default_stages: [commit]
 fail_fast: false
 
