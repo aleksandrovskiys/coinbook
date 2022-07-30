@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str
     CORS_ORIGINS: list[str] = [
         "http://localhost",
-        "http://localhost:3001",
+        "http://localhost:3050",
     ]
 
     ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 12

@@ -9,6 +9,14 @@
       "command": "export $(grep -v '^#' .env | xargs); $SHELL",
       "isBackground": true,
       "problemMatcher": []
+    },
+    {
+      "label": "Frontend",
+      "type": "shell",
+      "command": "npm start",
+      "isBackground": true,
+      "options": { "cwd": "${workspaceFolder}/frontend", "env": { "PORT": "3050" } },
+      "problemMatcher": []
     }
   ]
 }
