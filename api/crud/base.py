@@ -26,7 +26,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         self.model = model
 
-    def get(self, session: Session, id: Any) -> ModelType | None:  # noqa: A002
+    def get(self, session: Session, id: Any) -> ModelType | None:
         return session.query(self.model).filter(self.model.id == id).first()
 
     def get_multi(self, session: Session, *, skip: int = 0, limit: int = 100) -> list[ModelType]:
@@ -57,7 +57,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         session.refresh(db_obj)
         return db_obj
 
-    def remove(self, session: Session, *, id: int | str) -> ModelType:  # noqa: A002
+    def remove(self, session: Session, *, id: int | str) -> ModelType:
         obj = session.query(self.model).get(id)
         session.delete(obj)
         session.commit()

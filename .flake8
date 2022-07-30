@@ -58,7 +58,6 @@ ignore=
     # T499 Internal mypy traceback, stderr output, or an unmatched line.
     T499,
 
-mypy_config=.mypy.ini
 per-file-ignores=
     */settings/*:F401,F403,F405
     **/__init__.py:F401,F403

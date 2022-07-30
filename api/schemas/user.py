@@ -21,7 +21,7 @@ class UserCreate(UserBase):
 
 
 class UserInDBBase(UserBase):
-    id: int  # noqa
+    id: int
     categories: list[CategoryInDB]
 
     class Config:

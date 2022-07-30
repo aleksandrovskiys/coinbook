@@ -11,7 +11,7 @@ class AccountCreate(AccountBase):
 
 class AccountInDB(AccountBase):
     user_id: int
-    id: int  # noqa
+    id: int
 
     class Config:
         orm_mode = True

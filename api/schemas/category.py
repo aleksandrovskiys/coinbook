@@ -12,7 +12,7 @@ class CategoryCreate(BaseModel):
 
 class CategoryInDB(CategoryBase):
     user_id: int
-    id: int  # noqa
+    id: int
 
     class Config:
         orm_mode = True

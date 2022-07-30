@@ -1,4 +1,4 @@
-exclude: "venv|node_modules|.git|env.py"
+exclude: "venv|node_modules|.git|env.py|finances|PersonalFinances"
 default_stages: [commit]
 fail_fast: false
 
@@ -56,8 +56,11 @@ repos:
             pep8-naming,
             flake8-blind-except,
             flake8-bugbear,
-            flake8-builtins,
             flake8-comprehensions,
-            flake8-mypy, # TODO: change it with raw mypy because we have problems with that plugin on windows
             flake8-print,
           ]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.971
+    hooks:
+    -   id: mypy
