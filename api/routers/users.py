@@ -43,7 +43,7 @@ async def login(session: Session = Depends(deps.get_db), form_data: OAuth2Passwo
     return UserLoginResponseSchema(  # nosec
         access_token=create_access_token(subject=user.id, expires_delta=access_token_expires),
         token_type="bearer",
-        user_info=User.from_orm(user),
+        user=User.from_orm(user),
     )
 
 

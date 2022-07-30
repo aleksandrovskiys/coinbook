@@ -1,11 +1,7 @@
 from typing import Any
-from typing import Dict
 from typing import Generic
-from typing import List
-from typing import Optional
 from typing import Type
 from typing import TypeVar
-from typing import Union
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -30,11 +26,14 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         self.model = model
 
-    def get(self, session: Session, id: Any) -> Optional[ModelType]:  # noqa: A002
+    def get(self, session: Session, id: Any) -> ModelType | None:  # noqa: A002
         return session.query(self.model).filter(self.model.id == id).first()
 
-    def get_multi(self, session: Session, *, skip: int = 0, limit: int = 100) -> List[ModelType]:
+    def get_multi(self, session: Session, *, skip: int = 0, limit: int = 100) -> list[ModelType]:
         return session.query(self.model).offset(skip).limit(limit).all()
+
+    def get_all(self, session: Session) -> list[ModelType]:
+        return session.query(self.model).all()
 
     def create(self, session: Session, *, obj_in: CreateSchemaType) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
@@ -44,9 +43,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         session.refresh(db_obj)
         return db_obj
 
-    def update(
-        self, session: Session, *, db_obj: ModelType, obj_in: Union[UpdateSchemaType, Dict[str, Any]]
-    ) -> ModelType:
+    def update(self, session: Session, *, db_obj: ModelType, obj_in: UpdateSchemaType | dict[str, Any]) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in
@@ -60,8 +57,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         session.refresh(db_obj)
         return db_obj
 
-    def remove(self, session: Session, *, id: int) -> ModelType:  # noqa: A002
+    def remove(self, session: Session, *, id: int | str) -> ModelType:  # noqa: A002
         obj = session.query(self.model).get(id)
+        session.delete(obj)
+        session.commit()
+        return obj
+
+    def remove_obj(self, session: Session, *, obj: ModelType) -> ModelType:
         session.delete(obj)
         session.commit()
         return obj

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from pydantic import EmailStr
-from pydantic import constr
+from pydantic import Field
 
 from api.schemas.category import CategoryInDB
 
@@ -16,8 +16,8 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     email: EmailStr
     password: str
-    first_name: constr(min_length=1, strip_whitespace=True)
-    last_name: constr(min_length=1, strip_whitespace=True)
+    first_name: str = Field(min_length=1, strip_whitespace=True)
+    last_name: str = Field(min_length=1, strip_whitespace=True)
 
 
 class UserInDBBase(UserBase):
