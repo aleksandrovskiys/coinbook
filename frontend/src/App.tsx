@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { api } from "src/api";
 import { APPLICATION_URLS } from "src/components/common/constants";
 import ErrorAlerts from "src/components/common/ErrorAlerts";
 import NavigationBar from "src/components/navigation/NavigationBar";
@@ -13,23 +11,21 @@ import MainPage from "src/components/pages/MainPage";
 import Profile from "src/components/pages/Profile";
 import { SignUp } from "src/components/pages/Register";
 import Settings from "src/components/pages/Settings";
-import { updateUserInfo } from "src/redux/features/users/usersSlice";
-import { useAppSelector } from "src/redux/hooks";
+import { fetchUserInformation } from "src/redux/features/users/usersSlice";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.users.userToken);
+  const userInfo = useAppSelector((state) => state.users.userInfo);
+
   useEffect(() => {
     const userToken = token;
-    if (userToken) {
-      api
-        .getUserInfo()
-        .then((resp) => resp.json())
-        .then((data) => {
-          dispatch(updateUserInfo(data));
-        });
+    if (userToken && !userInfo) {
+      dispatch(fetchUserInformation());
     }
-  });
+  }, [dispatch, token, userInfo]);
+
   return (
     <BrowserRouter>
       <NavigationBar />

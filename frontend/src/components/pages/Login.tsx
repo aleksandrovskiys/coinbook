@@ -11,30 +11,32 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-import { api } from "src/api";
 import { APPLICATION_URLS } from "src/components/common/constants";
-import { login } from "src/redux/features/users/usersSlice";
-import { useAppDispatch } from "src/redux/hooks";
+import { startLogin } from "src/redux/features/users/usersSlice";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const loginStatus = useAppSelector((state) => state.users.loginStatus);
+
+  React.useEffect(() => {
+    switch (loginStatus) {
+      case "succeeded":
+        navigate(APPLICATION_URLS.home, { replace: true });
+        break;
+      default:
+        break;
+    }
+  }, [loginStatus, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email: string = data.get("email") as string;
     const password: string = data.get("password") as string;
-    api
-      .login(email, password)
-      .then((resp) => resp.json())
-      .then((data) => {
-        dispatch(login(data));
-        navigate(APPLICATION_URLS.home, { replace: true });
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+
+    dispatch(startLogin({ username: email, password }));
   };
 
   return (

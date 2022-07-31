@@ -13,14 +13,9 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { api } from "src/api";
 import { APPLICATION_URLS } from "src/components/common/constants";
 import { clearErrors } from "src/redux/features/errors/errorsSlice";
-import {
-  registrationFinished,
-  setRegistrationFailed,
-  startRegistration,
-} from "src/redux/features/users/usersSlice";
+import { startRegistration } from "src/redux/features/users/usersSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 const theme = createTheme();
@@ -132,31 +127,28 @@ const SuccessfullRegistration = () => {
 };
 
 export function SignUp() {
-  const registeredSuccessfully = useAppSelector((state) => state.users.registrationSuccessfull);
+  const registrationStatus = useAppSelector((state) => state.users.registrationStatus);
   const dispatch = useAppDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(startRegistration());
-    dispatch(clearErrors());
 
     const data = new FormData(event.currentTarget);
-    api
-      .register(
-        data.get("firstName") as string,
-        data.get("lastName") as string,
-        data.get("email") as string,
-        data.get("password") as string
-      )
-      .then(() => dispatch(registrationFinished()))
-      .catch(() => dispatch(setRegistrationFailed()));
+    const registrationData = {
+      firstName: data.get("firstName") as string,
+      lastName: data.get("lastName") as string,
+      email: data.get("email") as string,
+      password: data.get("password") as string,
+    };
+    dispatch(startRegistration(registrationData));
+    dispatch(clearErrors());
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        {registeredSuccessfully ? (
+        {registrationStatus === "succeeded" ? (
           <SuccessfullRegistration />
         ) : (
           <RegistrationBox handleSubmit={handleSubmit} />

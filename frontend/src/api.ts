@@ -1,10 +1,9 @@
-import { addError } from "src/redux/features/errors/errorsSlice";
-import { store } from "src/redux/store";
 import { API_URL, API_URLS } from "src/components/common/constants";
+import { getTokenFromStorage } from "src/utils/localStorage";
 
 class ApiClient {
   async secureFetch(url: string, init: RequestInit): Promise<Response> {
-    const token = store.getState().users.userToken;
+    const token = getTokenFromStorage();
     const response = await fetch(this.buildUrl(url), {
       ...init,
       headers: {
@@ -12,22 +11,25 @@ class ApiClient {
         Authorization: `Bearer ${token}`,
       },
     });
+
     if (!response.ok) {
+      let errorsArray: string[] = [];
       if (response.headers.get("content-type") === "application/json") {
         const result = await response.json();
         if (result.detail) {
           if (typeof result.detail === "string") {
-            store.dispatch(addError(result.detail));
-            throw new Error(result.detail);
+            errorsArray.push(result.detail);
           } else {
-            let errorMessage = result.detail
-              .map((el) => `${el.loc.join(":")} - ${el.msg}`)
+            result.detail
+              .map((el: { loc: any[]; msg: any }) => `${el.loc.join(":")} - ${el.msg}`)
               .forEach((element) => {
-                store.dispatch(addError(element));
+                errorsArray.push(element);
               });
-            throw new Error(errorMessage);
           }
         }
+        const error = new Error();
+        error["errors"] = errorsArray;
+        throw error;
       }
       throw new Error(`${response.status}: ${response.statusText}`);
     }

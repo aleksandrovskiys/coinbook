@@ -1,28 +1,33 @@
 import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 
 interface ErrorMessage {
-  id: string,
-  message: string,
-  open: boolean
+  id: string;
+  message: string;
+  open: boolean;
 }
-
 
 export const errorsSlice = createSlice({
   name: "errors",
   initialState: [] as Array<ErrorMessage>,
   reducers: {
-    addError: (state, errorAction: PayloadAction<string>) => {
-      const error: ErrorMessage = {
-        id: nanoid(),
-        message: errorAction.payload,
-        open: true,
-      };
-      state.push(error);
+    addError: {
+      reducer: (state, errorAction: PayloadAction<ErrorMessage>) => {
+        state.push(errorAction.payload);
+      },
+      prepare: (message: string) => {
+        const error: ErrorMessage = {
+          id: nanoid(),
+          message: message,
+          open: true,
+        };
+
+        return { payload: error };
+      },
     },
     removeError: (state, action: PayloadAction<string>) => {
       return state.filter((element) => element.id !== action.payload);
     },
-    clearErrors: (state) => {
+    clearErrors: () => {
       return [];
     },
   },
