@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { APPLICATION_URLS } from "src/components/common/constants";
+import { APPLICATION_URLS } from "src/common/constants";
 import ErrorAlerts from "src/components/common/ErrorAlerts";
 import NavigationBar from "src/components/navigation/NavigationBar";
 import { Accounts } from "src/components/pages/Accounts";

@@ -7,3 +7,7 @@ export interface LoginInterface {
 }
 
 export type asyncThunkStatuses = "idle" | "pending" | "succeeded" | "failed";
+
+export interface ApiErrorInterface extends Error {
+  errors?: string[];
+}

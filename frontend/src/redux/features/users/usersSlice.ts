@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "src/api";
 import { asyncThunkStatuses } from "src/interfaces/api";
-import { addError } from "src/redux/features/errors/errorsSlice";
+import { parseErrors } from "src/redux/features/errors/errorsSlice";
 import { getTokenFromStorage } from "src/utils/localStorage";
 
 const userToken = getTokenFromStorage();
@@ -13,12 +13,7 @@ export const fetchUserInformation = createAsyncThunk(
       const result = await api.getUserInfo();
       return await result.json();
     } catch (err) {
-      if (err.errors) {
-        err.errors.forEach((error: string) => {
-          thunkApi.dispatch(addError(error));
-        });
-      }
-      thunkApi.rejectWithValue(err.errors);
+      parseErrors(err, thunkApi);
     }
   }
 );
@@ -31,11 +26,7 @@ export const startLogin = createAsyncThunk(
       const data = await result.json();
       thunkApi.dispatch(login(data));
     } catch (err) {
-      if (err.errors) {
-        err.errors.forEach((error: string) => {
-          thunkApi.dispatch(addError(error));
-        });
-      }
+      parseErrors(err, thunkApi);
     }
   }
 );
@@ -51,12 +42,7 @@ export const startRegistration = createAsyncThunk(
       const data = await result.json();
       return data;
     } catch (err) {
-      if (err.errors) {
-        err.errors.forEach((error: string) => {
-          thunkApi.dispatch(addError(error));
-        });
-        throw Error("Error on registration");
-      }
+      parseErrors(err, thunkApi);
     }
   }
 );
@@ -105,7 +91,9 @@ export const usersSlice = createSlice({
       state.userInfo = action.payload["user_info"];
       state.loginStatus = "succeeded";
     },
-
+    setRegistrationStatusIdle: (state) => {
+      state.registrationStatus = "idle";
+    },
     updateUserInfo: (state, action) => {
       state.userInfo = action.payload;
     },
@@ -114,9 +102,19 @@ export const usersSlice = createSlice({
     builder
       .addCase(fetchUserInformation.fulfilled, (state, action) => {
         state.userInfo = action.payload;
+        state.loginStatus = "succeeded";
       })
-      .addCase(startLogin.rejected, (state, action) => {
+      .addCase(fetchUserInformation.rejected, (state) => {
         state.loginStatus = "failed";
+      })
+      .addCase(startLogin.pending, (state) => {
+        state.loginStatus = "pending";
+      })
+      .addCase(startLogin.rejected, (state) => {
+        state.loginStatus = "failed";
+      })
+      .addCase(startRegistration.pending, (state) => {
+        state.registrationStatus = "pending";
       })
       .addCase(startRegistration.fulfilled, (state) => {
         state.registrationStatus = "succeeded";
@@ -132,6 +130,6 @@ export const userInfoSelector = (state) => {
   }
 };
 
-export const { logout, login, updateUserInfo } = usersSlice.actions;
+export const { logout, login, setRegistrationStatusIdle, updateUserInfo } = usersSlice.actions;
 
 export default usersSlice.reducer;

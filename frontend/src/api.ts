@@ -1,4 +1,5 @@
-import { API_URL, API_URLS } from "src/components/common/constants";
+import { API_URL, API_URLS } from "src/common/constants";
+import { ApiError } from "src/common/exceptions";
 import { getTokenFromStorage } from "src/utils/localStorage";
 
 class ApiClient {
@@ -27,11 +28,12 @@ class ApiClient {
               });
           }
         }
-        const error = new Error();
-        error["errors"] = errorsArray;
+        const error = new ApiError(`Error during API call to ${url}`, errorsArray);
         throw error;
       }
-      throw new Error(`${response.status}: ${response.statusText}`);
+      throw new ApiError(
+        `Error during API call to ${url}: ${response.status}: ${response.statusText}`
+      );
     }
 
     return response;
@@ -64,7 +66,7 @@ class ApiClient {
       password: password,
     };
 
-    let formBody: Array<string> = [];
+    let formBody: string[] = [];
     for (const property in loginInfo) {
       const encodedKey = encodeURIComponent(property) as string;
       const encodedValue = encodeURIComponent(loginInfo[property]) as string;

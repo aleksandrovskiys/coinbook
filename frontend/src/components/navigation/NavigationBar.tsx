@@ -10,7 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { APPLICATION_URLS } from "src/components/common/constants";
+import { APPLICATION_URLS } from "src/common/constants";
 import { NavigationItem } from "src/components/navigation/NavigationItem";
 import NavigationMenuItem from "src/components/navigation/NavigationMenuItem";
 import { logout } from "src/redux/features/users/usersSlice";

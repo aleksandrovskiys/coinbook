@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-import { APPLICATION_URLS } from "src/components/common/constants";
+import { APPLICATION_URLS } from "src/common/constants";
 import { startLogin } from "src/redux/features/users/usersSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
@@ -20,15 +20,10 @@ export default function Login() {
   const navigate = useNavigate();
   const loginStatus = useAppSelector((state) => state.users.loginStatus);
 
-  React.useEffect(() => {
-    switch (loginStatus) {
-      case "succeeded":
-        navigate(APPLICATION_URLS.home, { replace: true });
-        break;
-      default:
-        break;
-    }
-  }, [loginStatus, navigate]);
+  if (loginStatus === "succeeded") {
+    navigate(APPLICATION_URLS.home, { replace: true });
+    return null;
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();

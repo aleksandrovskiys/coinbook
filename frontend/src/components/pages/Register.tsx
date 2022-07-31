@@ -12,10 +12,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { APPLICATION_URLS } from "src/components/common/constants";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { APPLICATION_URLS } from "src/common/constants";
 import { clearErrors } from "src/redux/features/errors/errorsSlice";
-import { startRegistration } from "src/redux/features/users/usersSlice";
+import { setRegistrationStatusIdle, startRegistration } from "src/redux/features/users/usersSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 const theme = createTheme();
@@ -103,6 +103,8 @@ const RegistrationBox = ({ handleSubmit }) => {
 };
 
 const SuccessfullRegistration = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -117,8 +119,10 @@ const SuccessfullRegistration = () => {
         fullWidth
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
-        to={APPLICATION_URLS.login}
-        component={RouterLink}
+        onClick={() => {
+          dispatch(setRegistrationStatusIdle());
+          navigate(APPLICATION_URLS.login, { replace: true });
+        }}
       >
         Go to login
       </Button>
@@ -128,7 +132,14 @@ const SuccessfullRegistration = () => {
 
 export function SignUp() {
   const registrationStatus = useAppSelector((state) => state.users.registrationStatus);
+  const loginStatus = useAppSelector((state) => state.users.loginStatus);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  if (loginStatus === "succeeded") {
+    navigate(APPLICATION_URLS.home, { replace: true });
+    return null;
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
