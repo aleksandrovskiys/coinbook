@@ -23,5 +23,6 @@
   ],
   "python.analysis.diagnosticMode": "workspace",
   "python.linting.mypyEnabled": true,
-  "python.linting.flake8Args": ["--config=.flake8"]
+  "python.linting.flake8Args": ["--config=.flake8"],
+  "prettier.configPath": "./frontend/.prettierrc"
 }
