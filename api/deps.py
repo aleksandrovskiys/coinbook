@@ -43,8 +43,6 @@ def get_current_user(session: Session = Depends(get_db), token: str = Depends(re
     return user
 
 
-def is_superuser(current_user: models.User = Depends(get_current_user)) -> models.User:
+def is_superuser(current_user: models.User = Depends(get_current_user)) -> None:
     if not current_user.is_superuser:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Only superuser can do this action.")
-
-    return current_user
