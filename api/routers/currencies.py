@@ -6,12 +6,13 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.exceptions import HTTPException
 
+from api import constants
 from api import crud
 from api import deps
 from api.models.user import User
 from api.schemas.currency import CurrencyBase
 
-router = APIRouter()
+router = APIRouter(tags=[constants.SwaggerTags.CURRENCIES])
 
 
 @router.get("", response_model=list[CurrencyBase])
@@ -20,7 +21,7 @@ def get_currencies(session: Session = Depends(deps.get_db), _: User = Depends(de
 
 
 @router.post(
-    "", response_model=CurrencyBase, status_code=status.HTTP_201_CREATED, dependencies=Depends(deps.is_superuser)
+    "", response_model=CurrencyBase, status_code=status.HTTP_201_CREATED, dependencies=[Depends(deps.is_superuser)]
 )
 def create_currency(currency: CurrencyBase = Body(), session: Session = Depends(deps.get_db)):
     if crud.currency.get(session, currency.code):

@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from fastapi import status
 from sqlalchemy.orm import Session
 
+from api import constants
 from api import crud
 from api import deps
 from api.models.user import User
@@ -11,7 +12,7 @@ from api.schemas.category import CategoryBase
 from api.schemas.category import CategoryCreate
 from api.schemas.category import CategoryInDB
 
-router = APIRouter()
+router = APIRouter(tags=[constants.SwaggerTags.CATEGORIES])
 
 
 @router.get("", response_model=list[CategoryInDB])

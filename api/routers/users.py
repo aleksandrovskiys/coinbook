@@ -7,6 +7,7 @@ from fastapi import status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
+from api import constants
 from api import crud
 from api import deps
 from api.schemas.user import User
@@ -15,7 +16,7 @@ from api.schemas.user import UserLoginResponseSchema
 from api.security import create_access_token
 from api.settings import settings
 
-router = APIRouter()
+router = APIRouter(tags=[constants.SwaggerTags.USERS])
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED, response_model=User)
