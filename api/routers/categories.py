@@ -42,7 +42,7 @@ async def update_category(
         )
 
     if category_obj.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permission to edit this category")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=constants.PERMISSION_ERROR_TEXT_TEMPLATE)
 
     return CategoryInDB.from_orm(crud.category.update(session=session, obj_in=category, db_obj=category_obj))
 
@@ -58,6 +58,6 @@ async def get_category(
         )
 
     if category.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permission to view this category")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=constants.PERMISSION_ERROR_TEXT_TEMPLATE)
 
     return CategoryInDB.from_orm(category)

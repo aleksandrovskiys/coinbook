@@ -42,7 +42,7 @@ async def update_account(
         )
 
     if account_obj.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permission to edit this account")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=constants.PERMISSION_ERROR_TEXT_TEMPLATE)
 
     return AccountInDB.from_orm(crud.account.update(session=session, obj_in=account, db_obj=account_obj))
 
@@ -58,6 +58,6 @@ async def get_account(
         )
 
     if account.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permission to view this account")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=constants.PERMISSION_ERROR_TEXT_TEMPLATE)
 
     return AccountInDB.from_orm(account)

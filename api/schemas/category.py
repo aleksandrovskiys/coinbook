@@ -16,3 +16,10 @@ class CategoryInDB(CategoryBase):
 
     class Config:
         orm_mode = True
+
+
+class Category(CategoryBase):
+    id: int
+
+    class Config:
+        orm_mode = True

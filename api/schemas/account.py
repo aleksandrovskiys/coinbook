@@ -15,3 +15,10 @@ class AccountInDB(AccountBase):
 
     class Config:
         orm_mode = True
+
+
+class Account(AccountBase):
+    id: int
+
+    class Config:
+        orm_mode = True
