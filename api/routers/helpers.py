@@ -7,14 +7,14 @@ from api.crud.base import CRUDBase
 from api.models.user import User
 
 
-def get_and_check_permissions(session: Session, crud: CRUDBase, current_user: User, key: int | str):
+def get_and_check_permissions(session: Session, crud: CRUDBase, current_user: User, key: int | str | None):
     obj = get_or_404(session, crud, key)
     check_permissions(current_user, obj)
 
     return obj
 
 
-def get_or_404(session: Session, crud: CRUDBase, key: int | str):
+def get_or_404(session: Session, crud: CRUDBase, key: int | str | None):
     obj = crud.get(session=session, id=key)
     if not obj:
         raise HTTPException(

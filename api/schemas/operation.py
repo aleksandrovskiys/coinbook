@@ -13,6 +13,8 @@ from api.schemas.user import UserInDB
 class OperationBase(BaseModel):
     date: datetime
     type: OperationType
+    account_id: int
+    category_id: int | None = None
     amount: float = 0
 
     class Config:
@@ -20,15 +22,13 @@ class OperationBase(BaseModel):
 
 
 class OperationCreate(OperationBase):
-    account_id: int
-    category_id: int
-    user_id: int | None = None
+    user_id: int
 
 
 class Operation(OperationBase):
     id: int
     account: Account
-    category: Category
+    category: Category | None
 
 
 class OperationInDb(OperationBase):

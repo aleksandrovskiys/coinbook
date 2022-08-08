@@ -24,7 +24,7 @@ async def get_user_categories(current_user: User = Depends(deps.get_current_user
 async def create_category(
     category: CategoryBase, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> CategoryInDB:
-    category_obj = CategoryCreate(name=category.name, user_id=current_user.id)
+    category_obj = CategoryCreate(**category.dict(), user_id=current_user.id)
     return CategoryInDB.from_orm(crud.category.create(session=session, obj_in=category_obj))
 
 
