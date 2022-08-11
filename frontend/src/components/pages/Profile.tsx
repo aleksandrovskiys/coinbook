@@ -9,7 +9,7 @@ export default function Profile() {
   if (currentUser == null) return <h1>Loading...</h1>;
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="lg">
       <CssBaseline />
       <h1>Profile page</h1>
       <h3>ID: {currentUser.id}</h3>

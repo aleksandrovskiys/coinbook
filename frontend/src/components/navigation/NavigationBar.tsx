@@ -34,7 +34,7 @@ const ResponsiveAppBar = () => {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth={false}>
         <Toolbar disableGutters>
           <CurrencyExchangeIcon sx={{ mr: 1, display: "flex" }} />
           <Typography
