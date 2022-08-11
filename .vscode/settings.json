@@ -9,6 +9,9 @@
     "editor.formatOnSaveMode": "file",
     "editor.formatOnSave": true
   },
+  "[typescript]": {
+    "editor.tabSize": 2
+  },
   "editor.codeActionsOnSave": { "source.organizeImports": true },
   "python.sortImports.args": [
     "--profile",
