@@ -2,7 +2,7 @@
   "files.exclude": {
     "**/__pycache__": true
   },
-  "prettier.printWidth": 99,
+  "prettier.printWidth": 120,
   "[python]": {
     "editor.wordBasedSuggestions": true,
 
