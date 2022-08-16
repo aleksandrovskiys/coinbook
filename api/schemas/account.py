@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic import Field
 
 from api.schemas.currency import CurrencyBase
 
@@ -23,6 +24,11 @@ class AccountInDB(AccountBase):
 
 class Account(AccountBase):
     id: int
+    user_id: int = Field(alias="userId")
+
+    balance: int = 0
+    month_worth_change: int = Field(default=0, alias="monthWorthChange")
 
     class Config:
         orm_mode = True
+        allow_population_by_field_name = True

@@ -1,5 +1,6 @@
 import { API_URL, API_URLS } from "src/common/constants";
 import { ApiError } from "src/common/exceptions";
+import { Account } from "src/redux/features/accounts/accountsSlice";
 import { getTokenFromStorage } from "src/utils/localStorage";
 
 class ApiClient {
@@ -31,9 +32,7 @@ class ApiClient {
         const error = new ApiError(`Error during API call to ${url}`, errorsArray);
         throw error;
       }
-      throw new ApiError(
-        `Error during API call to ${url}: ${response.status}: ${response.statusText}`
-      );
+      throw new ApiError(`Error during API call to ${url}: ${response.status}: ${response.statusText}`);
     }
 
     return response;
@@ -84,6 +83,10 @@ class ApiClient {
 
   async getUserInfo() {
     return this.secureFetch(API_URLS.userInfo, {});
+  }
+
+  async getAccountsInfo(): Promise<Account[]> {
+    return (await this.secureFetch(API_URLS.getUserAccounts, {})).json();
   }
 }
 

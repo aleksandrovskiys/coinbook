@@ -9,13 +9,7 @@ const ErrorAlerts = () => {
   if (!errors.length) return null;
 
   return (
-    <Stack
-      sx={{ marginTop: "10px" }}
-      spacing={1}
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Stack sx={{ marginTop: "10px" }} spacing={1} display="flex" justifyContent="center" alignItems="center">
       {errors.map((element) => (
         <Alert
           key={element.id}

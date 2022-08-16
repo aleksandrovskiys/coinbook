@@ -6,17 +6,14 @@ import { getTokenFromStorage } from "src/utils/localStorage";
 
 const userToken = getTokenFromStorage();
 
-export const fetchUserInformation = createAsyncThunk(
-  "users/fetchUserInformation",
-  async (arg: void, thunkApi) => {
-    try {
-      const result = await api.getUserInfo();
-      return await result.json();
-    } catch (err) {
-      parseErrors(err, thunkApi);
-    }
+export const fetchUserInformation = createAsyncThunk("users/fetchUserInformation", async (arg: void, thunkApi) => {
+  try {
+    const result = await api.getUserInfo();
+    return await result.json();
+  } catch (err) {
+    parseErrors(err, thunkApi);
   }
-);
+});
 
 export const startLogin = createAsyncThunk(
   "users/login",
@@ -33,10 +30,7 @@ export const startLogin = createAsyncThunk(
 
 export const startRegistration = createAsyncThunk(
   "users/register",
-  async (
-    arg: { firstName: string; lastName: string; email: string; password: string },
-    thunkApi
-  ) => {
+  async (arg: { firstName: string; lastName: string; email: string; password: string }, thunkApi) => {
     try {
       const result = await api.register(arg.firstName, arg.lastName, arg.email, arg.password);
       const data = await result.json();

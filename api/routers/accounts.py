@@ -8,6 +8,7 @@ from api import constants
 from api import crud
 from api import deps
 from api.models.user import User
+from api.schemas.account import Account
 from api.schemas.account import AccountBase
 from api.schemas.account import AccountCreate
 from api.schemas.account import AccountInDB
@@ -15,9 +16,11 @@ from api.schemas.account import AccountInDB
 router = APIRouter(tags=[constants.SwaggerTags.ACCOUNTS])
 
 
-@router.get("", response_model=list[AccountInDB])
-async def get_user_accounts(current_user: User = Depends(deps.get_current_user)) -> list[AccountInDB]:
-    return [AccountInDB.from_orm(account) for account in current_user.accounts]
+@router.get("", response_model=list[Account])
+async def get_user_accounts(
+    current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
+) -> list[Account]:
+    return crud.account.get_user_accounts(session=session, user=current_user)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=AccountInDB)

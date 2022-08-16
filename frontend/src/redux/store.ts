@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import accountsReducer from "src/redux/features/accounts/accountsSlice";
 import errorsReducer from "src/redux/features/errors/errorsSlice";
 import usersReducer from "src/redux/features/users/usersSlice";
 
@@ -6,6 +7,7 @@ export const store = configureStore({
   reducer: {
     users: usersReducer,
     errors: errorsReducer,
+    accounts: accountsReducer,
   },
 });
 

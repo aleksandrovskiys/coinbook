@@ -50,24 +50,10 @@ const RegistrationBox = ({ handleSubmit }) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              fullWidth
-              id="lastName"
-              label="Last Name"
-              name="lastName"
-              autoComplete="family-name"
-            />
+            <TextField required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="family-name" />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-            />
+            <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
           </Grid>
           <Grid item xs={12}>
             <TextField
@@ -157,7 +143,7 @@ export function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="lg">
+      <Container component="main" maxWidth="sm">
         <CssBaseline />
         {registrationStatus === "succeeded" ? (
           <SuccessfullRegistration />
