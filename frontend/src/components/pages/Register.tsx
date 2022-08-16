@@ -143,7 +143,7 @@ export function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm">
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
         {registrationStatus === "succeeded" ? (
           <SuccessfullRegistration />
