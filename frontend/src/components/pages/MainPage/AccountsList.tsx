@@ -64,13 +64,11 @@ export function AccountsList() {
         {status === "pending" ? (
           <h1>Loading...</h1>
         ) : (
-          <nav>
-            <List disablePadding>
-              {accounts?.map((account) => (
-                <AccountsListItem key={account.id} account={account} />
-              ))}
-            </List>
-          </nav>
+          <List disablePadding>
+            {accounts?.map((account) => (
+              <AccountsListItem key={account.id} account={account} />
+            ))}
+          </List>
         )}
       </Paper>
     </React.Fragment>

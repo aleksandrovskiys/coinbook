@@ -1,6 +1,7 @@
 import { API_URL, API_URLS } from "src/common/constants";
 import { ApiError } from "src/common/exceptions";
 import { Account } from "src/redux/features/accounts/accountsSlice";
+import { Operation } from "src/redux/features/operations/operationsSlice";
 import { getTokenFromStorage } from "src/utils/localStorage";
 
 class ApiClient {
@@ -87,6 +88,10 @@ class ApiClient {
 
   async getAccountsInfo(): Promise<Account[]> {
     return (await this.secureFetch(API_URLS.getUserAccounts, {})).json();
+  }
+
+  async getOperations(): Promise<Operation[]> {
+    return (await this.secureFetch(API_URLS.getOperations, {})).json();
   }
 }
 

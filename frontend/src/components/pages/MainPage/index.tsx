@@ -1,22 +1,13 @@
-import {
-  Box,
-  Container,
-  createTheme,
-  CssBaseline,
-  Grid,
-  Paper,
-  styled,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Box, Container, createTheme, CssBaseline, Grid, Paper, styled, ThemeProvider } from "@mui/material";
 import * as React from "react";
 import { useAppSelector } from "src/redux/hooks";
 import { AccountsList } from "./AccountsList";
 import { Categories } from "./Categories";
+import { OperationsList } from "./OperationsList";
 
 const theme = createTheme();
 
-const Item = styled(Paper)(({ theme }) => ({
+export const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: "center",
   color: theme.palette.text.secondary,
@@ -47,10 +38,7 @@ export default function MainPage() {
               <Categories />
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
-                Operations
-              </Typography>
-              <Item elevation={4}>Operations body</Item>
+              <OperationsList />
             </Grid>
           </Grid>
         </Box>
