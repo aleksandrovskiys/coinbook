@@ -23,12 +23,11 @@ async def get_user_accounts(
     return crud.account.get_user_accounts(session=session, user=current_user)
 
 
-@router.post("", status_code=status.HTTP_201_CREATED, response_model=AccountInDB)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=Account)
 async def create_account(
-    account: AccountBase, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
-) -> AccountInDB:
-    account_obj = AccountCreate(name=account.name, user_id=current_user.id)
-    return AccountInDB.from_orm(crud.account.create(session=session, obj_in=account_obj))
+    account: AccountCreate, current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
+) -> Account:
+    return crud.account.create(session=session, obj_in=account)
 
 
 @router.put("/{account_id}", response_model=AccountInDB)

@@ -83,11 +83,6 @@ export default function Login() {
               flexDirection: "column",
             }}
           >
-            {/* <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid> */}
             <Grid item>
               <Link to={APPLICATION_URLS.register} component={RouterLink} variant="body2">
                 {"Don't have an account? Sign Up"}

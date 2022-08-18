@@ -16,7 +16,7 @@ function OperationListItem({ operation }: { operation: Operation }) {
         primary={
           <React.Fragment>
             {operation.account.name} - {operation.type}
-            <Typography align="right" sx={{ display: "inline", float: "right" }}>
+            <Typography align="right" component="span" sx={{ display: "inline", float: "right" }}>
               {`${amount}`}
             </Typography>
           </React.Fragment>
@@ -24,7 +24,7 @@ function OperationListItem({ operation }: { operation: Operation }) {
         secondary={
           <React.Fragment>
             {date.toLocaleString()}
-            <Typography align="right" sx={{ display: "inline", float: "right" }}>
+            <Typography align="right" component="span" sx={{ display: "inline", float: "right" }}>
               {`${categoryName}`}
             </Typography>
           </React.Fragment>

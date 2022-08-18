@@ -9,10 +9,17 @@ export interface Currency {
   symbol?: string;
 }
 
-export interface Account {
-  id: number;
+export interface AccountBase {
   name: string;
   userId: number;
+}
+
+export interface AccountCreate extends AccountBase {
+  currencyCode: string;
+}
+
+export interface Account extends AccountBase {
+  id: number;
   currency: Currency;
 
   balance: number;
@@ -20,15 +27,19 @@ export interface Account {
 }
 
 interface AccountState {
-  accounts?: Account[];
+  accounts: Account[];
+  currencies: Currency[];
 
-  status: asyncThunkStatuses;
+  accountFetchStatus: asyncThunkStatuses;
+  accountCreationStatus: asyncThunkStatuses;
 }
 
 const initialState: AccountState = {
   accounts: [],
+  currencies: [],
 
-  status: "idle",
+  accountFetchStatus: "idle",
+  accountCreationStatus: "idle",
 };
 
 export const fetchAccountsInformation = createAsyncThunk(
@@ -43,6 +54,27 @@ export const fetchAccountsInformation = createAsyncThunk(
   }
 );
 
+export const fetchAvailableCurrencies = createAsyncThunk(
+  "accounts/fetchAvailableCurrencies",
+  async (arg: void, thunkApi) => {
+    try {
+      const result = await api.getCurrencies();
+      return result;
+    } catch (err) {
+      parseErrors(err, thunkApi);
+    }
+  }
+);
+
+export const createAccount = createAsyncThunk("accounts/createAccount", async (account: AccountCreate, thunkApi) => {
+  try {
+    const result = await api.createAccount(account);
+    return result;
+  } catch (err) {
+    parseErrors(err, thunkApi);
+  }
+});
+
 export const accountsSlice = createSlice({
   name: "accounts",
   initialState: initialState,
@@ -50,15 +82,25 @@ export const accountsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchAccountsInformation.pending, (state) => {
-        state.status = "pending";
+        state.accountFetchStatus = "pending";
       })
       .addCase(fetchAccountsInformation.fulfilled, (state, action) => {
-        state.accounts = action.payload;
-        state.status = "succeeded";
+        state.accounts = action.payload || [];
+        state.accountFetchStatus = "succeeded";
       })
       .addCase(fetchAccountsInformation.rejected, (state) => {
         state.accounts = [];
-        state.status = "failed";
+        state.accountFetchStatus = "failed";
+      })
+      .addCase(fetchAvailableCurrencies.fulfilled, (state, action) => {
+        state.currencies = action.payload || [];
+      })
+      .addCase(createAccount.fulfilled, (state, action) => {
+        if (action.payload) state.accounts.push(action.payload);
+        state.accountCreationStatus = "succeeded";
+      })
+      .addCase(createAccount.rejected, (state, action) => {
+        state.accountCreationStatus = "failed";
       });
   },
 });

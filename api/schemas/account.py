@@ -6,20 +6,20 @@ from api.schemas.currency import CurrencyBase
 
 class AccountBase(BaseModel):
     name: str
-    currency: CurrencyBase
+    currency_code: str = Field(alias="currencyCode")
+
+    class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
 
 
 class AccountCreate(AccountBase):
-    user_id: int
+    user_id: int = Field(alias="userId")
 
 
 class AccountInDB(AccountBase):
     user_id: int
     id: int
-    currency_code: str
-
-    class Config:
-        orm_mode = True
 
 
 class Account(AccountBase):
@@ -28,7 +28,4 @@ class Account(AccountBase):
 
     balance: int = 0
     month_worth_change: int = Field(default=0, alias="monthWorthChange")
-
-    class Config:
-        orm_mode = True
-        allow_population_by_field_name = True
+    currency: CurrencyBase

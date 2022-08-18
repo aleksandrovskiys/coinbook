@@ -15,8 +15,9 @@ export const API_URLS = {
   register: "/users/register",
   login: "/users/login",
 
-  getUserAccounts: "/accounts",
-  getOperations: "/operations",
+  accounts: "/accounts",
+  operations: "/operations",
+  currencies: "/currencies",
 };
 
 export const API_URL: string = process.env.REACT_APP_APPLICATION_API as string;

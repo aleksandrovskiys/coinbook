@@ -6,6 +6,7 @@ from api.schemas.category import CategoryInDB
 
 
 class UserBase(BaseModel):
+    id: int
     first_name: str | None
     last_name: str | None
     email: EmailStr

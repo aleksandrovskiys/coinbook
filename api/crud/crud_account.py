@@ -29,7 +29,7 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountBase]):
         return accounts
 
     @staticmethod
-    def get_account_balance(session: Session, account: Account) -> int:
+    def get_account_balance(session: Session, account: Account) -> float:
         result = (
             session.query(
                 func.sum(
@@ -40,10 +40,13 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountBase]):
             .first()
         )
 
+        if not result["balance"]:
+            return 0
+
         return round(result["balance"], 2)
 
     @staticmethod
-    def get_account_month_worth_change(session: Session, account: Account):
+    def get_account_month_worth_change(session: Session, account: Account) -> float:
         result = (
             session.query(
                 func.sum(
@@ -54,6 +57,9 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountBase]):
             .where(Operation.date >= datetime.date.today().replace(day=1))
             .first()
         )
+
+        if not result["month_worth_change"]:
+            return 0
 
         return round(result["month_worth_change"], 2)
 
