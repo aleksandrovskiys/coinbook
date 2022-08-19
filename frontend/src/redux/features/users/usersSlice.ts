@@ -11,6 +11,7 @@ export const fetchUserInformation = createAsyncThunk("users/fetchUserInformation
     const result = await api.getUserInfo();
     return await result.json();
   } catch (err) {
+    thunkApi.dispatch(logout());
     parseErrors(err, thunkApi);
   }
 });
