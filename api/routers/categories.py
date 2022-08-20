@@ -8,6 +8,7 @@ from api import constants
 from api import crud
 from api import deps
 from api.models.user import User
+from api.schemas.category import Category
 from api.schemas.category import CategoryBase
 from api.schemas.category import CategoryCreate
 from api.schemas.category import CategoryInDB
@@ -15,9 +16,11 @@ from api.schemas.category import CategoryInDB
 router = APIRouter(tags=[constants.SwaggerTags.CATEGORIES])
 
 
-@router.get("", response_model=list[CategoryInDB])
-async def get_user_categories(current_user: User = Depends(deps.get_current_user)) -> list[CategoryInDB]:
-    return [CategoryInDB.from_orm(category) for category in current_user.categories]
+@router.get("", response_model=list[Category])
+async def get_user_categories(
+    current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
+) -> list[Category]:
+    return crud.category.get_user_categories(session=session, user_id=current_user.id)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=CategoryInDB)

@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic import Field
 
 from api.models.category import CategoryType
 
@@ -24,6 +25,8 @@ class CategoryInDB(CategoryBase):
 
 class Category(CategoryBase):
     id: int
+    month_expenses: float = Field(alias="monthExpenses", default=0)
 
     class Config:
         orm_mode = True
+        allow_population_by_field_name = True
