@@ -38,6 +38,13 @@ export function OperationsList() {
     dispatch(createOperation(newOperation));
   };
 
+  const content = operations.length ? (
+    operations.map((operation) => <OperationListItem key={operation.id} operation={operation} />)
+  ) : (
+    <Typography variant="h6" align="center">
+      You have no operations yet
+    </Typography>
+  );
   return (
     <React.Fragment>
       <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
@@ -79,11 +86,7 @@ export function OperationsList() {
         />
       )}
       <Paper sx={{ width: "100%" }} elevation={4}>
-        <List disablePadding>
-          {operations?.map((operation) => (
-            <OperationListItem key={operation.id} operation={operation} />
-          ))}
-        </List>
+        <List disablePadding>{content}</List>
       </Paper>
     </React.Fragment>
   );

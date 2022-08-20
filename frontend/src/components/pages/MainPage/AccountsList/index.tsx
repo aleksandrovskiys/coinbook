@@ -36,6 +36,13 @@ export function AccountsList() {
     dispatch(fetchAccountsInformation());
   }, [dispatch, operations]);
 
+  const content = accounts.length ? (
+    accounts.map((account) => <AccountsListItem key={account.id} account={account} />)
+  ) : (
+    <Typography variant="h6" align="center">
+      You have no accounts yet
+    </Typography>
+  );
   return (
     <React.Fragment>
       <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
@@ -64,13 +71,7 @@ export function AccountsList() {
         />
       )}
       <Paper sx={{ width: "100%" }} elevation={4}>
-        {
-          <List disablePadding>
-            {accounts?.map((account) => (
-              <AccountsListItem key={account.id} account={account} />
-            ))}
-          </List>
-        }
+        {<List disablePadding>{content}</List>}
       </Paper>
     </React.Fragment>
   );
