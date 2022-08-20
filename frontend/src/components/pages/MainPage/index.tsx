@@ -45,11 +45,11 @@ export default function MainPage() {
           <Grid container spacing={5} rowSpacing={5}>
             <Grid item xs={4}>
               <AccountsList />
-              <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
+              <Typography variant="h4" align="center" marginBottom={2} marginTop={2}>
                 Expenses
               </Typography>
               <CategoriesList categoryType="expense" />
-              <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
+              <Typography variant="h4" align="center" marginBottom={2} marginTop={2}>
                 Income
               </Typography>
               <CategoriesList categoryType="income" />
