@@ -8,7 +8,6 @@ import { AddAccountForm } from "./AddAccountForm";
 export function AccountsList() {
   const dispatch = useAppDispatch();
 
-  const status = useAppSelector((state) => state.accounts.accountFetchStatus);
   const accounts = useAppSelector((state) => state.accounts.accounts);
   const userId = useAppSelector((state) => state.users.userInfo!.id);
   const operations = useAppSelector((state) => state.operations.operations);
