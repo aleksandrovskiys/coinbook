@@ -1,7 +1,8 @@
 import { API_URL, API_URLS } from "src/common/constants";
 import { ApiError } from "src/common/exceptions";
 import { Account, AccountCreate, Currency } from "src/redux/features/accounts/accountsSlice";
-import { Operation } from "src/redux/features/operations/operationsSlice";
+import { Category } from "src/redux/features/categories/categoriesSlice";
+import { Operation, OperationCreate } from "src/redux/features/operations/operationsSlice";
 import { getTokenFromStorage } from "src/utils/localStorage";
 
 class ApiClient {
@@ -98,6 +99,10 @@ class ApiClient {
     return (await this.secureFetch(API_URLS.currencies, {})).json();
   }
 
+  async getCategories(): Promise<Category[]> {
+    return (await this.secureFetch(API_URLS.categories, {})).json();
+  }
+
   async createAccount(account: AccountCreate): Promise<Account> {
     return (
       await this.secureFetch(API_URLS.accounts, {
@@ -106,6 +111,18 @@ class ApiClient {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(account),
+      })
+    ).json();
+  }
+
+  async createOperation(operation: OperationCreate): Promise<Operation> {
+    return (
+      await this.secureFetch(API_URLS.operations, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(operation),
       })
     ).json();
   }

@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel
+from pydantic import Field
 
 from api.models.operation import OperationType
 from api.schemas.account import Account
@@ -13,12 +14,13 @@ from api.schemas.user import UserInDB
 class OperationBase(BaseModel):
     date: datetime
     type: OperationType
-    account_id: int
-    category_id: int | None = None
+    account_id: int = Field(alias="accountId")
+    category_id: int | None = Field(alias="categoryId", default=None)
     amount: float = 0
 
     class Config:
         orm_mode = True
+        allow_population_by_field_name = True
 
 
 class OperationCreate(OperationBase):

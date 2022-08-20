@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import accountsReducer from "src/redux/features/accounts/accountsSlice";
+import categoriesReducer from "src/redux/features/categories/categoriesSlice";
 import errorsReducer from "src/redux/features/errors/errorsSlice";
-import OperationsReducer from "src/redux/features/operations/operationsSlice";
+import operationsReducer from "src/redux/features/operations/operationsSlice";
 import usersReducer from "src/redux/features/users/usersSlice";
 
 export const store = configureStore({
@@ -9,11 +10,10 @@ export const store = configureStore({
     users: usersReducer,
     errors: errorsReducer,
     accounts: accountsReducer,
-    operations: OperationsReducer,
+    operations: operationsReducer,
+    categories: categoriesReducer,
   },
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

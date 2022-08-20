@@ -20,7 +20,9 @@ class User(Base):
 
     categories = relationship("Category", cascade="all, delete-orphan", order_by="Category.id", backref="user")
     accounts = relationship("Account", cascade="all, delete-orphan", order_by="Account.id", backref="user")
-    operations = relationship("Operation", cascade="all, delete-orphan", order_by="Operation.id", backref="user")
+    operations = relationship(
+        "Operation", cascade="all, delete-orphan", order_by="desc(Operation.date)", backref="user"
+    )
 
     @property
     def full_name(self) -> str:

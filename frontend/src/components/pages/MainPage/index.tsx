@@ -2,7 +2,7 @@ import { Box, Container, createTheme, CssBaseline, Grid, Paper, styled, ThemePro
 import * as React from "react";
 import { useAppSelector } from "src/redux/hooks";
 import { AccountsList } from "./AccountsList";
-import { Categories } from "./Categories";
+import { CategoriesList } from "./CategoriesList";
 import { OperationsList } from "./OperationsList";
 
 const theme = createTheme();
@@ -35,7 +35,7 @@ export default function MainPage() {
           <Grid container spacing={5} rowSpacing={5}>
             <Grid item xs={4}>
               <AccountsList />
-              <Categories />
+              <CategoriesList />
             </Grid>
             <Grid item xs={8}>
               <OperationsList />

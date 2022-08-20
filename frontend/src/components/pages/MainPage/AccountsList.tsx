@@ -16,6 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import * as React from "react";
+import { defaultLocale } from "src/common/constants";
 import {
   Account,
   AccountCreate,
@@ -43,8 +44,8 @@ function AccountBalanceChange({ change, displayText }: { change: number; display
 }
 
 function AccountsListItem({ account }: { account: Account }) {
-  const balance = account.balance.toLocaleString("de-DE", { style: "currency", currency: account.currency.code });
-  const monthWorthChange = account.monthWorthChange.toLocaleString("de-DE", {
+  const balance = account.balance.toLocaleString(defaultLocale, { style: "currency", currency: account.currency.code });
+  const monthWorthChange = account.monthWorthChange.toLocaleString(defaultLocale, {
     style: "currency",
     currency: account.currency.code,
   });
@@ -103,7 +104,7 @@ export function AccountsList() {
       </Typography>
       {!addAccountToggle && (
         <Button
-          variant="contained"
+          variant="outlined"
           sx={{ marginBottom: "10px" }}
           onClick={() => {
             setAddAccountToggle(!addAccountToggle);
@@ -167,18 +168,18 @@ function AddAccountForm({
           <TextField
             name="newAccountName"
             label="Name"
-            variant="standard"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            fullWidth
           />
         </Grid>
         <Grid item sm={6}>
-          <FormControl fullWidth variant="standard">
+          <FormControl fullWidth>
             <InputLabel id="currency-label">Currency</InputLabel>
             <Select
               labelId="currency-label"
               value={currencyCode}
-              label="Age"
+              label="Currency"
               name="newAccountCurrencyCode"
               onChange={(event) => {
                 setCurrencyCode(event.target.value);
@@ -196,11 +197,11 @@ function AddAccountForm({
         </Grid>
         <Grid item sm={12} alignItems="end">
           <Box display="flex" justifyContent="flex-end">
-            <Button variant="contained" color="success" type="submit">
+            <Button variant="outlined" type="submit">
               Save
             </Button>
             <Button
-              variant="contained"
+              variant="outlined"
               color="error"
               sx={{ marginLeft: "5px" }}
               onClick={() => {

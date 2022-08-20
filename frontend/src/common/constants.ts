@@ -18,6 +18,9 @@ export const API_URLS = {
   accounts: "/accounts",
   operations: "/operations",
   currencies: "/currencies",
+  categories: "/categories",
 };
 
 export const API_URL: string = process.env.REACT_APP_APPLICATION_API as string;
+
+export const defaultLocale = "de-DE";
