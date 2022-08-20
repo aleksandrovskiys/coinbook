@@ -1,5 +1,4 @@
 import {
-  Button,
   FormControl,
   Grid,
   InputAdornment,
@@ -16,6 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import * as React from "react";
 import { useEffect } from "react";
 import { getCurrencySymbol } from "src/common/utils";
+import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
 import { categoriesSelectorCreator } from "src/redux/features/categories/categoriesSlice";
 import {
   clearNewOperation,
@@ -131,23 +131,12 @@ export function AddOperationForm({
           </FormControl>
         </Grid>
         <Grid item sm={12} alignItems="end">
-          <Box display="flex" justifyContent="flex-end">
-            <Button variant="outlined" type="submit" size="small">
-              Save
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              sx={{ marginLeft: "5px" }}
-              onClick={() => {
-                setAddOperationToggle(false);
-                dispatch(clearNewOperation());
-              }}
-            >
-              Cancel
-            </Button>
-          </Box>
+          <SaveObjectButtons
+            cancelOnClick={() => {
+              setAddOperationToggle(false);
+              dispatch(clearNewOperation());
+            }}
+          />
         </Grid>
       </Grid>
     </Box>

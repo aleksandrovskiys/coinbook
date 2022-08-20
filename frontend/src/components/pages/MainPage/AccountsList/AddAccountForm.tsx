@@ -1,7 +1,8 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import * as React from "react";
 import { fetchAvailableCurrencies } from "src/redux/features/accounts/accountsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { SaveObjectButtons } from "../../../common/SaveObjectButtons";
 
 export function AddAccountForm({
   currencyCode,
@@ -65,24 +66,13 @@ export function AddAccountForm({
           </FormControl>
         </Grid>
         <Grid item sm={12} alignItems="end">
-          <Box display="flex" justifyContent="flex-end">
-            <Button variant="outlined" type="submit" size="small">
-              Save
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              sx={{ marginLeft: "5px" }}
-              onClick={() => {
-                setAddAccountToggle(false);
-                setName("");
-                setCurrencyCode("");
-              }}
-            >
-              Cancel
-            </Button>
-          </Box>
+          <SaveObjectButtons
+            cancelOnClick={() => {
+              setAddAccountToggle(false);
+              setName("");
+              setCurrencyCode("");
+            }}
+          />
         </Grid>
       </Grid>
     </Box>
