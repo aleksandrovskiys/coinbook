@@ -6,7 +6,6 @@ from api.schemas.category import CategoryInDB
 
 
 class UserBase(BaseModel):
-    id: int
     first_name: str | None
     last_name: str | None
     email: EmailStr
@@ -34,6 +33,8 @@ class UserInDB(UserInDBBase):
 
 
 class User(UserBase):
+    id: int
+
     class Config:
         orm_mode = True
 
