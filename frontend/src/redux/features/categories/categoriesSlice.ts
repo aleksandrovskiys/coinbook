@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "src/api";
 import { asyncThunkStatuses } from "src/interfaces/api";
 import { parseErrors } from "src/redux/features/errors/errorsSlice";
@@ -22,21 +22,27 @@ export interface CategoryCreate {
 
 interface CategoriesState {
   categories: Category[];
-  newCategory: CategoryCreate;
+  newCategory: { [key in CategoryType]: CategoryCreate };
 
   loadStatus: asyncThunkStatuses;
-  categoryCreationStatus: asyncThunkStatuses;
+  categoryCreationStatus: { [key in CategoryType]: asyncThunkStatuses };
 }
 
 const initialState: CategoriesState = {
   categories: [],
   newCategory: {
-    name: "",
-    type: "expense",
+    expense: {
+      name: "",
+      type: "expense",
+    },
+    income: {
+      name: "",
+      type: "income",
+    },
   },
 
   loadStatus: "idle",
-  categoryCreationStatus: "idle",
+  categoryCreationStatus: { expense: "idle", income: "idle" },
 };
 
 export const fetchUserCategories = createAsyncThunk(
@@ -54,12 +60,13 @@ export const fetchUserCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk(
   "categories/createCategory",
-  async (category: CategoryCreate, thunkApi) => {
+  async (payload: { type: CategoryType; value: CategoryCreate }, thunkApi) => {
     try {
-      const result = await api.createCategory(category);
-      return result;
+      const result = await api.createCategory(payload.value);
+      return { type: payload.type, result: result };
     } catch (err) {
       parseErrors(err, thunkApi);
+      thunkApi.dispatch(clearNewCategory(payload.type));
     }
   }
 );
@@ -68,12 +75,12 @@ export const categoriesSlice = createSlice({
   name: "categories",
   initialState: initialState,
   reducers: {
-    clearNewCategory(state) {
-      state.newCategory = initialState.newCategory;
-      state.categoryCreationStatus = "idle";
+    clearNewCategory(state, action: PayloadAction<CategoryType>) {
+      state.newCategory[action.payload] = initialState.newCategory[action.payload];
+      state.categoryCreationStatus[action.payload] = "idle";
     },
-    setNewCategoryName(state, action) {
-      state.newCategory.name = action.payload;
+    setNewCategoryName(state, action: PayloadAction<{ type: CategoryType; value: string }>) {
+      state.newCategory[action.payload.type].name = action.payload.value;
     },
   },
   extraReducers(builder) {
@@ -90,11 +97,8 @@ export const categoriesSlice = createSlice({
         state.categories = action.payload;
       })
       .addCase(createCategory.fulfilled, (state, action) => {
-        if (action.payload) state.categories.push(action.payload);
-        state.categoryCreationStatus = "succeeded";
-      })
-      .addCase(createCategory.rejected, (state, action) => {
-        state.categoryCreationStatus = "failed";
+        if (action.payload) state.categories.push(action.payload.result);
+        state.categoryCreationStatus[action.payload!.type] = "succeeded";
       });
   },
 });

@@ -12,12 +12,12 @@ import {
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 import { CategoryListItem } from "./CategoryListItem";
 
-export function CategoriesList() {
+export function CategoriesList({ categoryType }: { categoryType: CategoryType }) {
   const dispatch = useAppDispatch();
 
-  const categories = useAppSelector(categoriesSelectorCreator("expense"));
-  const newCategory = useAppSelector((state) => state.categories.newCategory);
-  const categoryCreationStatus = useAppSelector((state) => state.categories.categoryCreationStatus);
+  const categories = useAppSelector(categoriesSelectorCreator(categoryType));
+  const newCategory = useAppSelector((state) => state.categories.newCategory[categoryType]);
+  const categoryCreationStatus = useAppSelector((state) => state.categories.categoryCreationStatus[categoryType]);
   const [addCategoryToggle, setAddCategoryToggle] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -27,9 +27,9 @@ export function CategoriesList() {
   React.useEffect(() => {
     if (categoryCreationStatus === "succeeded") {
       setAddCategoryToggle(false);
-      dispatch(clearNewCategory());
+      dispatch(clearNewCategory(categoryType));
     }
-  }, [categoryCreationStatus, dispatch]);
+  }, [categoryCreationStatus, categoryType, dispatch]);
 
   const content = categories.length ? (
     categories.map((category) => (
@@ -43,14 +43,11 @@ export function CategoriesList() {
 
   function AddCategoryOnSubmit(event: React.FormEvent) {
     event.preventDefault();
-    dispatch(createCategory(newCategory));
+    dispatch(createCategory({ type: categoryType, value: newCategory }));
   }
 
   return (
     <React.Fragment>
-      <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
-        Categories
-      </Typography>
       {!addCategoryToggle && (
         <Button
           variant="outlined"
@@ -67,7 +64,7 @@ export function CategoriesList() {
         <AddCategoryForm
           setAddCategoryToggle={setAddCategoryToggle}
           addCategoryOnSubmit={AddCategoryOnSubmit}
-          categoryType={"expense"}
+          categoryType={categoryType}
         />
       )}
       <Paper sx={{ width: "100%" }} elevation={4}>
@@ -97,9 +94,9 @@ function AddCategoryForm({
           <TextField
             name="categoryName"
             label="Name"
-            value={newCategory.name}
+            value={newCategory[categoryType].name}
             size="small"
-            onChange={(e) => dispatch(setNewCategoryName(e.target.value))}
+            onChange={(e) => dispatch(setNewCategoryName({ type: categoryType, value: e.target.value }))}
             fullWidth
           />
         </Grid>
@@ -107,7 +104,7 @@ function AddCategoryForm({
           <SaveObjectButtons
             cancelOnClick={() => {
               setAddCategoryToggle(false);
-              dispatch(clearNewCategory());
+              dispatch(clearNewCategory(categoryType));
             }}
           />
         </Grid>

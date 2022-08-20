@@ -1,4 +1,14 @@
-import { Box, Container, createTheme, CssBaseline, Grid, Paper, styled, ThemeProvider } from "@mui/material";
+import {
+  Box,
+  Container,
+  createTheme,
+  CssBaseline,
+  Grid,
+  Paper,
+  styled,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import * as React from "react";
 import { useAppSelector } from "src/redux/hooks";
 import { AccountsList } from "./AccountsList";
@@ -35,7 +45,14 @@ export default function MainPage() {
           <Grid container spacing={5} rowSpacing={5}>
             <Grid item xs={4}>
               <AccountsList />
-              <CategoriesList />
+              <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
+                Expenses
+              </Typography>
+              <CategoriesList categoryType="expense" />
+              <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
+                Income
+              </Typography>
+              <CategoriesList categoryType="income" />
             </Grid>
             <Grid item xs={8}>
               <OperationsList />
