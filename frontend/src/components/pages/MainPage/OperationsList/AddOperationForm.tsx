@@ -61,6 +61,7 @@ export function AddOperationForm({
               label="Account"
               size="small"
               name="accountId"
+              autoFocus
               onChange={(event) => {
                 dispatch(setNewOperationAccountId(event.target.value));
               }}
@@ -105,7 +106,12 @@ export function AddOperationForm({
             <DateTimePicker
               label="Date"
               value={newOperation.date ? Date.parse(newOperation.date) : undefined}
-              onChange={(value: Date | null) => dispatch(setNewOperationDate(value?.toISOString()))}
+              onChange={(value: Date | null) => {
+                try {
+                  const operationDate = value?.toISOString();
+                  dispatch(setNewOperationDate(operationDate));
+                } catch {}
+              }}
               renderInput={(params) => <TextField size="small" name="date" {...params} />}
             />
           </LocalizationProvider>
