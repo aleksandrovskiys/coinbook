@@ -52,11 +52,14 @@ export function AddOperationForm({
       <Grid container spacing={1}>
         <Grid item sm={3}>
           <FormControl fullWidth>
-            <InputLabel id="account-label">Account</InputLabel>
+            <InputLabel id="account-label" size="small">
+              Account
+            </InputLabel>
             <Select
               labelId="account-label"
               value={newOperation.accountId || ""}
               label="Account"
+              size="small"
               name="accountId"
               onChange={(event) => {
                 dispatch(setNewOperationAccountId(event.target.value));
@@ -74,12 +77,15 @@ export function AddOperationForm({
         </Grid>
         <Grid item sm={3}>
           <FormControl fullWidth>
-            <InputLabel id="category-label">Category</InputLabel>
+            <InputLabel id="category-label" size="small">
+              Category
+            </InputLabel>
             <Select
               labelId="category-label"
               value={newOperation.categoryId || ""}
               label="Category"
               name="categoryId"
+              size="small"
               onChange={(event) => {
                 dispatch(setNewOperationCategoryId(event.target.value));
               }}
@@ -100,17 +106,20 @@ export function AddOperationForm({
               label="Date"
               value={newOperation.date ? Date.parse(newOperation.date) : undefined}
               onChange={(value: Date | null) => dispatch(setNewOperationDate(value?.toISOString()))}
-              renderInput={(params) => <TextField name="date" {...params} />}
+              renderInput={(params) => <TextField size="small" name="date" {...params} />}
             />
           </LocalizationProvider>
         </Grid>
         <Grid item sm={3}>
           <FormControl fullWidth>
-            <InputLabel htmlFor="amount-input">Amount</InputLabel>
+            <InputLabel htmlFor="amount-input" size="small">
+              Amount
+            </InputLabel>
             <OutlinedInput
               id="amount-input"
               value={newOperation.amount}
               name="amount"
+              size="small"
               onChange={(e) => dispatch(setNewOperationAmount(e.target.value))}
               endAdornment={
                 <InputAdornment position="start">
@@ -123,12 +132,13 @@ export function AddOperationForm({
         </Grid>
         <Grid item sm={12} alignItems="end">
           <Box display="flex" justifyContent="flex-end">
-            <Button variant="outlined" type="submit">
+            <Button variant="outlined" type="submit" size="small">
               Save
             </Button>
             <Button
               variant="outlined"
               color="error"
+              size="small"
               sx={{ marginLeft: "5px" }}
               onClick={() => {
                 setAddOperationToggle(false);

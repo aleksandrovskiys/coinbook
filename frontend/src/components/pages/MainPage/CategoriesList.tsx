@@ -13,14 +13,9 @@ export function CategoriesList() {
     dispatch(fetchUserCategories());
   }, [dispatch]);
 
-  const content =
-    loadStatus === "succeeded" ? (
-      categories.map((category) => (
-        <CategoryListItem key={category.id} name={category.name} monthExpenses={category.monthExpenses || 0} />
-      ))
-    ) : (
-      <CategoryListItem name="Loading..." monthExpenses={0} />
-    );
+  const content = categories.map((category) => (
+    <CategoryListItem key={category.id} name={category.name} monthExpenses={category.monthExpenses || 0} />
+  ));
 
   return (
     <React.Fragment>

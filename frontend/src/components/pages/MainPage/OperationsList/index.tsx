@@ -49,6 +49,7 @@ export function OperationsList() {
             variant="outlined"
             sx={{ marginBottom: "10px" }}
             color="error"
+            size="small"
             onClick={() => {
               setAddOperationToggle(!addOperationToggle);
               setNewOperationType("expense");
@@ -60,6 +61,7 @@ export function OperationsList() {
             variant="outlined"
             sx={{ marginBottom: "10px", marginLeft: "5px" }}
             color="success"
+            size="small"
             onClick={() => {
               setAddOperationToggle(!addOperationToggle);
               setNewOperationType("income");
