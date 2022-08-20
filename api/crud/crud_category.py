@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from api.crud.base import CRUDBase
 from api.models.category import Category
+from api.models.category import CategoryType
 from api.models.operation import Operation
 from api.models.operation import OperationType
 from api.schemas.category import Category as CategorySchema
@@ -30,7 +31,7 @@ class CategoryCrud(CRUDBase[Category, CategoryCreate, CategoryBase]):
             category = CategorySchema.from_orm(orm_category)
             category.month_expenses = self.category_balance_in_period(
                 session=session,
-                category_id=category.id,
+                category=category,
                 from_=from_,
                 to_=to_,
             )
@@ -38,14 +39,16 @@ class CategoryCrud(CRUDBase[Category, CategoryCreate, CategoryBase]):
 
         return categories
 
-    def category_balance_in_period(self, session: Session, category_id: int, from_: datetime, to_: datetime) -> float:
+    def category_balance_in_period(
+        self, session: Session, category: CategorySchema, from_: datetime, to_: datetime
+    ) -> float:
         result = (
             session.query(
                 func.sum(
                     case((Operation.type == OperationType.expense, -Operation.amount), else_=Operation.amount)
                 ).label("balance")
             )
-            .where(Operation.category_id == category_id)
+            .where(Operation.category_id == category.id)
             .where(Operation.date >= from_)
             .where(Operation.date < to_)
             .first()
@@ -54,7 +57,7 @@ class CategoryCrud(CRUDBase[Category, CategoryCreate, CategoryBase]):
         if not result["balance"]:
             return 0
 
-        return round(result["balance"], 2)
+        return round(result["balance"], 2) * (-1 if category.type == CategoryType.expense else 1)
 
 
 category = CategoryCrud(Category)
