@@ -38,7 +38,7 @@ async def login(session: Session = Depends(deps.get_db), form_data: OAuth2Passwo
     user = crud.user.authenticate(session, email=form_data.username, password=form_data.password)
 
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password ")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return UserLoginResponseSchema(  # nosec
