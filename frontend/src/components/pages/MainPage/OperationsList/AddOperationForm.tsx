@@ -106,6 +106,7 @@ export function AddOperationForm({
             <DateTimePicker
               label="Date"
               value={newOperation.date ? Date.parse(newOperation.date) : undefined}
+              ampm={false}
               onChange={(value: Date | null) => {
                 try {
                   const operationDate = value?.toISOString();
