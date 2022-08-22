@@ -27,5 +27,9 @@
   "python.analysis.diagnosticMode": "workspace",
   "python.linting.mypyEnabled": true,
   "python.linting.flake8Args": ["--config=.flake8"],
-  "prettier.configPath": "./frontend/.prettierrc"
+  "prettier.configPath": "./frontend/.prettierrc",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifierEnding": "minimal",
+  "typescript.preferences.importModuleSpecifierEnding": "minimal",
+  "javascript.preferences.importModuleSpecifier": "non-relative"
 }
