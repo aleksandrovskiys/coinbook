@@ -1,8 +1,8 @@
 import { ListItem, ListItemText, Typography } from "@mui/material";
 import * as React from "react";
 import { defaultLocale } from "src/common/constants";
+import { AccountBalanceChange } from "src/components/pages/MainPage/AccountsList/AccountBalanceChange";
 import { Account } from "src/redux/features/accounts/accountsSlice";
-import { AccountBalanceChange } from "./AccountBalanceChange";
 
 export function AccountsListItem({ account }: { account: Account }) {
   const balance = account.balance.toLocaleString(defaultLocale, { style: "currency", currency: account.currency.code });

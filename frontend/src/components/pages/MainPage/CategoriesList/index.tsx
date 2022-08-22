@@ -1,5 +1,7 @@
 import { Button, List, Paper, Typography } from "@mui/material";
 import * as React from "react";
+import { AddCategoryForm } from "src/components/pages/MainPage/CategoriesList/AddCategoryForm";
+import { CategoryListItem } from "src/components/pages/MainPage/CategoriesList/CategoryListItem";
 import {
   categoriesSelectorCreator,
   CategoryType,
@@ -8,8 +10,6 @@ import {
   fetchUserCategories,
 } from "src/redux/features/categories/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
-import { AddCategoryForm } from "./AddCategoryForm";
-import { CategoryListItem } from "./CategoryListItem";
 
 export function CategoriesList({ categoryType }: { categoryType: CategoryType }) {
   const dispatch = useAppDispatch();

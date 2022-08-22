@@ -1,9 +1,9 @@
 import { Button, List, Paper, Typography } from "@mui/material";
 import * as React from "react";
+import { AccountsListItem } from "src/components/pages/MainPage/AccountsList/AccountsListItem";
+import { AddAccountForm } from "src/components/pages/MainPage/AccountsList/AddAccountForm";
 import { AccountCreate, createAccount, fetchAccountsInformation } from "src/redux/features/accounts/accountsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
-import { AccountsListItem } from "./AccountsListItem";
-import { AddAccountForm } from "./AddAccountForm";
 
 export function AccountsList() {
   const dispatch = useAppDispatch();
