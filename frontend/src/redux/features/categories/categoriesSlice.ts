@@ -26,6 +26,7 @@ interface CategoriesState {
 
   loadStatus: asyncThunkStatuses;
   categoryCreationStatus: { [key in CategoryType]: asyncThunkStatuses };
+  categoryUpdateStatus: { [key: number]: asyncThunkStatuses };
 }
 
 const initialState: CategoriesState = {
@@ -43,6 +44,7 @@ const initialState: CategoriesState = {
 
   loadStatus: "idle",
   categoryCreationStatus: { expense: "idle", income: "idle" },
+  categoryUpdateStatus: {},
 };
 
 export const fetchUserCategories = createAsyncThunk(
@@ -71,6 +73,17 @@ export const createCategory = createAsyncThunk(
   }
 );
 
+export const updateCategory = createAsyncThunk("categories/updateCategory", async (payload: Category, thunkApi) => {
+  try {
+    const result = await api.updateCategory(payload);
+    return result;
+  } catch (err) {
+    thunkApi.dispatch(setCategoryStatusFailed(payload));
+    parseErrors(err, thunkApi);
+    return payload;
+  }
+});
+
 export const categoriesSlice = createSlice({
   name: "categories",
   initialState: initialState,
@@ -81,6 +94,12 @@ export const categoriesSlice = createSlice({
     },
     setNewCategoryName(state, action: PayloadAction<{ type: CategoryType; value: string }>) {
       state.newCategory[action.payload.type].name = action.payload.value;
+    },
+    resetUpdateCategoryStatus(state, action: PayloadAction<Category>) {
+      state.categoryUpdateStatus[action.payload.id] = "idle";
+    },
+    setCategoryStatusFailed(state, action: PayloadAction<Category>) {
+      state.categoryUpdateStatus[action.payload.id] = "failed";
     },
   },
   extraReducers(builder) {
@@ -99,6 +118,11 @@ export const categoriesSlice = createSlice({
       .addCase(createCategory.fulfilled, (state, action) => {
         if (action.payload) state.categories.push(action.payload.result);
         state.categoryCreationStatus[action.payload!.type] = "succeeded";
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        const category = state.categories.find((element) => element.id === action.payload.id);
+        category!.name = action.payload.name;
+        state.categoryUpdateStatus[category!.id] = "succeeded";
       });
   },
 });
@@ -106,6 +130,7 @@ export const categoriesSlice = createSlice({
 export const categoriesSelectorCreator = (type: OperationType) => (state: RootState) =>
   state.categories.categories.filter((element) => element.type === type);
 
-export const { setNewCategoryName, clearNewCategory } = categoriesSlice.actions;
+export const { setNewCategoryName, clearNewCategory, resetUpdateCategoryStatus, setCategoryStatusFailed } =
+  categoriesSlice.actions;
 
 export default categoriesSlice.reducer;
