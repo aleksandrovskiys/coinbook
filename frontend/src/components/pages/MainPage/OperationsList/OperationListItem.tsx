@@ -1,5 +1,5 @@
 import { ListItem, ListItemText, Typography } from "@mui/material";
-import * as moment from "moment";
+import { addMinutes } from "date-fns";
 import * as React from "react";
 import { defaultLocale } from "src/common/constants";
 import { Operation } from "src/redux/features/operations/operationsSlice";
@@ -24,7 +24,7 @@ export function OperationListItem({ operation }: { operation: Operation }) {
         }
         secondary={
           <React.Fragment>
-            {moment(date).add(-date.getTimezoneOffset(), "minutes").toDate().toLocaleString()}
+            {addMinutes(date, -date.getTimezoneOffset()).toLocaleString()}
             <Typography align="right" component="span" sx={{ display: "inline", float: "right" }}>
               {`${categoryName}`}
             </Typography>
