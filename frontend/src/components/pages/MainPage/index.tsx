@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import * as React from "react";
+import { AccountsList } from "src/components/pages/MainPage/AccountsList";
+import { CategoriesList } from "src/components/pages/MainPage/CategoriesList";
+import { OperationsList } from "src/components/pages/MainPage/OperationsList";
 import { useAppSelector } from "src/redux/hooks";
-import { AccountsList } from "./AccountsList";
-import { CategoriesList } from "./CategoriesList";
-import { OperationsList } from "./OperationsList";
 
 const theme = createTheme();
 
