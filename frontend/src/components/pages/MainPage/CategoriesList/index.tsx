@@ -31,9 +31,7 @@ export function CategoriesList({ categoryType }: { categoryType: CategoryType })
   }, [categoryCreationStatus, categoryType, dispatch]);
 
   const content = categories.length ? (
-    categories.map((category) => (
-      <CategoryListItem key={category.id} name={category.name} monthExpenses={category.monthExpenses || 0} />
-    ))
+    categories.map((category) => <CategoryListItem key={category.id} category={category} />)
   ) : (
     <Typography variant="h6" align="center">
       You have no categories yet

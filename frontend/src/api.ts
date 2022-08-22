@@ -127,6 +127,18 @@ class ApiClient {
     ).json();
   }
 
+  async updateCategory(category: Category): Promise<Category> {
+    return (
+      await this.secureFetch(`${API_URLS.categories}/${category.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(category),
+      })
+    ).json();
+  }
+
   async createOperation(operation: OperationCreate): Promise<Operation> {
     return (
       await this.secureFetch(API_URLS.operations, {
