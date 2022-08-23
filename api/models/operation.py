@@ -24,7 +24,7 @@ class Operation(Base):
     date = Column(DateTime)
 
     account_id = Column(Integer, ForeignKey("accounts.id"))
-    category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
+    category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
     user_id = Column(Integer, ForeignKey("users.id"))
 
     account = relationship("Account")

@@ -64,3 +64,21 @@ async def get_category(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=constants.PERMISSION_ERROR_TEXT_TEMPLATE)
 
     return CategoryInDB.from_orm(category)
+
+
+@router.delete("/{category_id}")
+async def delete_category(
+    category_id: int,
+    session: Session = Depends(deps.get_db),
+    current_user: User = Depends(deps.get_current_user),
+):
+    category = crud.category.get(session=session, id=category_id)
+    if not category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category with specified id not found in Database"
+        )
+
+    if category.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=constants.PERMISSION_ERROR_TEXT_TEMPLATE)
+
+    return Category.from_orm(crud.category.remove_obj(session=session, obj=category))
