@@ -7,7 +7,6 @@ from starlette.exceptions import HTTPException
 from api import constants
 from api import crud
 from api import deps
-from api.models.operation import OperationType
 from api.models.user import User
 from api.routers.helpers import get_and_check_permissions
 from api.schemas.operation import Operation
@@ -34,11 +33,6 @@ def create_operation(
     current_user: User = Depends(deps.get_current_user),
 ):
     get_and_check_permissions(session, crud.account, current_user, key=operation.account_id)
-
-    if not operation.category_id and operation.type != OperationType.balance_correction:
-        raise HTTPException(
-            status.HTTP_400_BAD_REQUEST, detail="Empty category allowed only for 'balance_correction' operations."
-        )
 
     if operation.category_id:
         category = get_and_check_permissions(session, crud.category, current_user, key=operation.category_id)
