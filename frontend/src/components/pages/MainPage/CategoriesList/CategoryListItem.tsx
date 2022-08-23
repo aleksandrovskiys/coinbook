@@ -1,9 +1,19 @@
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DoneIcon from "@mui/icons-material/Done";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
-import { Box, CircularProgress, IconButton, ListItem, ListItemText, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Collapse,
+  IconButton,
+  ListItem,
+  ListItemText,
+  TextField,
+  Typography,
+} from "@mui/material";
 import * as React from "react";
-import { Category, updateCategory } from "src/redux/features/categories/categoriesSlice";
+import { Category, deleteCategory, updateCategory } from "src/redux/features/categories/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 interface ICategoryListProps {
@@ -15,7 +25,10 @@ export function CategoryListItem({ category }: ICategoryListProps) {
 
   const [isEditMode, setEditMode] = React.useState<boolean>(false);
   const [value, setValue] = React.useState<string>(category.name);
+  const [isEditButtonsShown, setIsEditButtonsShown] = React.useState<boolean>(false);
   const categoryUpdateStatus = useAppSelector((state) => state.categories.categoryUpdateStatus[category.id]);
+
+  const listItemRef = React.useRef(null);
 
   React.useEffect(() => {
     if (categoryUpdateStatus === "succeeded") {
@@ -25,13 +38,23 @@ export function CategoryListItem({ category }: ICategoryListProps) {
   }, [categoryUpdateStatus, category.name]);
 
   const toggleIsEdit = () => setEditMode(!isEditMode);
-  const updateIconOnClick = (e: React.FormEvent) => {
+  const updateIconOnClick = () => {
     dispatch(updateCategory({ ...category, name: value }));
+  };
+  const deleteOnClick = () => {
+    dispatch(deleteCategory(category));
   };
 
   return (
-    <ListItem disablePadding divider sx={{ padding: "2px 8px" }}>
+    <ListItem
+      disablePadding
+      divider
+      sx={{ padding: "2px 8px" }}
+      onMouseOver={() => setIsEditButtonsShown(true)}
+      onMouseOut={() => setIsEditButtonsShown(false)}
+    >
       <ListItemText
+        ref={listItemRef}
         primary={
           <Box flexDirection="row" display="flex" alignItems="center">
             {isEditMode ? (
@@ -57,9 +80,16 @@ export function CategoryListItem({ category }: ICategoryListProps) {
             {categoryUpdateStatus === "pending" ? (
               <CircularProgress />
             ) : !isEditMode ? (
-              <IconButton onClick={toggleIsEdit}>
-                <EditTwoToneIcon fontSize="small" />
-              </IconButton>
+              <Collapse orientation="horizontal" in={isEditButtonsShown}>
+                <Box flexDirection="row" display="flex" alignItems="center">
+                  <IconButton onClick={toggleIsEdit}>
+                    <EditTwoToneIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton onClick={deleteOnClick}>
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                </Box>
+              </Collapse>
             ) : (
               <Box>
                 <IconButton onClick={updateIconOnClick}>
