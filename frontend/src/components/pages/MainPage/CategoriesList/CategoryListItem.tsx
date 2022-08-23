@@ -80,16 +80,7 @@ export function CategoryListItem({ category }: ICategoryListProps) {
             {categoryUpdateStatus === "pending" ? (
               <CircularProgress />
             ) : !isEditMode ? (
-              <Collapse orientation="horizontal" in={isEditButtonsShown}>
-                <Box flexDirection="row" display="flex" alignItems="center">
-                  <IconButton onClick={toggleIsEdit}>
-                    <EditTwoToneIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton onClick={deleteOnClick}>
-                    <DeleteOutlineIcon />
-                  </IconButton>
-                </Box>
-              </Collapse>
+              <EditButtons show={isEditButtonsShown} toggleEditMode={toggleIsEdit} deleteOnClick={deleteOnClick} />
             ) : (
               <Box>
                 <IconButton onClick={updateIconOnClick}>
@@ -109,5 +100,25 @@ export function CategoryListItem({ category }: ICategoryListProps) {
         }
       />
     </ListItem>
+  );
+}
+interface IEditButtonProps {
+  show: boolean;
+  toggleEditMode: () => void;
+  deleteOnClick: () => void;
+}
+
+function EditButtons({ show, toggleEditMode, deleteOnClick }: IEditButtonProps): JSX.Element {
+  return (
+    <Collapse orientation="horizontal" in={show}>
+      <Box flexDirection="row" display="flex" alignItems="center">
+        <IconButton onClick={toggleEditMode}>
+          <EditTwoToneIcon fontSize="small" />
+        </IconButton>
+        <IconButton onClick={deleteOnClick}>
+          <DeleteOutlineIcon />
+        </IconButton>
+      </Box>
+    </Collapse>
   );
 }

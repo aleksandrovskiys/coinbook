@@ -2,7 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "src/api";
 import { asyncThunkStatuses } from "src/interfaces/api";
 import { parseErrors } from "src/redux/features/errors/errorsSlice";
-import { fetchOperations, OperationType } from "src/redux/features/operations/operationsSlice";
+import {
+  deleteOperationsCategory,
+  OperationType,
+  updateOperationsCategory,
+} from "src/redux/features/operations/operationsSlice";
 import { RootState } from "src/redux/store";
 
 export type CategoryType = "expense" | "income";
@@ -76,6 +80,7 @@ export const createCategory = createAsyncThunk(
 export const updateCategory = createAsyncThunk("categories/updateCategory", async (payload: Category, thunkApi) => {
   try {
     const result = await api.updateCategory(payload);
+    thunkApi.dispatch(updateOperationsCategory(result));
     return result;
   } catch (err) {
     thunkApi.dispatch(setCategoryStatusFailed(payload));
@@ -87,7 +92,7 @@ export const updateCategory = createAsyncThunk("categories/updateCategory", asyn
 export const deleteCategory = createAsyncThunk("categories/deleteCategory", async (payload: Category, thunkApi) => {
   try {
     const result = await api.deleteCategory(payload);
-    thunkApi.dispatch(fetchOperations());
+    thunkApi.dispatch(deleteOperationsCategory(result));
     return result;
   } catch (err) {
     parseErrors(err, thunkApi);
