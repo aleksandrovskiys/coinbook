@@ -115,6 +115,29 @@ class ApiClient {
     ).json();
   }
 
+  async updateAccount(account: Account): Promise<Account> {
+    return (
+      await this.secureFetch(`${API_URLS.accounts}/${account.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(account),
+      })
+    ).json();
+  }
+
+  async deleteAccount(account: Account): Promise<Account> {
+    return (
+      await this.secureFetch(`${API_URLS.accounts}/${account.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    ).json();
+  }
+
   async createCategory(category: CategoryCreate): Promise<Category> {
     return (
       await this.secureFetch(API_URLS.categories, {

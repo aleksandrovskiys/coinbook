@@ -1,20 +1,10 @@
-import CloseIcon from "@mui/icons-material/Close";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import DoneIcon from "@mui/icons-material/Done";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
-import {
-  Box,
-  CircularProgress,
-  Collapse,
-  IconButton,
-  ListItem,
-  ListItemText,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, ListItem, ListItemText, Typography } from "@mui/material";
 import * as React from "react";
+import { EditableTextField } from "src/components/common/EditableTextField";
+import { EditButtons } from "src/components/common/EditButtons";
 import { Category, deleteCategory, updateCategory } from "src/redux/features/categories/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { SubmitCancelButtons } from "../../../common/SubmitCancelButtons";
 
 interface ICategoryListProps {
   category: Category;
@@ -41,6 +31,10 @@ export function CategoryListItem({ category }: ICategoryListProps) {
   const updateIconOnClick = () => {
     dispatch(updateCategory({ ...category, name: value }));
   };
+  const cancelIconOnClick = () => {
+    setEditMode(false);
+    setValue(category.name);
+  };
   const deleteOnClick = () => {
     dispatch(deleteCategory(category));
   };
@@ -57,23 +51,13 @@ export function CategoryListItem({ category }: ICategoryListProps) {
         ref={listItemRef}
         primary={
           <Box flexDirection="row" display="flex" alignItems="center">
-            {isEditMode ? (
-              <TextField
-                variant="standard"
-                value={value}
-                disabled={!isEditMode}
-                onChange={(e) => setValue(e.target.value)}
-                sx={{ flexGrow: 1, maxWidth: "50%" }}
-              />
-            ) : (
-              <Typography
-                onClick={() => {
-                  setEditMode(true);
-                }}
-              >
-                {category.name}
-              </Typography>
-            )}
+            <EditableTextField
+              isEditMode={isEditMode}
+              value={value}
+              setValue={setValue}
+              setEditMode={setEditMode}
+              textFieldSx={{ flexGrow: 1, maxWidth: "50%" }}
+            />
 
             <Typography sx={{ marginLeft: "auto", marginRight: "5px" }}>{category.monthExpenses || 0}</Typography>
 
@@ -82,43 +66,11 @@ export function CategoryListItem({ category }: ICategoryListProps) {
             ) : !isEditMode ? (
               <EditButtons show={isEditButtonsShown} toggleEditMode={toggleIsEdit} deleteOnClick={deleteOnClick} />
             ) : (
-              <Box>
-                <IconButton onClick={updateIconOnClick}>
-                  <DoneIcon fontSize="small" color="success" />
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    setEditMode(false);
-                    setValue(category.name);
-                  }}
-                >
-                  <CloseIcon fontSize="small" color="error" />
-                </IconButton>
-              </Box>
+              <SubmitCancelButtons updateIconOnClick={updateIconOnClick} cancelIconOnClick={cancelIconOnClick} />
             )}
           </Box>
         }
       />
     </ListItem>
-  );
-}
-interface IEditButtonProps {
-  show: boolean;
-  toggleEditMode: () => void;
-  deleteOnClick: () => void;
-}
-
-function EditButtons({ show, toggleEditMode, deleteOnClick }: IEditButtonProps): JSX.Element {
-  return (
-    <Collapse orientation="horizontal" in={show}>
-      <Box flexDirection="row" display="flex" alignItems="center">
-        <IconButton onClick={toggleEditMode}>
-          <EditTwoToneIcon fontSize="small" />
-        </IconButton>
-        <IconButton onClick={deleteOnClick}>
-          <DeleteOutlineIcon />
-        </IconButton>
-      </Box>
-    </Collapse>
   );
 }
