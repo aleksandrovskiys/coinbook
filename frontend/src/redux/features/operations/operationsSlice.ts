@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "src/api";
 import { asyncThunkStatuses } from "src/interfaces/api";
 import { Account } from "src/redux/features/accounts/accountsSlice";
@@ -13,7 +13,7 @@ export interface Operation {
   account: Account;
   userId: number;
   type: OperationType;
-  category: Category;
+  category: Category | null;
   amount: number;
 }
 
@@ -91,6 +91,22 @@ export const operationsSlice = createSlice({
     setNewOperationCategoryId(state, action) {
       state.newOperation.categoryId = action.payload;
     },
+    updateOperationsCategory(state, action: PayloadAction<Category>) {
+      state.operations = state.operations.map((element) => {
+        if (element.category?.id === action.payload.id) {
+          element.category = action.payload;
+        }
+        return element;
+      });
+    },
+    deleteOperationsCategory(state, action: PayloadAction<Category>) {
+      state.operations = state.operations.map((element) => {
+        if (element.category?.id === action.payload.id) {
+          element.category = null;
+        }
+        return element;
+      });
+    },
   },
   extraReducers(builder) {
     builder
@@ -121,6 +137,8 @@ export const {
   setNewOperationAccountId,
   setNewOperationDate,
   setNewOperationCategoryId,
+  updateOperationsCategory,
+  deleteOperationsCategory,
 } = operationsSlice.actions;
 
 export default operationsSlice.reducer;
