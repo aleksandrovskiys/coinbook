@@ -125,6 +125,7 @@ export function AddOperationForm({
             <OutlinedInput
               id="amount-input"
               value={newOperation.amount}
+              type="number"
               name="amount"
               size="small"
               onChange={(e) => dispatch(setNewOperationAmount(e.target.value))}

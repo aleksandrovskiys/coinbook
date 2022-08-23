@@ -32,6 +32,7 @@ interface AccountState {
 
   accountFetchStatus: asyncThunkStatuses;
   accountCreationStatus: asyncThunkStatuses;
+  accountUpdateStatus: asyncThunkStatuses;
 }
 
 const initialState: AccountState = {
@@ -40,6 +41,7 @@ const initialState: AccountState = {
 
   accountFetchStatus: "idle",
   accountCreationStatus: "idle",
+  accountUpdateStatus: "idle",
 };
 
 export const fetchAccountsInformation = createAsyncThunk(
@@ -75,6 +77,15 @@ export const createAccount = createAsyncThunk("accounts/createAccount", async (a
   }
 });
 
+export const deleteAccount = createAsyncThunk("accounts/deleteAccount", async (account: Account, thunkApi) => {
+  try {
+    const result = await api.deleteAccount(account);
+    return result;
+  } catch (err) {
+    parseErrors(err, thunkApi);
+  }
+});
+
 export const accountsSlice = createSlice({
   name: "accounts",
   initialState: initialState,
@@ -99,8 +110,11 @@ export const accountsSlice = createSlice({
         if (action.payload) state.accounts.push(action.payload);
         state.accountCreationStatus = "succeeded";
       })
-      .addCase(createAccount.rejected, (state, action) => {
+      .addCase(createAccount.rejected, (state) => {
         state.accountCreationStatus = "failed";
+      })
+      .addCase(deleteAccount.fulfilled, (state, action) => {
+        state.accounts = state.accounts.filter((element) => element.id !== action.payload!.id);
       });
   },
 });
