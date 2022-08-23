@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "src/api";
 import { asyncThunkStatuses } from "src/interfaces/api";
 import { parseErrors } from "src/redux/features/errors/errorsSlice";
-import { OperationType } from "src/redux/features/operations/operationsSlice";
+import { fetchOperations, OperationType } from "src/redux/features/operations/operationsSlice";
 import { RootState } from "src/redux/store";
 
 export type CategoryType = "expense" | "income";
@@ -84,6 +84,17 @@ export const updateCategory = createAsyncThunk("categories/updateCategory", asyn
   }
 });
 
+export const deleteCategory = createAsyncThunk("categories/deleteCategory", async (payload: Category, thunkApi) => {
+  try {
+    const result = await api.deleteCategory(payload);
+    thunkApi.dispatch(fetchOperations());
+    return result;
+  } catch (err) {
+    parseErrors(err, thunkApi);
+    return payload;
+  }
+});
+
 export const categoriesSlice = createSlice({
   name: "categories",
   initialState: initialState,
@@ -123,6 +134,9 @@ export const categoriesSlice = createSlice({
         const category = state.categories.find((element) => element.id === action.payload.id);
         category!.name = action.payload.name;
         state.categoryUpdateStatus[category!.id] = "succeeded";
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.categories = state.categories.filter((element) => element.id !== action.payload.id);
       });
   },
 });

@@ -139,6 +139,17 @@ class ApiClient {
     ).json();
   }
 
+  async deleteCategory(category: Category): Promise<Category> {
+    return (
+      await this.secureFetch(`${API_URLS.categories}/${category.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    ).json();
+  }
+
   async createOperation(operation: OperationCreate): Promise<Operation> {
     return (
       await this.secureFetch(API_URLS.operations, {

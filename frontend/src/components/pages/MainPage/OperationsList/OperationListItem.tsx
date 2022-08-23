@@ -9,7 +9,7 @@ export function OperationListItem({ operation }: { operation: Operation }) {
     style: "currency",
     currency: operation.account.currency.code,
   });
-  const categoryName = operation.category?.name || "Balance correction";
+  const categoryName = operation.category?.name || "Unknown";
   const date = new Date(operation.date);
   return (
     <ListItem disablePadding divider sx={{ padding: "2px 16px" }}>
