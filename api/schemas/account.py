@@ -17,6 +17,11 @@ class AccountCreate(AccountBase):
     user_id: int = Field(alias="userId")
 
 
+class AccountUpdate(AccountCreate):
+    id: int
+    balance: int
+
+
 class AccountInDB(AccountBase):
     user_id: int
     id: int

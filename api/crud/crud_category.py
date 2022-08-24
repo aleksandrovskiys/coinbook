@@ -59,5 +59,8 @@ class CategoryCrud(CRUDBase[Category, CategoryCreate, CategoryBase]):
 
         return round(result["balance"], 2) * (-1 if category.type == CategoryType.expense else 1)
 
+    def get_balance_correction_category(self, session: Session) -> Category:
+        return session.query(Category).filter(Category.type == CategoryType.balance_correction).first()
+
 
 category = CategoryCrud(Category)
