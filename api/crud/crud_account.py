@@ -4,17 +4,18 @@ from sqlalchemy import case
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
+from api import crud
 from api.crud.base import CRUDBase
 from api.models.account import Account
 from api.models.operation import Operation
 from api.models.operation import OperationType
 from api.models.user import User
 from api.schemas.account import Account as AccountSchema
-from api.schemas.account import AccountBase
 from api.schemas.account import AccountCreate
+from api.schemas.account import AccountUpdate
 
 
-class AccountCrud(CRUDBase[Account, AccountCreate, AccountBase]):
+class AccountCrud(CRUDBase[Account, AccountCreate, AccountUpdate]):
     def get_user_accounts(self, session: Session, user: User) -> list[Account]:
         accounts_objects = session.query(self.model).filter(self.model.user_id == user.id).all()
         accounts = []
@@ -62,6 +63,18 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountBase]):
             return 0
 
         return round(result["month_worth_change"], 2)
+
+    def update(self, session: Session, *, db_obj: Account, obj_in: AccountUpdate) -> Account:
+        updated_account = super().update(session, db_obj=db_obj, obj_in=obj_in)
+        current_balance = self.get_account_balance(session=session, account=db_obj)
+        if current_balance != obj_in.balance:
+            crud.operation.add_balance_correction_operation(
+                session=session,
+                account=db_obj,
+                current_balance=current_balance,
+                new_balance=obj_in.balance,
+            )
+        return updated_account
 
 
 account = AccountCrud(Account)

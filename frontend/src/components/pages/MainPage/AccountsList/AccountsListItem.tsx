@@ -81,7 +81,6 @@ export function AccountsListItem({ account }: { account: Account }) {
       id: account.id,
     };
     dispatch(updateAccount(accountUpdateObject));
-    clearEditFields();
   };
 
   const deleteOnClick = () => {

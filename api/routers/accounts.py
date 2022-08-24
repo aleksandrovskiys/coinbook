@@ -9,9 +9,9 @@ from api import crud
 from api import deps
 from api.models.user import User
 from api.schemas.account import Account
-from api.schemas.account import AccountBase
 from api.schemas.account import AccountCreate
 from api.schemas.account import AccountInDB
+from api.schemas.account import AccountUpdate
 
 router = APIRouter(tags=[constants.SwaggerTags.ACCOUNTS])
 
@@ -33,7 +33,7 @@ async def create_account(
 @router.put("/{account_id}", response_model=Account)
 async def update_account(
     account_id: int,
-    account: AccountBase,
+    account: AccountUpdate,
     current_user: User = Depends(deps.get_current_user),
     session: Session = Depends(deps.get_db),
 ) -> Account:
