@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "src/api";
 import { asyncThunkStatuses } from "src/interfaces/api";
 import { parseErrors } from "src/redux/features/errors/errorsSlice";
+import { fetchOperations } from "src/redux/features/operations/operationsSlice";
 
 export interface Currency {
   name: string;
@@ -16,6 +17,11 @@ export interface AccountBase {
 
 export interface AccountCreate extends AccountBase {
   currencyCode: string;
+}
+
+export interface AccountUpdate extends AccountCreate {
+  id: number;
+  balance: number;
 }
 
 export interface Account extends AccountBase {
@@ -77,6 +83,16 @@ export const createAccount = createAsyncThunk("accounts/createAccount", async (a
   }
 });
 
+export const updateAccount = createAsyncThunk("accounts/updateAccount", async (account: AccountUpdate, thunkApi) => {
+  try {
+    const result = await api.updateAccount(account);
+    thunkApi.dispatch(fetchOperations());
+    return result;
+  } catch (err) {
+    parseErrors(err, thunkApi);
+  }
+});
+
 export const deleteAccount = createAsyncThunk("accounts/deleteAccount", async (account: Account, thunkApi) => {
   try {
     const result = await api.deleteAccount(account);
@@ -115,6 +131,21 @@ export const accountsSlice = createSlice({
       })
       .addCase(deleteAccount.fulfilled, (state, action) => {
         state.accounts = state.accounts.filter((element) => element.id !== action.payload!.id);
+      })
+      .addCase(updateAccount.fulfilled, (state, action) => {
+        state.accountUpdateStatus = "succeeded";
+        const account = state.accounts.find((element) => element.id === action.payload?.id);
+        if (account) {
+          for (const key in action.payload) {
+            account[key] = action.payload[key];
+          }
+        }
+      })
+      .addCase(updateAccount.pending, (state) => {
+        state.accountUpdateStatus = "pending";
+      })
+      .addCase(updateAccount.rejected, (state) => {
+        state.accountUpdateStatus = "failed";
       });
   },
 });

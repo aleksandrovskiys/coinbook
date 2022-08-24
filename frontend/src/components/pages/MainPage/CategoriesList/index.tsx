@@ -4,14 +4,14 @@ import { AddCategoryForm } from "src/components/pages/MainPage/CategoriesList/Ad
 import { CategoryListItem } from "src/components/pages/MainPage/CategoriesList/CategoryListItem";
 import {
   categoriesSelectorCreator,
-  CategoryType,
   clearNewCategory,
   createCategory,
   fetchUserCategories,
+  UserCategoryTypes,
 } from "src/redux/features/categories/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
-export function CategoriesList({ categoryType }: { categoryType: CategoryType }) {
+export function CategoriesList({ categoryType }: { categoryType: UserCategoryTypes }) {
   const dispatch = useAppDispatch();
 
   const categories = useAppSelector(categoriesSelectorCreator(categoryType));

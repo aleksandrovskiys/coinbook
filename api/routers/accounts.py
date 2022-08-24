@@ -30,13 +30,13 @@ async def create_account(
     return crud.account.create(session=session, obj_in=account)
 
 
-@router.put("/{account_id}", response_model=AccountInDB)
+@router.put("/{account_id}", response_model=Account)
 async def update_account(
     account_id: int,
     account: AccountBase,
     current_user: User = Depends(deps.get_current_user),
     session: Session = Depends(deps.get_db),
-) -> AccountInDB:
+) -> Account:
     account_obj = crud.account.get(session=session, id=account_id)
     if not account_obj:
         raise HTTPException(
@@ -46,7 +46,7 @@ async def update_account(
     if account_obj.user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=constants.PERMISSION_ERROR_TEXT_TEMPLATE)
 
-    return AccountInDB.from_orm(crud.account.update(session=session, obj_in=account, db_obj=account_obj))
+    return crud.account.update(session=session, obj_in=account, db_obj=account_obj)
 
 
 @router.get("/{account_id}", response_model=AccountInDB)

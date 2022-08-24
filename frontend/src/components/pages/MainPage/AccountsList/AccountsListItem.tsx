@@ -15,7 +15,13 @@ import { EditableTextField } from "src/components/common/EditableTextField";
 import { EditButtons } from "src/components/common/EditButtons";
 import { SubmitCancelButtons } from "src/components/common/SubmitCancelButtons";
 import { AccountBalanceChange } from "src/components/pages/MainPage/AccountsList/AccountBalanceChange";
-import { Account, deleteAccount, fetchAvailableCurrencies } from "src/redux/features/accounts/accountsSlice";
+import {
+  Account,
+  AccountUpdate,
+  deleteAccount,
+  fetchAvailableCurrencies,
+  updateAccount,
+} from "src/redux/features/accounts/accountsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 const StyledInput = styled(Input)`
@@ -49,12 +55,33 @@ export function AccountsListItem({ account }: { account: Account }) {
     dispatch(fetchAvailableCurrencies());
   }, [dispatch]);
 
-  const toggleIsEdit = () => setEditMode(!isEditMode);
-  const cancelIconOnClick = (e: React.FormEvent) => {
+  React.useEffect(() => {
+    if (accountUpdateStatus === "succeeded") {
+      setEditMode(false);
+    }
+  }, [accountUpdateStatus]);
+
+  function clearEditFields() {
     setEditMode(false);
     setAccountBalance(account.balance);
     setAccountName(account.name);
     setAccountCurrencyCode(account.currency.code);
+  }
+  const toggleIsEdit = () => setEditMode(!isEditMode);
+  const cancelIconOnClick = (e: React.FormEvent) => {
+    clearEditFields();
+  };
+
+  const updateIconOnClick = () => {
+    const accountUpdateObject: AccountUpdate = {
+      name: accountName,
+      currencyCode: accountCurrencyCode,
+      userId: account.userId,
+      balance: accountBalance,
+      id: account.id,
+    };
+    dispatch(updateAccount(accountUpdateObject));
+    clearEditFields();
   };
 
   const deleteOnClick = () => {
@@ -125,12 +152,7 @@ export function AccountsListItem({ account }: { account: Account }) {
             ) : !isEditMode ? (
               <EditButtons show={isEditButtonsShown} toggleEditMode={toggleIsEdit} deleteOnClick={deleteOnClick} />
             ) : (
-              <SubmitCancelButtons
-                updateIconOnClick={function (event: React.FormEvent<Element>): void {
-                  throw new Error("Function not implemented.");
-                }}
-                cancelIconOnClick={cancelIconOnClick}
-              />
+              <SubmitCancelButtons updateIconOnClick={updateIconOnClick} cancelIconOnClick={cancelIconOnClick} />
             )}
           </Box>
         }
