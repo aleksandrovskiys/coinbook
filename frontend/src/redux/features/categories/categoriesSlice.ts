@@ -9,27 +9,28 @@ import {
 } from "src/redux/features/operations/operationsSlice";
 import { RootState } from "src/redux/store";
 
-export type CategoryType = "expense" | "income";
+export type UserCategoryTypes = "expense" | "income";
+export type OperationCategoryTypes = UserCategoryTypes | "balance_correction";
 
 export interface Category {
   id: number;
   name: string;
-  type: CategoryType;
+  type: OperationCategoryTypes;
 
   monthExpenses?: number;
 }
 
 export interface CategoryCreate {
   name: string;
-  type: CategoryType;
+  type: UserCategoryTypes;
 }
 
 interface CategoriesState {
   categories: Category[];
-  newCategory: { [key in CategoryType]: CategoryCreate };
+  newCategory: { [key in UserCategoryTypes]: CategoryCreate };
 
   loadStatus: asyncThunkStatuses;
-  categoryCreationStatus: { [key in CategoryType]: asyncThunkStatuses };
+  categoryCreationStatus: { [key in UserCategoryTypes]: asyncThunkStatuses };
   categoryUpdateStatus: { [key: number]: asyncThunkStatuses };
 }
 
@@ -66,7 +67,7 @@ export const fetchUserCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk(
   "categories/createCategory",
-  async (payload: { type: CategoryType; value: CategoryCreate }, thunkApi) => {
+  async (payload: { type: UserCategoryTypes; value: CategoryCreate }, thunkApi) => {
     try {
       const result = await api.createCategory(payload.value);
       return { type: payload.type, result: result };
@@ -104,11 +105,11 @@ export const categoriesSlice = createSlice({
   name: "categories",
   initialState: initialState,
   reducers: {
-    clearNewCategory(state, action: PayloadAction<CategoryType>) {
+    clearNewCategory(state, action: PayloadAction<UserCategoryTypes>) {
       state.newCategory[action.payload] = initialState.newCategory[action.payload];
       state.categoryCreationStatus[action.payload] = "idle";
     },
-    setNewCategoryName(state, action: PayloadAction<{ type: CategoryType; value: string }>) {
+    setNewCategoryName(state, action: PayloadAction<{ type: UserCategoryTypes; value: string }>) {
       state.newCategory[action.payload.type].name = action.payload.value;
     },
     resetUpdateCategoryStatus(state, action: PayloadAction<Category>) {

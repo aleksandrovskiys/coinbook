@@ -12,6 +12,7 @@ from api.db.base_class import Base
 class CategoryType(enum.Enum):
     expense = "expense"
     income = "income"
+    balance_correction = "balance_correction"
 
 
 class Category(Base):
