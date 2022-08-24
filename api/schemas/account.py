@@ -19,7 +19,7 @@ class AccountCreate(AccountBase):
 
 class AccountUpdate(AccountCreate):
     id: int
-    balance: int
+    balance: float
 
 
 class AccountInDB(AccountBase):
