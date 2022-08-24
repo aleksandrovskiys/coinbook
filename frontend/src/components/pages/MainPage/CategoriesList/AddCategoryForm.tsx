@@ -1,7 +1,7 @@
 import { Box, Grid, TextField } from "@mui/material";
 import * as React from "react";
 import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
-import { CategoryType, clearNewCategory, setNewCategoryName } from "src/redux/features/categories/categoriesSlice";
+import { clearNewCategory, setNewCategoryName, UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 export function AddCategoryForm({
@@ -11,7 +11,7 @@ export function AddCategoryForm({
 }: {
   setAddCategoryToggle: CallableFunction;
   addCategoryOnSubmit: React.FormEventHandler;
-  categoryType: CategoryType;
+  categoryType: UserCategoryTypes;
 }) {
   const dispatch = useAppDispatch();
 

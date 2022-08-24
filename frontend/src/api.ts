@@ -1,6 +1,6 @@
 import { API_URL, API_URLS } from "src/common/constants";
 import { ApiError } from "src/common/exceptions";
-import { Account, AccountCreate, Currency } from "src/redux/features/accounts/accountsSlice";
+import { Account, AccountCreate, AccountUpdate, Currency } from "src/redux/features/accounts/accountsSlice";
 import { Category, CategoryCreate } from "src/redux/features/categories/categoriesSlice";
 import { Operation, OperationCreate } from "src/redux/features/operations/operationsSlice";
 import { getTokenFromStorage } from "src/utils/localStorage";
@@ -115,7 +115,7 @@ class ApiClient {
     ).json();
   }
 
-  async updateAccount(account: Account): Promise<Account> {
+  async updateAccount(account: AccountUpdate): Promise<Account> {
     return (
       await this.secureFetch(`${API_URLS.accounts}/${account.id}`, {
         method: "PUT",
