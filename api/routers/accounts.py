@@ -20,7 +20,7 @@ router = APIRouter(tags=[constants.SwaggerTags.ACCOUNTS])
 async def get_user_accounts(
     current_user: User = Depends(deps.get_current_user), session: Session = Depends(deps.get_db)
 ) -> list[Account]:
-    return crud.account.get_user_accounts(session=session, user=current_user)
+    return [Account.from_orm(account) for account in crud.account.get_user_accounts(session=session, user=current_user)]
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=Account)
