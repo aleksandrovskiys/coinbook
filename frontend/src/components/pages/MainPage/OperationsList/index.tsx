@@ -2,12 +2,8 @@ import { Box, Button, List, Paper, Typography } from "@mui/material";
 import * as React from "react";
 import { AddOperationForm } from "src/components/pages/MainPage/OperationsList/AddOperationForm";
 import { OperationListItem } from "src/components/pages/MainPage/OperationsList/OperationListItem";
-import {
-  clearNewOperation,
-  createOperation,
-  fetchOperations,
-  OperationType,
-} from "src/redux/features/operations/operationsSlice";
+import { UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
+import { clearNewOperation, createOperation, fetchOperations } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 export function OperationsList() {
@@ -16,7 +12,7 @@ export function OperationsList() {
   const isLoggedIn = !!useAppSelector((state) => state.users.userInfo);
   const newOperation = useAppSelector((state) => state.operations.newOperation);
   const operationCreationStatus = useAppSelector((state) => state.operations.operationCreationStatus);
-  const [newOperationType, setNewOperationType] = React.useState<OperationType>("expense");
+  const [newOperationType, setNewOperationType] = React.useState<UserCategoryTypes>("expense");
 
   const [addOperationToggle, setAddOperationToggle] = React.useState<boolean>(false);
 

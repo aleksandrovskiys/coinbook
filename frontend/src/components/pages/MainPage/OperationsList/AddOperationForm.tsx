@@ -16,10 +16,9 @@ import * as React from "react";
 import { useEffect } from "react";
 import { getCurrencySymbol } from "src/common/utils";
 import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
-import { categoriesSelectorCreator } from "src/redux/features/categories/categoriesSlice";
+import { categoriesSelectorCreator, UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
 import {
   clearNewOperation,
-  OperationType,
   setNewOperationAccountId,
   setNewOperationAmount,
   setNewOperationCategoryId,
@@ -35,7 +34,7 @@ export function AddOperationForm({
 }: {
   addOperationOnSubmit: React.FormEventHandler;
   setAddOperationToggle: CallableFunction;
-  operationType: OperationType;
+  operationType: UserCategoryTypes;
 }): JSX.Element {
   const newOperation = useAppSelector((state) => state.operations.newOperation);
   const accounts = useAppSelector((state) => state.accounts.accounts);
@@ -43,12 +42,11 @@ export function AddOperationForm({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(startOperationCreation(operationType));
-  }, [dispatch, operationType]);
+    dispatch(startOperationCreation());
+  }, [dispatch]);
 
   return (
     <Box component="form" onSubmit={addOperationOnSubmit} noValidate sx={{ margin: "10px 0px" }}>
-      <TextField name="type" sx={{ display: "none" }} value={operationType} />
       <Grid container spacing={1}>
         <Grid item sm={3}>
           <FormControl fullWidth>

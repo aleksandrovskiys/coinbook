@@ -2,11 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "src/api";
 import { asyncThunkStatuses } from "src/interfaces/api";
 import { parseErrors } from "src/redux/features/errors/errorsSlice";
-import {
-  deleteOperationsCategory,
-  OperationType,
-  updateOperationsCategory,
-} from "src/redux/features/operations/operationsSlice";
+import { deleteOperationsCategory, updateOperationsCategory } from "src/redux/features/operations/operationsSlice";
 import { RootState } from "src/redux/store";
 
 export type UserCategoryTypes = "expense" | "income";
@@ -147,7 +143,7 @@ export const categoriesSlice = createSlice({
   },
 });
 
-export const categoriesSelectorCreator = (type: OperationType) => (state: RootState) =>
+export const categoriesSelectorCreator = (type: UserCategoryTypes) => (state: RootState) =>
   state.categories.categories.filter((element) => element.type === type);
 
 export const { setNewCategoryName, clearNewCategory, resetUpdateCategoryStatus, setCategoryStatusFailed } =

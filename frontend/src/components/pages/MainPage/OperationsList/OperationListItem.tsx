@@ -1,6 +1,7 @@
 import { ListItem, ListItemText, Typography } from "@mui/material";
 import { addMinutes } from "date-fns";
 import * as React from "react";
+import { defaultColor, expenseColor, incomeColor } from "src/common/colors";
 import { defaultLocale } from "src/common/constants";
 import { Operation } from "src/redux/features/operations/operationsSlice";
 
@@ -9,6 +10,12 @@ export function OperationListItem({ operation }: { operation: Operation }) {
     style: "currency",
     currency: operation.account.currency.code,
   });
+  const color =
+    operation.category?.type === "income"
+      ? incomeColor
+      : operation.category?.type === "expense"
+      ? expenseColor
+      : defaultColor;
   const categoryName = operation.category?.name || "Unknown";
   const date = new Date(operation.date);
   return (
@@ -16,8 +23,8 @@ export function OperationListItem({ operation }: { operation: Operation }) {
       <ListItemText
         primary={
           <React.Fragment>
-            {operation.account.name} - {operation.type}
-            <Typography align="right" component="span" sx={{ display: "inline", float: "right" }}>
+            {operation.account.name}
+            <Typography align="right" component="span" sx={{ display: "inline", float: "right", color: color }}>
               {`${amount}`}
             </Typography>
           </React.Fragment>

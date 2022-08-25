@@ -1,20 +1,11 @@
-import enum
-
 from sqlalchemy import Column
 from sqlalchemy import DateTime
-from sqlalchemy import Enum
 from sqlalchemy import Float
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
 
 from api.db.base_class import Base
-
-
-class OperationType(enum.Enum):
-    expense = "expense"
-    income = "income"
-    balance_correction = "balance_correction"
 
 
 class Operation(Base):
@@ -30,5 +21,4 @@ class Operation(Base):
     account = relationship("Account")
     category = relationship("Category")
 
-    type = Column(Enum(OperationType))
     amount = Column(Float)

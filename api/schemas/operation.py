@@ -3,7 +3,6 @@ from datetime import datetime
 from pydantic import BaseModel
 from pydantic import Field
 
-from api.models.operation import OperationType
 from api.schemas.account import Account
 from api.schemas.account import AccountInDB
 from api.schemas.category import Category
@@ -13,7 +12,6 @@ from api.schemas.user import UserInDB
 
 class OperationBase(BaseModel):
     date: datetime
-    type: OperationType
     account_id: int = Field(alias="accountId")
     category_id: int | None = Field(alias="categoryId", default=None)
     amount: float = 0
