@@ -5,14 +5,11 @@ import { Account } from "src/redux/features/accounts/accountsSlice";
 import { Category } from "src/redux/features/categories/categoriesSlice";
 import { parseErrors } from "src/redux/features/errors/errorsSlice";
 
-export type OperationType = "expense" | "income" | "balance_correction";
-
 export interface Operation {
   id: number;
   date: string;
   account: Account;
   userId: number;
-  type: OperationType;
   category: Category | null;
   amount: number;
 }
@@ -20,7 +17,6 @@ export interface Operation {
 export interface OperationCreate {
   date?: string;
   accountId?: number;
-  type?: OperationType;
   categoryId?: number;
   amount?: number;
 }
@@ -73,10 +69,9 @@ export const operationsSlice = createSlice({
       state.newOperation = initialState.newOperation;
       state.operationCreationStatus = "idle";
     },
-    startOperationCreation(state, action) {
+    startOperationCreation(state) {
       state.newOperation = {
         ...initialState.newOperation,
-        type: action.payload,
       };
     },
     setNewOperationAmount(state, action) {

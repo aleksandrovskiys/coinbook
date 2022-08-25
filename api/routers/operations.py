@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from starlette import status
-from starlette.exceptions import HTTPException
 
 from api import constants
 from api import crud
@@ -33,11 +32,6 @@ def create_operation(
     current_user: User = Depends(deps.get_current_user),
 ):
     get_and_check_permissions(session, crud.account, current_user, key=operation.account_id)
-
-    if operation.category_id:
-        category = get_and_check_permissions(session, crud.category, current_user, key=operation.category_id)
-        if category and constants.CATEGORY_TO_OPERATION_TYPE_MAPPING.get(category.type) != operation.type:
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Operation type doesn't match category type")
 
     operation = OperationCreate(**operation.dict(), user_id=current_user.id)
     operation.user_id = current_user.id

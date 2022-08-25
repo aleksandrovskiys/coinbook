@@ -8,7 +8,6 @@ from api.crud.base import CRUDBase
 from api.models.category import Category
 from api.models.category import CategoryType
 from api.models.operation import Operation
-from api.models.operation import OperationType
 from api.schemas.category import Category as CategorySchema
 from api.schemas.category import CategoryBase
 from api.schemas.category import CategoryCreate
@@ -45,9 +44,10 @@ class CategoryCrud(CRUDBase[Category, CategoryCreate, CategoryBase]):
         result = (
             session.query(
                 func.sum(
-                    case((Operation.type == OperationType.expense, -Operation.amount), else_=Operation.amount)
+                    case((Category.type == CategoryType.expense, -Operation.amount), else_=Operation.amount)
                 ).label("balance")
             )
+            .join(Category)
             .where(Operation.category_id == category.id)
             .where(Operation.date >= from_)
             .where(Operation.date < to_)

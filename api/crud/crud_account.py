@@ -7,8 +7,9 @@ from sqlalchemy.orm import Session
 from api import crud
 from api.crud.base import CRUDBase
 from api.models.account import Account
+from api.models.category import Category
+from api.models.category import CategoryType
 from api.models.operation import Operation
-from api.models.operation import OperationType
 from api.models.user import User
 from api.schemas.account import Account as AccountSchema
 from api.schemas.account import AccountCreate
@@ -34,9 +35,10 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountUpdate]):
         result = (
             session.query(
                 func.sum(
-                    case((Operation.type == OperationType.expense, -Operation.amount), else_=Operation.amount)
+                    case((Category.type == CategoryType.expense, -Operation.amount), else_=Operation.amount)
                 ).label("balance")
             )
+            .join(Category)
             .where(Operation.account_id == account.id)
             .first()
         )
@@ -51,9 +53,10 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountUpdate]):
         result = (
             session.query(
                 func.sum(
-                    case((Operation.type == OperationType.expense, -Operation.amount), else_=Operation.amount)
+                    case((Category.type == CategoryType.expense, -Operation.amount), else_=Operation.amount)
                 ).label("month_worth_change")
             )
+            .join(Category)
             .where(Operation.account_id == account.id)
             .where(Operation.date >= datetime.date.today().replace(day=1))
             .first()
