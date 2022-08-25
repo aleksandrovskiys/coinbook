@@ -33,7 +33,7 @@ export function OperationListItem({ operation }: { operation: Operation }) {
         }
         secondary={
           <React.Fragment>
-            <Tooltip title={dateInCurrentTZ.toLocaleString()} placement="top">
+            <Tooltip title={dateInCurrentTZ.toLocaleString()} placement="right">
               <Typography component="span">{relativeDate} ago</Typography>
             </Tooltip>
             <Typography align="right" component="span" sx={{ display: "inline", float: "right" }}>
