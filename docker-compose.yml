@@ -5,7 +5,7 @@ services:
     image: postgres:latest
     ports:
       - target: 5432
-        published: 5432
+        published: 55432
         protocol: tcp
         mode: host
     restart: unless-stopped
@@ -20,8 +20,6 @@ services:
       dockerfile: docker/Dockerfile.api
     environment:
       - STATIC_ROOT=/opt/project/personal_finances/staticroot
-      - POSTGRES_URL=db
-      - POSTGRES_PORT=5432
     volumes:
       - ./:/opt/personal_finances
     restart: unless-stopped
