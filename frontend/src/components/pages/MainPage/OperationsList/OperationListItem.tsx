@@ -1,5 +1,5 @@
-import { ListItem, ListItemText, Typography } from "@mui/material";
-import { addMinutes } from "date-fns";
+import { ListItem, ListItemText, Tooltip, Typography } from "@mui/material";
+import { addMinutes, formatDistanceToNow } from "date-fns";
 import * as React from "react";
 import { defaultColor, expenseColor, incomeColor } from "src/common/colors";
 import { defaultLocale } from "src/common/constants";
@@ -18,6 +18,8 @@ export function OperationListItem({ operation }: { operation: Operation }) {
       : defaultColor;
   const categoryName = operation.category?.name || "Unknown";
   const date = new Date(operation.date);
+  const dateInCurrentTZ = addMinutes(date, -date.getTimezoneOffset());
+  const relativeDate = formatDistanceToNow(dateInCurrentTZ);
   return (
     <ListItem disablePadding divider sx={{ padding: "2px 16px" }}>
       <ListItemText
@@ -31,7 +33,9 @@ export function OperationListItem({ operation }: { operation: Operation }) {
         }
         secondary={
           <React.Fragment>
-            {addMinutes(date, -date.getTimezoneOffset()).toLocaleString()}
+            <Tooltip title={dateInCurrentTZ.toLocaleString()} placement="top">
+              <Typography component="span">{relativeDate} ago</Typography>
+            </Tooltip>
             <Typography align="right" component="span" sx={{ display: "inline", float: "right" }}>
               {`${categoryName}`}
             </Typography>
