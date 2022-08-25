@@ -17,6 +17,7 @@ services:
       dockerfile: docker/Dockerfile.api
     environment:
       - STATIC_ROOT=/opt/project/personal_finances/staticroot
+      - POSTGRES_HOST=db
     volumes:
       - ./:/opt/personal_finances
     restart: unless-stopped
