@@ -31,6 +31,6 @@ class Account(AccountBase):
     id: int
     user_id: int = Field(alias="userId")
 
-    balance: int = 0
+    balance: float = 0
     month_worth_change: int = Field(default=0, alias="monthWorthChange")
     currency: CurrencyBase

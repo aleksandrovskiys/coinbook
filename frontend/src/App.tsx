@@ -4,8 +4,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { APPLICATION_URLS } from "src/common/constants";
 import ErrorAlerts from "src/components/common/ErrorAlerts";
 import NavigationBar from "src/components/navigation/NavigationBar";
-import { Accounts } from "src/components/pages/Accounts";
-import { Categories } from "src/components/pages/Categories";
 import Login from "src/components/pages/Login";
 import MainPage from "src/components/pages/MainPage";
 import Profile from "src/components/pages/Profile";
@@ -33,8 +31,6 @@ function App() {
       <Routes>
         <Route path={APPLICATION_URLS.profile} element={<Profile />} />
         <Route path={APPLICATION_URLS.settings} element={<Settings />} />
-        <Route path={APPLICATION_URLS.accounts} element={<Accounts />} />
-        <Route path={APPLICATION_URLS.categories} element={<Categories />} />
         <Route path={APPLICATION_URLS.register} element={<SignUp />} />
         <Route path={APPLICATION_URLS.login} element={<Login />} />
         <Route path="/" element={<MainPage />} />

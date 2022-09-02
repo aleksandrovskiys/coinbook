@@ -22,6 +22,7 @@ export function NavigationBarAppName(): JSX.Element {
           color: "inherit",
           textDecoration: "none",
           cursor: "pointer",
+          flexGrow: 1,
         }}
       >
         Finance
