@@ -2,7 +2,6 @@ import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import * as React from "react";
-import { NavigationBarAdditionalPages } from "src/components/navigation/NavigationBarAdditionalPages";
 import { NavigationBarAppName } from "src/components/navigation/NavigationBarAppName";
 import { NavigationBarMenu } from "src/components/navigation/NavigationBarMenu";
 import { useAppSelector } from "src/redux/hooks";
@@ -25,7 +24,6 @@ const ResponsiveAppBar = () => {
       <Container maxWidth={false}>
         <Toolbar disableGutters>
           <NavigationBarAppName />
-          <NavigationBarAdditionalPages isLoggedIn={isLoggedIn} />
           <NavigationBarMenu
             isLoggedIn={isLoggedIn}
             handleOpenUserMenu={handleOpenUserMenu}
