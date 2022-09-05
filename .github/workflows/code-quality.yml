@@ -1,4 +1,4 @@
-name: Deploy
+name: Quality Checks
 on: [push]
 jobs:
   Quality-Checks:
