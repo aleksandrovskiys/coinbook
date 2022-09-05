@@ -12,7 +12,6 @@ import { Box } from "@mui/system";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { addMinutes } from "date-fns";
 import * as React from "react";
 import { useEffect } from "react";
 import { getCurrencySymbol } from "src/common/utils";
@@ -109,8 +108,7 @@ export function AddOperationForm({
               onChange={(value: Date | null) => {
                 try {
                   if (value) {
-                    const dateInCurrentTZ = addMinutes(value, value.getTimezoneOffset());
-                    const operationDate = dateInCurrentTZ.toISOString();
+                    const operationDate = value.toISOString();
                     dispatch(setNewOperationDate(operationDate));
                   }
                 } catch {
