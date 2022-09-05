@@ -1,14 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Input,
-  ListItem,
-  ListItemText,
-  MenuItem,
-  Select,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, ListItem, ListItemText, MenuItem, Select, Typography } from "@mui/material";
 import * as React from "react";
 import { defaultLocale } from "src/common/constants";
 import { EditableTextField } from "src/components/common/EditableTextField";
@@ -23,13 +13,7 @@ import {
   updateAccount,
 } from "src/redux/features/accounts/accountsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
-
-const StyledInput = styled(Input)`
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    display: none;
-  }
-`;
+import { StyledInput } from "../../../common/StyledInput";
 
 export function AccountsListItem({ account }: { account: Account }) {
   const dispatch = useAppDispatch();

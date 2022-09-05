@@ -12,6 +12,7 @@ import { Box } from "@mui/system";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { addMinutes } from "date-fns";
 import * as React from "react";
 import { useEffect } from "react";
 import { getCurrencySymbol } from "src/common/utils";
@@ -103,13 +104,18 @@ export function AddOperationForm({
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
               label="Date"
-              value={newOperation.date ? Date.parse(newOperation.date) : undefined}
+              value={newOperation.date ? new Date(newOperation.date) : undefined}
               ampm={false}
               onChange={(value: Date | null) => {
                 try {
-                  const operationDate = value?.toISOString();
-                  dispatch(setNewOperationDate(operationDate));
-                } catch {}
+                  if (value) {
+                    const dateInCurrentTZ = addMinutes(value, value.getTimezoneOffset());
+                    const operationDate = dateInCurrentTZ.toISOString();
+                    dispatch(setNewOperationDate(operationDate));
+                  }
+                } catch {
+                  dispatch(setNewOperationDate(""));
+                }
               }}
               renderInput={(params) => <TextField size="small" name="date" {...params} />}
             />

@@ -10,7 +10,7 @@ export interface ISubmitCancelButtonsProps {
 
 export function SubmitCancelButtons({ updateIconOnClick, cancelIconOnClick }: ISubmitCancelButtonsProps): JSX.Element {
   return (
-    <Box>
+    <Box flexDirection="row" display="flex" alignItems="center">
       <IconButton onClick={updateIconOnClick}>
         <DoneIcon fontSize="small" color="success" />
       </IconButton>
