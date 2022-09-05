@@ -27,6 +27,7 @@ flake8-comprehensions = "*"
 flake8-mypy = "*"
 flake8-print = "*"
 pytest = "*"
+isort = "*"
 
 [requires]
 python_version = "3.10"
