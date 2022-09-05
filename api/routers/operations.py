@@ -11,6 +11,7 @@ from api.routers.helpers import get_and_check_permissions
 from api.schemas.operation import Operation
 from api.schemas.operation import OperationBase
 from api.schemas.operation import OperationCreate
+from api.schemas.operation import OperationDelete
 
 router = APIRouter(tags=[constants.SwaggerTags.OPERATIONS])
 
@@ -59,7 +60,7 @@ def get_operation(
 @router.put("/{operation_id}", response_model=Operation)
 def update_operation(
     operation_id: str,
-    operation: OperationCreate,
+    operation: OperationBase,
     session: Session = Depends(deps.get_db),
     current_user: User = Depends(deps.get_current_user),
 ):
@@ -70,7 +71,7 @@ def update_operation(
     return crud.operation.update(session=session, db_obj=operation_obj, obj_in=operation)
 
 
-@router.delete("/{operation_id}", response_model=Operation)
+@router.delete("/{operation_id}", response_model=OperationDelete)
 def delete_operation(
     operation_id: str,
     session: Session = Depends(deps.get_db),
@@ -80,4 +81,4 @@ def delete_operation(
         session=session, crud=crud.operation, current_user=current_user, key=operation_id
     )
 
-    crud.operation.remove_obj(session=session, obj=operation)
+    return crud.operation.remove_obj(session=session, obj=operation)
