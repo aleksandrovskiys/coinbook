@@ -39,7 +39,7 @@ repos:
     rev: 1.7.0
     hooks:
       - id: bandit
-        args: ["--recursive", "--exclude=imsdashboard/tests,venv"]
+        args: ["--recursive", "--exclude=tests,venv"]
 
   - repo: https://gitlab.com/pycqa/flake8
     rev: "3.9.2"
