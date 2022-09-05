@@ -30,6 +30,10 @@ jobs:
         run: |
           bandit .
 
+      - name: Checking with flake8
+        run: |
+          flake8 .
+
       - name: Running tests
         run: |
           pytest
