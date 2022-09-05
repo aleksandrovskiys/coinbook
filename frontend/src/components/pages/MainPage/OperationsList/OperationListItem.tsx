@@ -1,47 +1,52 @@
-import { ListItem, ListItemText, Tooltip, Typography } from "@mui/material";
-import { addMinutes, formatDistanceToNow } from "date-fns";
+import { ListItem } from "@mui/material";
 import * as React from "react";
-import { defaultColor, expenseColor, incomeColor } from "src/common/colors";
-import { defaultLocale } from "src/common/constants";
-import { Operation } from "src/redux/features/operations/operationsSlice";
+import { EditButtons } from "src/components/common/EditButtons";
+import { SubmitCancelButtons } from "src/components/common/SubmitCancelButtons";
+import { EditOperation } from "src/components/pages/MainPage/OperationsList/EditOperation";
+import { deleteOperation, Operation, updateOperation } from "src/redux/features/operations/operationsSlice";
+import { useAppDispatch } from "src/redux/hooks";
+import { ShowOperation } from "./ShowOperation";
 
 export function OperationListItem({ operation }: { operation: Operation }) {
-  const amount = operation.amount.toLocaleString(defaultLocale, {
-    style: "currency",
-    currency: operation.account.currency.code,
-  });
-  const color =
-    operation.category?.type === "income"
-      ? incomeColor
-      : operation.category?.type === "expense"
-      ? expenseColor
-      : defaultColor;
-  const categoryName = operation.category?.name || "Unknown";
-  const date = new Date(operation.date);
-  const dateInCurrentTZ = addMinutes(date, -date.getTimezoneOffset());
-  const relativeDate = formatDistanceToNow(dateInCurrentTZ);
+  const dispatch = useAppDispatch();
+
+  const [isEditMode, setEditMode] = React.useState<boolean>(false);
+  const [isEditButtonsShown, setIsEditButtonsShown] = React.useState<boolean>(false);
+
+  const toggleIsEdit = () => setEditMode(!isEditMode);
+  const cancelIconOnClick = () => {
+    setEditMode(false);
+  };
+
+  const updateIconOnClick = () => {
+    dispatch(updateOperation(editedOperation));
+    setEditMode(false);
+  };
+
+  const deleteOnClick = () => {
+    dispatch(deleteOperation(operation));
+  };
+
+  let editedOperation = {
+    ...operation,
+  };
+
   return (
-    <ListItem disablePadding divider sx={{ padding: "2px 16px" }}>
-      <ListItemText
-        primary={
-          <React.Fragment>
-            {operation.account.name}
-            <Typography align="right" component="span" sx={{ display: "inline", float: "right", color: color }}>
-              {`${amount}`}
-            </Typography>
-          </React.Fragment>
-        }
-        secondary={
-          <React.Fragment>
-            <Tooltip title={dateInCurrentTZ.toLocaleString()} placement="right">
-              <Typography component="span">{relativeDate} ago</Typography>
-            </Tooltip>
-            <Typography align="right" component="span" sx={{ display: "inline", float: "right" }}>
-              {`${categoryName}`}
-            </Typography>
-          </React.Fragment>
-        }
-      ></ListItemText>
+    <ListItem
+      disablePadding
+      divider
+      sx={{ padding: "2px 16px" }}
+      onMouseOver={() => setIsEditButtonsShown(true)}
+      onMouseOut={() => setIsEditButtonsShown(false)}
+    >
+      {isEditMode ? <EditOperation operation={editedOperation} /> : <ShowOperation operation={operation} />}
+      {!isEditMode ? (
+        operation.category?.type !== "balance_correction" ? (
+          <EditButtons show={isEditButtonsShown} toggleEditMode={toggleIsEdit} deleteOnClick={deleteOnClick} />
+        ) : null
+      ) : (
+        <SubmitCancelButtons cancelIconOnClick={cancelIconOnClick} updateIconOnClick={updateIconOnClick} />
+      )}
     </ListItem>
   );
 }

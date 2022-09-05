@@ -15,13 +15,14 @@ export function CategoriesList({ categoryType }: { categoryType: UserCategoryTyp
   const dispatch = useAppDispatch();
 
   const categories = useAppSelector(categoriesSelectorCreator(categoryType));
+  const operations = useAppSelector((state) => state.operations.operations);
   const newCategory = useAppSelector((state) => state.categories.newCategory[categoryType]);
   const categoryCreationStatus = useAppSelector((state) => state.categories.categoryCreationStatus[categoryType]);
   const [addCategoryToggle, setAddCategoryToggle] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     dispatch(fetchUserCategories());
-  }, [dispatch]);
+  }, [dispatch, operations]);
 
   React.useEffect(() => {
     if (categoryCreationStatus === "succeeded") {

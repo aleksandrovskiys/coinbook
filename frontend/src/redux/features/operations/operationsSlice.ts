@@ -61,6 +61,30 @@ export const createOperation = createAsyncThunk(
   }
 );
 
+export const updateOperation = createAsyncThunk(
+  "operations/updateOperation",
+  async (operation: Operation, thunkApi) => {
+    try {
+      const result = await api.updateOperation(operation);
+      return result;
+    } catch (err) {
+      parseErrors(err, thunkApi);
+    }
+  }
+);
+
+export const deleteOperation = createAsyncThunk(
+  "operations/deleteOperation",
+  async (operation: Operation, thunkApi) => {
+    try {
+      const result = await api.deleteOperation(operation);
+      return result;
+    } catch (err) {
+      parseErrors(err, thunkApi);
+    }
+  }
+);
+
 export const operationsSlice = createSlice({
   name: "operations",
   initialState: initialState,
@@ -121,6 +145,19 @@ export const operationsSlice = createSlice({
       })
       .addCase(createOperation.rejected, (state, action) => {
         state.operationCreationStatus = "failed";
+      })
+      .addCase(updateOperation.fulfilled, (state, action) => {
+        if (action.payload) {
+          const operation = state.operations.find((element) => element.id === action.payload?.id);
+          if (operation) {
+            for (const key in action.payload) {
+              operation[key] = action.payload[key];
+            }
+          }
+        }
+      })
+      .addCase(deleteOperation.fulfilled, (state, action) => {
+        state.operations = state.operations.filter((element) => element.id !== action.payload?.id);
       });
   },
 });

@@ -184,6 +184,32 @@ class ApiClient {
       })
     ).json();
   }
+
+  async updateOperation(operation: Operation): Promise<Operation> {
+    const body: OperationCreate = {
+      date: operation.date,
+      accountId: operation.account.id,
+      categoryId: operation.category?.id,
+      amount: operation.amount,
+    };
+    return (
+      await this.secureFetch(`${API_URLS.operations}/${operation.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+    ).json();
+  }
+
+  async deleteOperation(operation: Operation): Promise<Operation> {
+    return (
+      await this.secureFetch(`${API_URLS.operations}/${operation.id}`, {
+        method: "DELETE",
+      })
+    ).json();
+  }
 }
 
 export const api = new ApiClient();
