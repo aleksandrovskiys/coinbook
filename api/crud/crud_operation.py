@@ -6,10 +6,11 @@ from api import crud
 from api.crud.base import CRUDBase
 from api.models.account import Account
 from api.models.operation import Operation
+from api.schemas.operation import OperationBase
 from api.schemas.operation import OperationCreate
 
 
-class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationCreate]):
+class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
     def add_balance_correction_operation(
         self, session: Session, account: Account, current_balance: float, new_balance: float
     ):

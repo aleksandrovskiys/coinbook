@@ -4,10 +4,7 @@ from pydantic import BaseModel
 from pydantic import Field
 
 from api.schemas.account import Account
-from api.schemas.account import AccountInDB
 from api.schemas.category import Category
-from api.schemas.category import CategoryInDB
-from api.schemas.user import UserInDB
 
 
 class OperationBase(BaseModel):
@@ -30,9 +27,11 @@ class Operation(OperationBase):
     account: Account
     category: Category | None
 
+    class Config:
+        json_encoders = {
+            datetime: lambda v: v.isoformat() + "Z",
+        }
 
-class OperationInDb(OperationBase):
+
+class OperationDelete(OperationBase):
     id: int
-    user: UserInDB
-    account: AccountInDB
-    category: CategoryInDB
