@@ -11,18 +11,18 @@ jobs:
         pip install --upgrade pip
         pip install pipenv
         pipenv install
-    - name: Analysing the code with black
-      run: |
-        black . --check
+      - name: Analysing the code with black
+        run: |
+          black . --check
 
-    - name: Checking imports with isort
-      run: |
-        isort . --check-only
-    
-    - name: Checking with bandit
-      run: |
-        bandit .
+      - name: Checking imports with isort
+        run: |
+          isort . --check-only
+      
+      - name: Checking with bandit
+        run: |
+          bandit .
 
-    - name: Running tests
-      run: |
-        pytest
+      - name: Running tests
+        run: |
+          pytest
