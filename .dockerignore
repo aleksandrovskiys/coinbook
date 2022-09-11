@@ -4,5 +4,14 @@ venv
 .idea
 .vscode
 .dockerignore
+.github
+.git
+.pytest_cache
+__pycache__/
+**/.mypy_cache
+postgres_data
+tests
+thunder-tests
+venv
 
 frontend

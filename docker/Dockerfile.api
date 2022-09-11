@@ -3,7 +3,7 @@ FROM python:3.10-slim
 RUN apt-get update && apt-get install -y python-dev libpq-dev gcc
 RUN pip install pipenv
 
-WORKDIR /opt/personal_finances
+WORKDIR /opt/coinbook
 
 COPY Pipfile Pipfile
 COPY Pipfile.lock Pipfile.lock
@@ -12,4 +12,6 @@ RUN pipenv install --system --deploy
 
 COPY . .
 
-CMD [ "uvicorn", "api:app", "--host", "0.0.0.0", "--reload" ]
+COPY docker/entrypoint.sh entrypoint.sh
+
+ENTRYPOINT [ "/bin/bash", "entrypoint.sh" ]
