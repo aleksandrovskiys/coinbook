@@ -5,7 +5,6 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str
     POSTGRES_PORT: str
     POSTGRES_DB: str
-    POSTGRES_NAME: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     CORS_ORIGINS: list[str]
