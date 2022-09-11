@@ -36,6 +36,8 @@ services:
       - "5050:80"
     env_file:
       - .env
+    volumes:
+      - ./:/opt/personal_finances
     depends_on:
       db:
         condition: service_healthy

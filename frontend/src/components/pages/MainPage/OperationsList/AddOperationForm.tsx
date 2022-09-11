@@ -48,7 +48,7 @@ export function AddOperationForm({
   return (
     <Box component="form" onSubmit={addOperationOnSubmit} noValidate sx={{ margin: "10px 0px" }}>
       <Grid container spacing={1}>
-        <Grid item sm={3}>
+        <Grid item xs={12} sm={3}>
           <FormControl fullWidth>
             <InputLabel id="account-label" size="small">
               Account
@@ -74,7 +74,7 @@ export function AddOperationForm({
             </Select>
           </FormControl>
         </Grid>
-        <Grid item sm={3}>
+        <Grid item xs={12} sm={3}>
           <FormControl fullWidth>
             <InputLabel id="category-label" size="small">
               Category
@@ -99,7 +99,7 @@ export function AddOperationForm({
             </Select>
           </FormControl>
         </Grid>
-        <Grid item sm={3}>
+        <Grid item xs={12} sm={3}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
               label="Date"
@@ -119,7 +119,7 @@ export function AddOperationForm({
             />
           </LocalizationProvider>
         </Grid>
-        <Grid item sm={3}>
+        <Grid item xs={12} sm={3}>
           <FormControl fullWidth>
             <InputLabel htmlFor="amount-input" size="small">
               Amount

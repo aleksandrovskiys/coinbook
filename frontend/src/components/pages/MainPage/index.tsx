@@ -43,7 +43,7 @@ export default function MainPage() {
         >
           <CssBaseline />
           <Grid container spacing={5} rowSpacing={5}>
-            <Grid item xs={4}>
+            <Grid item sm={4} xs={12}>
               <AccountsList />
               <Typography variant="h4" align="center" marginBottom={2} marginTop={2}>
                 Expenses
@@ -54,7 +54,7 @@ export default function MainPage() {
               </Typography>
               <CategoriesList categoryType="income" />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item sm={8} xs={12}>
               <OperationsList />
             </Grid>
           </Grid>
