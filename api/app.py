@@ -1,9 +1,6 @@
-from fastapi import Depends
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import models
-from api.deps import get_current_user
 from api.routers.accounts import router as account_router
 from api.routers.categories import router as category_router
 from api.routers.currencies import router as currency_router
@@ -28,6 +25,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def read_root(user: models.User = Depends(get_current_user)):
-    return {"Hello": "World", "user": user}
+@app.get("/healthcheck")
+def read_root():
+    return {"status": "ok"}
