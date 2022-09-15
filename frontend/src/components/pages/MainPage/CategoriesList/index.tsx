@@ -1,4 +1,4 @@
-import { Button, List, Paper, Typography } from "@mui/material";
+import { Box, Button, List, Paper, Typography } from "@mui/material";
 import * as React from "react";
 import { AddCategoryForm } from "src/components/pages/MainPage/CategoriesList/AddCategoryForm";
 import { CategoryListItem } from "src/components/pages/MainPage/CategoriesList/CategoryListItem";
@@ -45,7 +45,7 @@ export function CategoriesList({ categoryType }: { categoryType: UserCategoryTyp
   }
 
   return (
-    <React.Fragment>
+    <Box marginTop={2} marginBottom={2}>
       {!addCategoryToggle && (
         <Button
           variant="outlined"
@@ -55,7 +55,7 @@ export function CategoriesList({ categoryType }: { categoryType: UserCategoryTyp
             setAddCategoryToggle(!addCategoryToggle);
           }}
         >
-          New category
+          New {categoryType}
         </Button>
       )}
       {addCategoryToggle && (
@@ -68,6 +68,6 @@ export function CategoriesList({ categoryType }: { categoryType: UserCategoryTyp
       <Paper sx={{ width: "100%" }} elevation={4}>
         <List disablePadding>{content}</List>
       </Paper>
-    </React.Fragment>
+    </Box>
   );
 }

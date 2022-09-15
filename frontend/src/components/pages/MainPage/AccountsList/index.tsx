@@ -44,13 +44,10 @@ export function AccountsList() {
   );
   return (
     <React.Fragment>
-      <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
-        Accounts
-      </Typography>
       {!addAccountToggle && (
         <Button
           variant="outlined"
-          sx={{ marginBottom: "10px" }}
+          sx={{ marginBottom: "10px", marginTop: "30px" }}
           size="small"
           onClick={() => {
             setAddAccountToggle(!addAccountToggle);

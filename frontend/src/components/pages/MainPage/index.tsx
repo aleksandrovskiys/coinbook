@@ -1,14 +1,4 @@
-import {
-  Box,
-  Container,
-  createTheme,
-  CssBaseline,
-  Grid,
-  Paper,
-  styled,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Box, Container, createTheme, CssBaseline, Grid, Paper, styled, ThemeProvider } from "@mui/material";
 import * as React from "react";
 import { AccountsList } from "src/components/pages/MainPage/AccountsList";
 import { CategoriesList } from "src/components/pages/MainPage/CategoriesList";
@@ -45,13 +35,7 @@ export default function MainPage() {
           <Grid container spacing={5} rowSpacing={5}>
             <Grid item sm={4} xs={12}>
               <AccountsList />
-              <Typography variant="h4" align="center" marginBottom={2} marginTop={2}>
-                Expenses
-              </Typography>
               <CategoriesList categoryType="expense" />
-              <Typography variant="h4" align="center" marginBottom={2} marginTop={2}>
-                Income
-              </Typography>
               <CategoriesList categoryType="income" />
             </Grid>
             <Grid item sm={8} xs={12}>

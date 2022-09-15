@@ -43,11 +43,8 @@ export function OperationsList() {
   );
   return (
     <React.Fragment>
-      <Typography variant="h4" align="center" marginBottom={2} marginTop={6}>
-        Operations
-      </Typography>
       {!addOperationToggle && (
-        <Box display="flex">
+        <Box display="flex" marginTop="30px">
           <Button
             variant="outlined"
             sx={{ marginBottom: "10px" }}

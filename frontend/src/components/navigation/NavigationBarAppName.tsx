@@ -25,7 +25,7 @@ export function NavigationBarAppName(): JSX.Element {
           flexGrow: 1,
         }}
       >
-        Finance
+        Coinbook
       </Typography>
     </React.Fragment>
   );
