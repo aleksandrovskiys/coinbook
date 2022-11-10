@@ -1,6 +1,6 @@
+from sqlalchemy import DECIMAL
 from sqlalchemy import Column
 from sqlalchemy import DateTime
-from sqlalchemy import Float
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
@@ -21,4 +21,4 @@ class Operation(Base):
     account = relationship("Account")
     category = relationship("Category")
 
-    amount = Column(Float)
+    amount = Column(DECIMAL(15, 2))
