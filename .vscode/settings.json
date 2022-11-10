@@ -13,17 +13,6 @@
     "editor.tabSize": 2
   },
   "editor.codeActionsOnSave": { "source.organizeImports": true },
-  "python.sortImports.args": [
-    "--profile",
-    "black",
-    "--sl",
-    "--src",
-    "${workspaceFolder}",
-    "-p",
-    "${workspaceFolder}/",
-    "--line-length",
-    "120"
-  ],
   "python.analysis.diagnosticMode": "workspace",
   "python.linting.mypyEnabled": true,
   "python.linting.flake8Args": ["--config=.flake8"],
