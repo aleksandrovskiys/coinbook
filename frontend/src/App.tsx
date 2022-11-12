@@ -1,8 +1,9 @@
+import { SnackbarProvider } from "notistack";
 import * as React from "react";
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { APPLICATION_URLS } from "src/common/constants";
-import ErrorAlerts from "src/components/common/ErrorAlerts";
+import ErrorAlerts from "src/components/common/ErrorAlerts/ErrorAlerts";
 import NavigationBar from "src/components/navigation/NavigationBar";
 import Login from "src/components/pages/Login";
 import MainPage from "src/components/pages/MainPage";
@@ -26,15 +27,17 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavigationBar />
-      <ErrorAlerts />
-      <Routes>
-        <Route path={APPLICATION_URLS.profile} element={<Profile />} />
-        <Route path={APPLICATION_URLS.settings} element={<Settings />} />
-        <Route path={APPLICATION_URLS.register} element={<SignUp />} />
-        <Route path={APPLICATION_URLS.login} element={<Login />} />
-        <Route path="/" element={<MainPage />} />
-      </Routes>
+      <SnackbarProvider maxSnack={7} anchorOrigin={{ horizontal: "right", vertical: "bottom" }} autoHideDuration={5000}>
+        <ErrorAlerts />
+        <NavigationBar />
+        <Routes>
+          <Route path={APPLICATION_URLS.profile} element={<Profile />} />
+          <Route path={APPLICATION_URLS.settings} element={<Settings />} />
+          <Route path={APPLICATION_URLS.register} element={<SignUp />} />
+          <Route path={APPLICATION_URLS.login} element={<Login />} />
+          <Route path="/" element={<MainPage />} />
+        </Routes>
+      </SnackbarProvider>
     </BrowserRouter>
   );
 }
