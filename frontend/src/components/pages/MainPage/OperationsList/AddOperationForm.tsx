@@ -11,6 +11,7 @@ import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
 import { categoriesSelectorCreator, UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
 import {
   clearNewOperation,
+  createOperation,
   setNewOperationAccountId,
   setNewOperationAmount,
   setNewOperationCategoryId,
@@ -19,19 +20,20 @@ import {
 } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
-export function AddOperationForm({
-  addOperationOnSubmit,
-  setAddOperationToggle,
-  operationType,
-}: {
-  addOperationOnSubmit: React.FormEventHandler;
+interface IProps {
   setAddOperationToggle: CallableFunction;
   operationType: UserCategoryTypes;
-}): JSX.Element {
+}
+
+export function AddOperationForm({ setAddOperationToggle, operationType }: IProps): JSX.Element {
   const newOperation = useAppSelector((state) => state.operations.newOperation);
   const accounts = useAppSelector((state) => state.accounts.accounts);
   const categories = useAppSelector(categoriesSelectorCreator(operationType));
   const dispatch = useAppDispatch();
+  const onSubmit = (event) => {
+    event.preventDefault();
+    dispatch(createOperation(newOperation));
+  };
 
   useEffect(() => {
     dispatch(startOperationCreation());
@@ -43,7 +45,7 @@ export function AddOperationForm({
   const amountOnChange = (e) => dispatch(setNewOperationAmount(e.target.value));
 
   return (
-    <Box component="form" onSubmit={addOperationOnSubmit} noValidate sx={{ margin: "10px 0px" }}>
+    <Box component="form" onSubmit={onSubmit} noValidate sx={{ margin: "10px 0px" }}>
       <Grid container spacing={1}>
         <Grid item xs={12} sm={3}>
           <FormControl fullWidth>

@@ -3,14 +3,13 @@ import * as React from "react";
 import { AddOperationForm } from "src/components/pages/MainPage/OperationsList/AddOperationForm";
 import { OperationListItem } from "src/components/pages/MainPage/OperationsList/OperationListItem";
 import { UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
-import { clearNewOperation, createOperation, fetchOperations } from "src/redux/features/operations/operationsSlice";
+import { clearNewOperation, fetchOperations } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 export function OperationsList() {
   const dispatch = useAppDispatch();
   const operations = useAppSelector((state) => state.operations.operations);
   const isLoggedIn = !!useAppSelector((state) => state.users.userInfo);
-  const newOperation = useAppSelector((state) => state.operations.newOperation);
   const operationCreationStatus = useAppSelector((state) => state.operations.operationCreationStatus);
   const [newOperationType, setNewOperationType] = React.useState<UserCategoryTypes>("expense");
 
@@ -28,11 +27,6 @@ export function OperationsList() {
       dispatch(clearNewOperation());
     }
   }, [dispatch, operationCreationStatus]);
-
-  const addOperationOnSubmit = (event) => {
-    event.preventDefault();
-    dispatch(createOperation(newOperation));
-  };
 
   const content = operations.length ? (
     operations.map((operation) => <OperationListItem key={operation.id} operation={operation} />)
@@ -72,11 +66,7 @@ export function OperationsList() {
         </Box>
       )}
       {addOperationToggle && (
-        <AddOperationForm
-          addOperationOnSubmit={addOperationOnSubmit}
-          setAddOperationToggle={setAddOperationToggle}
-          operationType={newOperationType}
-        />
+        <AddOperationForm setAddOperationToggle={setAddOperationToggle} operationType={newOperationType} />
       )}
       <Paper sx={{ width: "100%" }} elevation={4}>
         <List disablePadding>{content}</List>
