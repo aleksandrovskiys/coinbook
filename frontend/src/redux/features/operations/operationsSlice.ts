@@ -23,7 +23,6 @@ export interface OperationCreate {
 
 interface OperationsState {
   operations: Operation[];
-  newOperation: OperationCreate;
 
   status: asyncThunkStatuses;
   operationCreationStatus: asyncThunkStatuses;
@@ -33,10 +32,6 @@ const initialState: OperationsState = {
   operations: [],
   status: "idle",
 
-  newOperation: {
-    date: new Date().toISOString(),
-    amount: 0,
-  },
   operationCreationStatus: "idle",
 };
 
@@ -89,27 +84,6 @@ export const operationsSlice = createSlice({
   name: "operations",
   initialState: initialState,
   reducers: {
-    clearNewOperation(state) {
-      state.newOperation = initialState.newOperation;
-      state.operationCreationStatus = "idle";
-    },
-    startOperationCreation(state) {
-      state.newOperation = {
-        ...initialState.newOperation,
-      };
-    },
-    setNewOperationAmount(state, action) {
-      state.newOperation!.amount = action.payload;
-    },
-    setNewOperationAccountId(state, action) {
-      state.newOperation.accountId = action.payload;
-    },
-    setNewOperationDate(state, action) {
-      state.newOperation.date = action.payload;
-    },
-    setNewOperationCategoryId(state, action) {
-      state.newOperation.categoryId = action.payload;
-    },
     updateOperationsCategory(state, action: PayloadAction<Category>) {
       state.operations = state.operations.map((element) => {
         if (element.category?.id === action.payload.id) {
@@ -162,15 +136,6 @@ export const operationsSlice = createSlice({
   },
 });
 
-export const {
-  clearNewOperation,
-  startOperationCreation,
-  setNewOperationAmount,
-  setNewOperationAccountId,
-  setNewOperationDate,
-  setNewOperationCategoryId,
-  updateOperationsCategory,
-  deleteOperationsCategory,
-} = operationsSlice.actions;
+export const { updateOperationsCategory, deleteOperationsCategory } = operationsSlice.actions;
 
 export default operationsSlice.reducer;

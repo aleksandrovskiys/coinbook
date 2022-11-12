@@ -3,7 +3,7 @@ import * as React from "react";
 import { AddOperationForm } from "src/components/pages/MainPage/OperationsList/AddOperationForm";
 import { OperationListItem } from "src/components/pages/MainPage/OperationsList/OperationListItem";
 import { UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
-import { clearNewOperation, fetchOperations } from "src/redux/features/operations/operationsSlice";
+import { fetchOperations } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 export function OperationsList() {
@@ -24,7 +24,6 @@ export function OperationsList() {
   React.useEffect(() => {
     if (operationCreationStatus === "succeeded") {
       setAddOperationToggle(false);
-      dispatch(clearNewOperation());
     }
   }, [dispatch, operationCreationStatus]);
 
