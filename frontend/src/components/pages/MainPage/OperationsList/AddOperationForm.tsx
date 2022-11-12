@@ -4,20 +4,12 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import * as React from "react";
-import { useEffect } from "react";
+import { useState } from "react";
 import { getCurrencySymbol } from "src/common/utils";
 import MoneyInput from "src/components/common/MoneyInput";
 import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
 import { categoriesSelectorCreator, UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
-import {
-  clearNewOperation,
-  createOperation,
-  setNewOperationAccountId,
-  setNewOperationAmount,
-  setNewOperationCategoryId,
-  setNewOperationDate,
-  startOperationCreation,
-} from "src/redux/features/operations/operationsSlice";
+import { createOperation, OperationCreate } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 interface IProps {
@@ -26,7 +18,10 @@ interface IProps {
 }
 
 export function AddOperationForm({ setAddOperationToggle, operationType }: IProps): JSX.Element {
-  const newOperation = useAppSelector((state) => state.operations.newOperation);
+  const [newOperation, setNewOperation] = useState<OperationCreate>({
+    date: new Date().toISOString(),
+    amount: undefined,
+  });
   const accounts = useAppSelector((state) => state.accounts.accounts);
   const categories = useAppSelector(categoriesSelectorCreator(operationType));
   const dispatch = useAppDispatch();
@@ -35,14 +30,10 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
     dispatch(createOperation(newOperation));
   };
 
-  useEffect(() => {
-    dispatch(startOperationCreation());
-  }, [dispatch]);
-
   const currencySymbol = getCurrencySymbol(
     accounts.find((account) => account.id === newOperation.accountId)?.currency.code
   );
-  const amountOnChange = (e) => dispatch(setNewOperationAmount(e.target.value));
+  const amountOnChange = (e) => setNewOperation({ ...newOperation, amount: e.target.value as number });
 
   return (
     <Box component="form" onSubmit={onSubmit} noValidate sx={{ margin: "10px 0px" }}>
@@ -54,13 +45,13 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
             </InputLabel>
             <Select
               labelId="account-label"
-              value={newOperation.accountId || ""}
+              value={newOperation.accountId}
               label="Account"
               size="small"
               name="accountId"
               autoFocus
               onChange={(event) => {
-                dispatch(setNewOperationAccountId(event.target.value));
+                setNewOperation({ ...newOperation, accountId: event.target.value as number });
               }}
             >
               {accounts.map((account) => {
@@ -80,12 +71,12 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
             </InputLabel>
             <Select
               labelId="category-label"
-              value={newOperation.categoryId || ""}
+              value={newOperation.categoryId}
               label="Category"
               name="categoryId"
               size="small"
               onChange={(event) => {
-                dispatch(setNewOperationCategoryId(event.target.value));
+                setNewOperation({ ...newOperation, categoryId: event.target.value as number });
               }}
             >
               {categories.map((category) => {
@@ -108,10 +99,10 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
                 try {
                   if (value) {
                     const operationDate = value.toISOString();
-                    dispatch(setNewOperationDate(operationDate));
+                    setNewOperation({ ...newOperation, date: operationDate });
                   }
                 } catch {
-                  dispatch(setNewOperationDate(""));
+                  setNewOperation({ ...newOperation, date: "" });
                 }
               }}
               renderInput={(params) => <TextField size="small" name="date" {...params} />}
@@ -125,7 +116,6 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
           <SaveObjectButtons
             cancelOnClick={() => {
               setAddOperationToggle(false);
-              dispatch(clearNewOperation());
             }}
           />
         </Grid>
