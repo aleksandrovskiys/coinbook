@@ -1,13 +1,4 @@
-import {
-  FormControl,
-  Grid,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  TextField,
-} from "@mui/material";
+import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -15,6 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import * as React from "react";
 import { useEffect } from "react";
 import { getCurrencySymbol } from "src/common/utils";
+import MoneyInput from "src/components/common/MoneyInput";
 import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
 import { categoriesSelectorCreator, UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
 import {
@@ -44,6 +36,11 @@ export function AddOperationForm({
   useEffect(() => {
     dispatch(startOperationCreation());
   }, [dispatch]);
+
+  const currencySymbol = getCurrencySymbol(
+    accounts.find((account) => account.id === newOperation.accountId)?.currency.code
+  );
+  const amountOnChange = (e) => dispatch(setNewOperationAmount(e.target.value));
 
   return (
     <Box component="form" onSubmit={addOperationOnSubmit} noValidate sx={{ margin: "10px 0px" }}>
@@ -120,25 +117,7 @@ export function AddOperationForm({
           </LocalizationProvider>
         </Grid>
         <Grid item xs={12} sm={3}>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="amount-input" size="small">
-              Amount
-            </InputLabel>
-            <OutlinedInput
-              id="amount-input"
-              value={newOperation.amount}
-              type="number"
-              name="amount"
-              size="small"
-              onChange={(e) => dispatch(setNewOperationAmount(e.target.value))}
-              endAdornment={
-                <InputAdornment position="start">
-                  {getCurrencySymbol(accounts.find((account) => account.id === newOperation.accountId)?.currency.code)}
-                </InputAdornment>
-              }
-              label="Amount"
-            />
-          </FormControl>
+          {<MoneyInput amount={newOperation.amount || 0} onChange={amountOnChange} currencySymbol={currencySymbol} />}
         </Grid>
         <Grid item sm={12} alignItems="end">
           <SaveObjectButtons
