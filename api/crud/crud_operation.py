@@ -17,7 +17,7 @@ class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
     ):
         balance_correction_category = crud.category.get_balance_correction_category(session=session)
         operation_data = OperationCreate(
-            date=datetime.datetime.now(),
+            date=datetime.datetime.utcnow(),
             accountId=account.id,
             categoryId=balance_correction_category.id,
             amount=round(new_balance - current_balance, 2),
