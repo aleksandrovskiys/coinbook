@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 from sqlalchemy import case
 from sqlalchemy import func
@@ -31,7 +32,7 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountUpdate]):
         return accounts
 
     @staticmethod
-    def get_account_balance(session: Session, account: Account) -> float:
+    def get_account_balance(session: Session, account: Account) -> Decimal:
         result = (
             session.query(
                 func.sum(
@@ -44,12 +45,12 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountUpdate]):
         )
 
         if not result["balance"]:
-            return 0
+            return Decimal(0)
 
         return round(result["balance"], 2)
 
     @staticmethod
-    def get_account_month_worth_change(session: Session, account: Account) -> float:
+    def get_account_month_worth_change(session: Session, account: Account) -> Decimal:
         result = (
             session.query(
                 func.sum(
@@ -63,9 +64,9 @@ class AccountCrud(CRUDBase[Account, AccountCreate, AccountUpdate]):
         )
 
         if not result["month_worth_change"]:
-            return 0
+            return Decimal(0)
 
-        return round(result["month_worth_change"], 2)
+        return result["month_worth_change"]
 
     def update(self, session: Session, *, db_obj: Account, obj_in: AccountUpdate) -> Account:
         updated_account = super().update(session, db_obj=db_obj, obj_in=obj_in)

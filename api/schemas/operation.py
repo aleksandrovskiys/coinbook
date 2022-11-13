@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import BaseModel
 from pydantic import Field
@@ -11,7 +12,7 @@ class OperationBase(BaseModel):
     date: datetime
     account_id: int = Field(alias="accountId")
     category_id: int | None = Field(alias="categoryId", default=None)
-    amount: float = 0
+    amount: Decimal = Decimal(0)
 
     class Config:
         orm_mode = True

@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from sqlalchemy import case
 from sqlalchemy import func
@@ -40,7 +41,7 @@ class CategoryCrud(CRUDBase[Category, CategoryCreate, CategoryBase]):
 
     def category_balance_in_period(
         self, session: Session, category: CategorySchema, from_: datetime, to_: datetime
-    ) -> float:
+    ) -> Decimal:
         result = (
             session.query(
                 func.sum(
@@ -55,9 +56,9 @@ class CategoryCrud(CRUDBase[Category, CategoryCreate, CategoryBase]):
         )
 
         if not result["balance"]:
-            return 0
+            return Decimal(0)
 
-        return round(result["balance"], 2) * (-1 if category.type == CategoryType.expense else 1)
+        return result["balance"] * (-1 if category.type == CategoryType.expense else 1)
 
     def get_balance_correction_category(self, session: Session) -> Category:
         return session.query(Category).filter(Category.type == CategoryType.balance_correction).first()

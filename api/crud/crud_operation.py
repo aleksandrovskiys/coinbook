@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 from sqlalchemy.orm import Session
 
@@ -12,7 +13,7 @@ from api.schemas.operation import OperationCreate
 
 class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
     def add_balance_correction_operation(
-        self, session: Session, account: Account, current_balance: float, new_balance: float
+        self, session: Session, account: Account, current_balance: Decimal, new_balance: Decimal
     ):
         balance_correction_category = crud.category.get_balance_correction_category(session=session)
         operation_data = OperationCreate(

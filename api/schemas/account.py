@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from pydantic import BaseModel
 from pydantic import Field
 
@@ -19,7 +21,7 @@ class AccountCreate(AccountBase):
 
 class AccountUpdate(AccountCreate):
     id: int
-    balance: float
+    balance: Decimal
 
 
 class AccountInDB(AccountBase):
@@ -31,6 +33,6 @@ class Account(AccountBase):
     id: int
     user_id: int = Field(alias="userId")
 
-    balance: float = 0
+    balance: Decimal = Decimal(0)
     month_worth_change: int = Field(default=0, alias="monthWorthChange")
     currency: CurrencyBase

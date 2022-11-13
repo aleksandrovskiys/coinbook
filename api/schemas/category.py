@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from pydantic import BaseModel
 from pydantic import Field
 
@@ -25,7 +27,7 @@ class CategoryInDB(CategoryBase):
 
 class Category(CategoryBase):
     id: int
-    month_expenses: float = Field(alias="monthExpenses", default=0)
+    month_expenses: Decimal = Field(alias="monthExpenses", default=0)
 
     class Config:
         orm_mode = True
