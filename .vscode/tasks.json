@@ -11,11 +11,27 @@
       "problemMatcher": []
     },
     {
-      "label": "Frontend",
+      "label": "Run FE",
       "type": "shell",
       "command": "npm start",
       "isBackground": true,
       "options": { "cwd": "${workspaceFolder}/frontend", "env": { "PORT": "3050" } },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build FE",
+      "type": "shell",
+      "command": "npm run build",
+      "isBackground": true,
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Deploy FE",
+      "type": "shell",
+      "command": "aws s3 sync build/ s3://coinbook-ui",
+      "isBackground": true,
+      "options": { "cwd": "${workspaceFolder}/frontend" },
       "problemMatcher": []
     }
   ]
