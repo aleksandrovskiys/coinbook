@@ -34,7 +34,7 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
     accounts.find((account) => account.id === newOperation.accountId)?.currency.code
   );
   const amountOnChange = (e) => {
-    setNewOperation({ ...newOperation, amount: parseFloat(e.target.value) });
+    setNewOperation({ ...newOperation, amount: e.target.value });
   };
 
   return (
@@ -112,7 +112,7 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
           </LocalizationProvider>
         </Grid>
         <Grid item xs={12} sm={3}>
-          {<MoneyInput amount={newOperation.amount || 0} onChange={amountOnChange} currencySymbol={currencySymbol} />}
+          {<MoneyInput amount={newOperation.amount} onChange={amountOnChange} currencySymbol={currencySymbol} />}
         </Grid>
         <Grid item sm={12} alignItems="end">
           <SaveObjectButtons

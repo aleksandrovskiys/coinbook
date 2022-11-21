@@ -2,7 +2,7 @@ import { FormControl, InputAdornment, InputLabel, OutlinedInput } from "@mui/mat
 import * as React from "react";
 
 interface IProps {
-  amount: number;
+  amount: number | undefined;
   onChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   currencySymbol: string;
 }
@@ -15,14 +15,13 @@ const MoneyInput = ({ amount, onChange, currencySymbol }: IProps) => (
     <OutlinedInput
       id="amount-input"
       value={amount}
-      type="number"
       name="amount"
       size="small"
       onChange={onChange}
       inputProps={{
         min: 0,
         step: 0.01,
-        pattern: "[\\d\\.]*",
+        type: "number",
       }}
       endAdornment={<InputAdornment position="start">{currencySymbol}</InputAdornment>}
       label="Amount"
