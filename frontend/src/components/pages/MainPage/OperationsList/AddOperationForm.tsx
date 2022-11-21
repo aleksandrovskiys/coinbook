@@ -33,7 +33,9 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
   const currencySymbol = getCurrencySymbol(
     accounts.find((account) => account.id === newOperation.accountId)?.currency.code
   );
-  const amountOnChange = (e) => setNewOperation({ ...newOperation, amount: e.target.value as number });
+  const amountOnChange = (e) => {
+    setNewOperation({ ...newOperation, amount: parseFloat(e.target.value) });
+  };
 
   return (
     <Box component="form" onSubmit={onSubmit} noValidate sx={{ margin: "10px 0px" }}>

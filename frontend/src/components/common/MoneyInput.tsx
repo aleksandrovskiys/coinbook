@@ -19,6 +19,11 @@ const MoneyInput = ({ amount, onChange, currencySymbol }: IProps) => (
       name="amount"
       size="small"
       onChange={onChange}
+      inputProps={{
+        min: 0,
+        step: 0.01,
+        pattern: "\\d*",
+      }}
       endAdornment={<InputAdornment position="start">{currencySymbol}</InputAdornment>}
       label="Amount"
     />
