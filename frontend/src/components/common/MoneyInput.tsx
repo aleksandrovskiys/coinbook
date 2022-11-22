@@ -22,6 +22,7 @@ const MoneyInput = ({ amount, onChange, currencySymbol }: IProps) => (
         min: 0,
         step: 0.01,
         type: "number",
+        inputMode: "decimal",
       }}
       endAdornment={<InputAdornment position="start">{currencySymbol}</InputAdornment>}
       label="Amount"
