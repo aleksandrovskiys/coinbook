@@ -33,6 +33,13 @@
       "isBackground": true,
       "options": { "cwd": "${workspaceFolder}/frontend" },
       "problemMatcher": []
+    },
+    {
+      "label": "Build BE Image",
+      "type": "shell",
+      "command": "docker build -t coinbook -f docker/Dockerfile.api .",
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }
