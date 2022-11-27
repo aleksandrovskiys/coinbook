@@ -7,6 +7,7 @@ class SwaggerTags(enum.Enum):
     CURRENCIES = "currencies"
     USERS = "users"
     OPERATIONS = "operations"
+    REPORTS = "reports"
 
 
 PERMISSION_ERROR_TEXT_TEMPLATE = "Not enough permission to access this {0}"
