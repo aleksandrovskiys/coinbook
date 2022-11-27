@@ -40,6 +40,13 @@
       "command": "docker build -t coinbook -f docker/Dockerfile.api .",
       "isBackground": true,
       "problemMatcher": []
+    },
+    {
+      "label": "Deploy BE",
+      "type": "shell",
+      "command": "aws ecs update-service --force-new-deployment --service coinbook-backend --cluster coinbook",
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }
