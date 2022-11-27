@@ -53,7 +53,7 @@ class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
             select(
                 func.date_trunc(period_type.value, timeframe).label(timeframe_column_name),
                 coalesce(
-                    sum(case((Category.type == CategoryType.expense, -Operation.amount), else_=Operation.amount)),
+                    self._get_operation_amount_sum(),
                     0,
                 ).label("timeframe_total"),
             )
@@ -79,13 +79,18 @@ class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
     def get_balance_to_date(self, session: Session, user_id: int, date_: datetime.date) -> Decimal:
         """Returns balance to the beginning of the selected day"""
         result = (
-            session.query(sum(Operation.amount).label("balance"))
+            session.query(self._get_operation_amount_sum().label("balance"))
+            .select_from(Operation)
+            .join(Category)
             .filter(Operation.date < date_)
             .filter(Operation.user_id == user_id)
             .first()
         )
 
         return result["balance"] or Decimal(0)
+
+    def _get_operation_amount_sum(self):
+        return sum(case((Category.type == CategoryType.expense, -Operation.amount), else_=Operation.amount))
 
 
 operation = OperationCRUD(Operation)
