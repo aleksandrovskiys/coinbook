@@ -5,13 +5,7 @@ import { EditableTextField } from "src/components/common/EditableTextField";
 import { EditButtons } from "src/components/common/EditButtons";
 import { SubmitCancelButtons } from "src/components/common/SubmitCancelButtons";
 import { AccountBalanceChange } from "src/components/pages/MainPage/AccountsList/AccountBalanceChange";
-import {
-  Account,
-  AccountUpdate,
-  deleteAccount,
-  fetchAvailableCurrencies,
-  updateAccount,
-} from "src/redux/features/accounts/accountsSlice";
+import { Account, AccountUpdate, deleteAccount, updateAccount } from "src/redux/features/accounts/accountsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 import { StyledInput } from "../../../common/StyledInput";
 
@@ -34,10 +28,6 @@ export function AccountsListItem({ account }: { account: Account }) {
     style: "currency",
     currency: account.currency.code,
   });
-
-  React.useEffect(() => {
-    dispatch(fetchAvailableCurrencies());
-  }, [dispatch]);
 
   React.useEffect(() => {
     if (accountUpdateStatus === "succeeded") {

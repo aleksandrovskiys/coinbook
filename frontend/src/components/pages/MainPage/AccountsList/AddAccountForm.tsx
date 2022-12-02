@@ -1,7 +1,6 @@
 import { Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import * as React from "react";
-import { fetchAvailableCurrencies } from "src/redux/features/accounts/accountsSlice";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { useAppSelector } from "src/redux/hooks";
 import { SaveObjectButtons } from "../../../common/SaveObjectButtons";
 
 export function AddAccountForm({
@@ -20,12 +19,6 @@ export function AddAccountForm({
   addAccountOnSubmit: React.FormEventHandler;
 }): JSX.Element {
   const currencies = useAppSelector((state) => state.accounts.currencies);
-
-  const dispatch = useAppDispatch();
-
-  React.useEffect(() => {
-    dispatch(fetchAvailableCurrencies());
-  }, [dispatch]);
 
   return (
     <Box component="form" onSubmit={addAccountOnSubmit} noValidate sx={{ margin: "10px 0px" }}>

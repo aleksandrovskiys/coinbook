@@ -22,5 +22,6 @@
   "typescript.preferences.importModuleSpecifierEnding": "minimal",
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.useAliasesForRenames": false,
-  "python.linting.banditArgs": ["-c", "pyproject.toml"]
+  "python.linting.banditArgs": ["-c", "pyproject.toml"],
+  "git.branchProtection": ["master"]
 }

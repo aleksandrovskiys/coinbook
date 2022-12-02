@@ -4,15 +4,13 @@ import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
 import { clearNewCategory, setNewCategoryName, UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
-export function AddCategoryForm({
-  setAddCategoryToggle,
-  addCategoryOnSubmit,
-  categoryType,
-}: {
+interface IProps {
   setAddCategoryToggle: CallableFunction;
   addCategoryOnSubmit: React.FormEventHandler;
   categoryType: UserCategoryTypes;
-}) {
+}
+
+export function AddCategoryForm({ setAddCategoryToggle, addCategoryOnSubmit, categoryType }: IProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const newCategory = useAppSelector((state) => state.categories.newCategory);

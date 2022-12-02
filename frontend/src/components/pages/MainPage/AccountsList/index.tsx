@@ -2,15 +2,17 @@ import { Button, List, Paper, Typography } from "@mui/material";
 import * as React from "react";
 import { AccountsListItem } from "src/components/pages/MainPage/AccountsList/AccountsListItem";
 import { AddAccountForm } from "src/components/pages/MainPage/AccountsList/AddAccountForm";
-import { AccountCreate, createAccount, fetchAccountsInformation } from "src/redux/features/accounts/accountsSlice";
+import { Account, AccountCreate, createAccount } from "src/redux/features/accounts/accountsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
-export function AccountsList() {
+interface IProps {
+  accounts: Account[];
+}
+
+export function AccountsList({ accounts }: IProps) {
   const dispatch = useAppDispatch();
 
-  const accounts = useAppSelector((state) => state.accounts.accounts);
   const userId = useAppSelector((state) => state.users.userInfo!.id);
-  const operations = useAppSelector((state) => state.operations.operations);
 
   const [addAccountToggle, setAddAccountToggle] = React.useState<boolean>(false);
   const [currencyCode, setCurrencyCode] = React.useState<string>("");
@@ -30,10 +32,6 @@ export function AccountsList() {
     setCurrencyCode("");
     setAccountName("");
   };
-
-  React.useEffect(() => {
-    dispatch(fetchAccountsInformation());
-  }, [dispatch, operations]);
 
   const content = accounts.length ? (
     accounts.map((account) => <AccountsListItem key={account.id} account={account} />)
