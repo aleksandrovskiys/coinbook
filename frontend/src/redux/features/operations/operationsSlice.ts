@@ -116,6 +116,7 @@ export const operationsSlice = createSlice({
       .addCase(createOperation.fulfilled, (state, action) => {
         if (action.payload) state.operations.unshift(action.payload);
         state.operationCreationStatus = "succeeded";
+        state.operations = state.operations.sort((a, b) => (a.date < b.date ? 1 : -1));
       })
       .addCase(createOperation.rejected, (state, action) => {
         state.operationCreationStatus = "failed";
