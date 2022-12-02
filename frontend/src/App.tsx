@@ -19,8 +19,7 @@ function App() {
   const userInfo = useAppSelector((state) => state.users.userInfo);
 
   useEffect(() => {
-    const userToken = token;
-    if (userToken && !userInfo) {
+    if (token && !userInfo) {
       dispatch(fetchUserInformation());
     }
   }, [dispatch, token, userInfo]);

@@ -3,26 +3,24 @@ import * as React from "react";
 import { AddCategoryForm } from "src/components/pages/MainPage/CategoriesList/AddCategoryForm";
 import { CategoryListItem } from "src/components/pages/MainPage/CategoriesList/CategoryListItem";
 import {
-  categoriesSelectorCreator,
+  Category,
   clearNewCategory,
   createCategory,
-  fetchUserCategories,
   UserCategoryTypes,
 } from "src/redux/features/categories/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
-export function CategoriesList({ categoryType }: { categoryType: UserCategoryTypes }) {
+interface IProps {
+  categoryType: UserCategoryTypes;
+  categories: Category[];
+}
+
+export function CategoriesList({ categoryType, categories }: IProps): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const categories = useAppSelector(categoriesSelectorCreator(categoryType));
-  const operations = useAppSelector((state) => state.operations.operations);
   const newCategory = useAppSelector((state) => state.categories.newCategory[categoryType]);
   const categoryCreationStatus = useAppSelector((state) => state.categories.categoryCreationStatus[categoryType]);
   const [addCategoryToggle, setAddCategoryToggle] = React.useState<boolean>(false);
-
-  React.useEffect(() => {
-    dispatch(fetchUserCategories());
-  }, [dispatch, operations]);
 
   React.useEffect(() => {
     if (categoryCreationStatus === "succeeded") {

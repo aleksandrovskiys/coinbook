@@ -1,11 +1,11 @@
 import { Box, Button } from "@mui/material";
 import * as React from "react";
 
-export function SaveObjectButtons({
-  cancelOnClick,
-}: {
+interface IProps {
   cancelOnClick: React.MouseEventHandler<HTMLElement>;
-}): JSX.Element {
+}
+
+export function SaveObjectButtons({ cancelOnClick }: IProps): JSX.Element {
   return (
     <Box display="flex" justifyContent="flex-end" sx={{ height: "100%" }}>
       <Button variant="outlined" type="submit" size="small" sx={{ height: "100%" }}>

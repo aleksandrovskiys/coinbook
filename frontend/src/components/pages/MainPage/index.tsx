@@ -3,7 +3,10 @@ import * as React from "react";
 import { AccountsList } from "src/components/pages/MainPage/AccountsList";
 import { CategoriesList } from "src/components/pages/MainPage/CategoriesList";
 import { OperationsList } from "src/components/pages/MainPage/OperationsList";
-import { useAppSelector } from "src/redux/hooks";
+import { fetchAccountsInformation, fetchAvailableCurrencies } from "src/redux/features/accounts/accountsSlice";
+import { categoriesSelectorCreator, fetchUserCategories } from "src/redux/features/categories/categoriesSlice";
+import { fetchOperations } from "src/redux/features/operations/operationsSlice";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 const theme = createTheme();
 
@@ -16,7 +19,28 @@ export const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function MainPage() {
+  const dispatch = useAppDispatch();
+
   const userInfo = useAppSelector((state) => state.users.userInfo);
+  const expenseCategories = useAppSelector(categoriesSelectorCreator("expense"));
+  const incomeCategories = useAppSelector(categoriesSelectorCreator("income"));
+  const operations = useAppSelector((state) => state.operations.operations);
+  const operationsFetchStatus = useAppSelector((state) => state.operations.status);
+  const accounts = useAppSelector((state) => state.accounts.accounts);
+
+  React.useEffect(() => {
+    if (!!userInfo) {
+      dispatch(fetchOperations());
+      dispatch(fetchAvailableCurrencies());
+    }
+  }, [dispatch, userInfo]);
+
+  React.useEffect(() => {
+    if (operationsFetchStatus === "succeeded" || operationsFetchStatus === "failed") {
+      dispatch(fetchUserCategories());
+      dispatch(fetchAccountsInformation());
+    }
+  }, [dispatch, operations, operationsFetchStatus]);
 
   if (!userInfo) return <CssBaseline />;
 
@@ -34,12 +58,12 @@ export default function MainPage() {
           <CssBaseline />
           <Grid container spacing={5} rowSpacing={5}>
             <Grid item sm={4} xs={12}>
-              <AccountsList />
-              <CategoriesList categoryType="expense" />
-              <CategoriesList categoryType="income" />
+              <AccountsList accounts={accounts} />
+              <CategoriesList categoryType="expense" categories={expenseCategories} />
+              <CategoriesList categoryType="income" categories={incomeCategories} />
             </Grid>
             <Grid item sm={8} xs={12}>
-              <OperationsList />
+              <OperationsList operations={operations} />
             </Grid>
           </Grid>
         </Box>

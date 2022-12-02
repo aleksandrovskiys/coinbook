@@ -3,23 +3,20 @@ import * as React from "react";
 import { AddOperationForm } from "src/components/pages/MainPage/OperationsList/AddOperationForm";
 import { OperationListItem } from "src/components/pages/MainPage/OperationsList/OperationListItem";
 import { UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
-import { fetchOperations } from "src/redux/features/operations/operationsSlice";
+import { Operation } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
-export function OperationsList() {
+interface IProps {
+  operations: Operation[];
+}
+
+export function OperationsList({ operations }: IProps) {
   const dispatch = useAppDispatch();
-  const operations = useAppSelector((state) => state.operations.operations);
-  const isLoggedIn = !!useAppSelector((state) => state.users.userInfo);
+
   const operationCreationStatus = useAppSelector((state) => state.operations.operationCreationStatus);
   const [newOperationType, setNewOperationType] = React.useState<UserCategoryTypes>("expense");
 
   const [addOperationToggle, setAddOperationToggle] = React.useState<boolean>(false);
-
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(fetchOperations());
-    }
-  }, [dispatch, isLoggedIn]);
 
   React.useEffect(() => {
     if (operationCreationStatus === "succeeded") {
