@@ -1,6 +1,7 @@
-import { Button, List, Paper, Typography } from "@mui/material";
+import { Button, Divider, List, Paper, Typography } from "@mui/material";
 import * as React from "react";
 import { AccountsListItem } from "src/components/pages/MainPage/AccountsList/AccountsListItem";
+import AccountsTotal, { CurrencyTotal } from "src/components/pages/MainPage/AccountsList/AccountsTotal";
 import { AddAccountForm } from "src/components/pages/MainPage/AccountsList/AddAccountForm";
 import { Account, AccountCreate, createAccount } from "src/redux/features/accounts/accountsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
@@ -33,13 +34,21 @@ export function AccountsList({ accounts }: IProps) {
     setAccountName("");
   };
 
-  const content = accounts.length ? (
-    accounts.map((account) => <AccountsListItem key={account.id} account={account} />)
-  ) : (
-    <Typography variant="h6" align="center">
-      You have no accounts yet
-    </Typography>
-  );
+  const currencyTotals: CurrencyTotal[] = [];
+  for (const account of accounts) {
+    let currencyTotal = currencyTotals.find((el) => el.currencyCode === account.currency.code);
+
+    if (currencyTotal === undefined) {
+      currencyTotal = {
+        currencyCode: account.currency.code,
+        total: 0,
+      };
+      currencyTotals.push(currencyTotal);
+    }
+
+    currencyTotal.total += account.balance;
+  }
+
   return (
     <React.Fragment>
       {!addAccountToggle && (
@@ -65,7 +74,25 @@ export function AccountsList({ accounts }: IProps) {
         />
       )}
       <Paper sx={{ width: "100%" }} elevation={4}>
-        {<List disablePadding>{content}</List>}
+        {
+          <List disablePadding>
+            {accounts.length ? (
+              accounts.map((account, index) => (
+                <>
+                  <AccountsListItem key={account.id} account={account} />
+                </>
+              ))
+            ) : (
+              <Typography variant="h6" align="center">
+                You have no accounts yet
+              </Typography>
+            )}
+          </List>
+        }
+        <Divider textAlign="left">Total</Divider>
+        {currencyTotals.map((currencyTotal) => (
+          <AccountsTotal {...currencyTotal} />
+        ))}
       </Paper>
     </React.Fragment>
   );
