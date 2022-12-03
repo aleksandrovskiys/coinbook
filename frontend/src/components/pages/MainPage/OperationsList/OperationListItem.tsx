@@ -1,13 +1,17 @@
 import { ListItem } from "@mui/material";
 import * as React from "react";
+import { ListChildComponentProps } from "react-window";
 import { EditButtons } from "src/components/common/EditButtons";
 import { SubmitCancelButtons } from "src/components/common/SubmitCancelButtons";
 import { EditOperation } from "src/components/pages/MainPage/OperationsList/EditOperation";
-import { deleteOperation, Operation, updateOperation } from "src/redux/features/operations/operationsSlice";
+import { deleteOperation, updateOperation } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch } from "src/redux/hooks";
 import { ShowOperation } from "./ShowOperation";
 
-export function OperationListItem({ operation }: { operation: Operation }) {
+export function OperationListItem(props: ListChildComponentProps) {
+  const { data, index, style } = props;
+  const operation = data[index];
+
   const dispatch = useAppDispatch();
 
   const [isEditMode, setEditMode] = React.useState<boolean>(false);
@@ -35,6 +39,8 @@ export function OperationListItem({ operation }: { operation: Operation }) {
     <ListItem
       disablePadding
       divider
+      style={style}
+      key={index}
       sx={{ padding: "2px 16px" }}
       onMouseOver={() => setIsEditButtonsShown(true)}
       onMouseOut={() => setIsEditButtonsShown(false)}

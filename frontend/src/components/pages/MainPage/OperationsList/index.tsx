@@ -1,5 +1,6 @@
-import { Box, Button, List, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import * as React from "react";
+import { FixedSizeList } from "react-window";
 import { AddOperationForm } from "src/components/pages/MainPage/OperationsList/AddOperationForm";
 import { OperationListItem } from "src/components/pages/MainPage/OperationsList/OperationListItem";
 import { UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
@@ -24,13 +25,6 @@ export function OperationsList({ operations }: IProps) {
     }
   }, [dispatch, operationCreationStatus]);
 
-  const content = operations.length ? (
-    operations.map((operation) => <OperationListItem key={operation.id} operation={operation} />)
-  ) : (
-    <Typography variant="h6" align="center">
-      You have no operations yet
-    </Typography>
-  );
   return (
     <React.Fragment>
       {!addOperationToggle && (
@@ -65,7 +59,21 @@ export function OperationsList({ operations }: IProps) {
         <AddOperationForm setAddOperationToggle={setAddOperationToggle} operationType={newOperationType} />
       )}
       <Paper sx={{ width: "100%" }} elevation={4}>
-        <List disablePadding>{content}</List>
+        {operations.length ? (
+          <FixedSizeList
+            height={window.innerHeight}
+            width="100%"
+            itemSize={70}
+            itemCount={operations.length}
+            itemData={operations}
+          >
+            {({ index, style, data }) => <OperationListItem data={data} index={index} style={style} />}
+          </FixedSizeList>
+        ) : (
+          <Typography variant="h6" align="center">
+            You have no operations yet
+          </Typography>
+        )}
       </Paper>
     </React.Fragment>
   );
