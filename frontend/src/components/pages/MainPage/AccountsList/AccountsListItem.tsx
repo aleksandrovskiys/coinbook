@@ -64,7 +64,6 @@ export function AccountsListItem({ account }: { account: Account }) {
   return (
     <ListItem
       disablePadding
-      divider
       sx={{ padding: "2px 16px" }}
       onMouseOver={() => setIsEditButtonsShown(true)}
       onMouseOut={() => setIsEditButtonsShown(false)}
