@@ -59,8 +59,8 @@ export default function MainPage() {
           <Grid container spacing={5} rowSpacing={5}>
             <Grid item sm={4} xs={12}>
               <AccountsList accounts={accounts} />
-              <CategoriesList categoryType="expense" categories={expenseCategories} />
-              <CategoriesList categoryType="income" categories={incomeCategories} />
+              <CategoriesList header="Expenses" categoryType="expense" categories={expenseCategories} />
+              <CategoriesList header="Income" categoryType="income" categories={incomeCategories} />
             </Grid>
             <Grid item sm={8} xs={12}>
               <OperationsList operations={operations} />

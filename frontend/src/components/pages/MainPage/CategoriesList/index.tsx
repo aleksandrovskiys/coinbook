@@ -1,4 +1,5 @@
-import { Box, Button, List, Paper, Typography } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, List, Typography } from "@mui/material";
 import * as React from "react";
 import { AddCategoryForm } from "src/components/pages/MainPage/CategoriesList/AddCategoryForm";
 import { CategoryListItem } from "src/components/pages/MainPage/CategoriesList/CategoryListItem";
@@ -12,15 +13,17 @@ import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 interface IProps {
   categoryType: UserCategoryTypes;
+  header: string;
   categories: Category[];
 }
 
-export function CategoriesList({ categoryType, categories }: IProps): JSX.Element {
+export function CategoriesList({ categoryType, categories, header }: IProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const newCategory = useAppSelector((state) => state.categories.newCategory[categoryType]);
   const categoryCreationStatus = useAppSelector((state) => state.categories.categoryCreationStatus[categoryType]);
   const [addCategoryToggle, setAddCategoryToggle] = React.useState<boolean>(false);
+  const total = categories.reduce((prev: number, next: Category) => prev + (next.monthExpenses || 0), 0);
 
   React.useEffect(() => {
     if (categoryCreationStatus === "succeeded") {
@@ -43,11 +46,11 @@ export function CategoriesList({ categoryType, categories }: IProps): JSX.Elemen
   }
 
   return (
-    <Box marginTop={2} marginBottom={2}>
+    <>
       {!addCategoryToggle && (
         <Button
           variant="outlined"
-          sx={{ marginBottom: "10px" }}
+          sx={{ marginBottom: "10px", marginTop: "15px" }}
           size="small"
           onClick={() => {
             setAddCategoryToggle(!addCategoryToggle);
@@ -63,9 +66,19 @@ export function CategoriesList({ categoryType, categories }: IProps): JSX.Elemen
           categoryType={categoryType}
         />
       )}
-      <Paper sx={{ width: "100%" }} elevation={4}>
-        <List disablePadding>{content}</List>
-      </Paper>
-    </Box>
+      <Accordion sx={{ marginTop: "2px", marginBottom: "2px" }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Box display="flex" flexDirection="row" alignItems="center" sx={{ flexGrow: 1 }}>
+            <Typography sx={{ flexGrow: 1, maxWidth: "30%" }}>{header}</Typography>
+            <Typography sx={{ marginLeft: "auto" }}>{total} Total</Typography>
+          </Box>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box>
+            <List disablePadding>{content}</List>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+    </>
   );
 }

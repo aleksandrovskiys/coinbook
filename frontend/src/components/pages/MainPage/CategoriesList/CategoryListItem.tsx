@@ -43,7 +43,7 @@ export function CategoryListItem({ category }: ICategoryListProps) {
     <ListItem
       disablePadding
       divider
-      sx={{ padding: "2px 8px" }}
+      sx={{ padding: "2px" }}
       onMouseOver={() => setIsEditButtonsShown(true)}
       onMouseOut={() => setIsEditButtonsShown(false)}
     >
