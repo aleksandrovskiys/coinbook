@@ -18,15 +18,13 @@ interface IProps {
 }
 
 export function AddOperationForm({ setAddOperationToggle, operationType }: IProps): JSX.Element {
-  const [newOperation, setNewOperation] = useState<OperationCreate>({
-    date: new Date().toISOString(),
-    amount: undefined,
-  });
+  const [newOperation, setNewOperation] = useState<OperationCreate>({});
   const accounts = useAppSelector((state) => state.accounts.accounts);
   const categories = useAppSelector(categoriesSelectorCreator(operationType));
   const dispatch = useAppDispatch();
   const onSubmit = (event) => {
     event.preventDefault();
+
     dispatch(createOperation(newOperation));
   };
 
@@ -34,6 +32,7 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
     accounts.find((account) => account.id === newOperation.accountId)?.currency.code
   );
   const amountOnChange = (e) => {
+    console.log("new amount value", e.target.value);
     setNewOperation({ ...newOperation, amount: e.target.value });
   };
 
@@ -47,7 +46,7 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
             </InputLabel>
             <Select
               labelId="account-label"
-              value={newOperation.accountId}
+              value={newOperation.accountId || ""}
               label="Account"
               size="small"
               name="accountId"
@@ -73,7 +72,7 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
             </InputLabel>
             <Select
               labelId="category-label"
-              value={newOperation.categoryId}
+              value={newOperation.categoryId || ""}
               label="Category"
               name="categoryId"
               size="small"
@@ -95,18 +94,9 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
               label="Date"
-              value={newOperation.date ? new Date(newOperation.date) : undefined}
+              value={newOperation.date}
               ampm={false}
-              onChange={(value: Date | null) => {
-                try {
-                  if (value) {
-                    const operationDate = value.toISOString();
-                    setNewOperation({ ...newOperation, date: operationDate });
-                  }
-                } catch {
-                  setNewOperation({ ...newOperation, date: "" });
-                }
-              }}
+              onChange={(newValue) => setNewOperation({ ...newOperation, date: newValue })}
               renderInput={(params) => <TextField size="small" name="date" {...params} />}
             />
           </LocalizationProvider>

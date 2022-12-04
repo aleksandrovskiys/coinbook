@@ -77,11 +77,7 @@ export function AccountsList({ accounts }: IProps) {
         {
           <List disablePadding>
             {accounts.length ? (
-              accounts.map((account, index) => (
-                <>
-                  <AccountsListItem key={account.id} account={account} />
-                </>
-              ))
+              accounts.map((account, index) => <AccountsListItem key={account.id} account={account} />)
             ) : (
               <Typography variant="h6" align="center">
                 You have no accounts yet
@@ -90,8 +86,8 @@ export function AccountsList({ accounts }: IProps) {
           </List>
         }
         <Divider textAlign="left">Total</Divider>
-        {currencyTotals.map((currencyTotal) => (
-          <AccountsTotal {...currencyTotal} />
+        {currencyTotals.map((currencyTotal, index) => (
+          <AccountsTotal {...currencyTotal} key={index} />
         ))}
       </Paper>
     </React.Fragment>

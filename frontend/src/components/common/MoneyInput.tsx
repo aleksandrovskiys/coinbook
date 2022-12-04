@@ -21,7 +21,7 @@ const MoneyInput = ({ amount, onChange, currencySymbol }: IProps) => (
       inputProps={{
         min: 0,
         step: 0.01,
-        type: "number",
+        pattern: "d+[.,]?d{0,2}",
         inputMode: "decimal",
       }}
       endAdornment={<InputAdornment position="start">{currencySymbol}</InputAdornment>}
