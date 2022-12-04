@@ -18,7 +18,9 @@ interface IProps {
 }
 
 export function AddOperationForm({ setAddOperationToggle, operationType }: IProps): JSX.Element {
-  const [newOperation, setNewOperation] = useState<OperationCreate>({});
+  const [newOperation, setNewOperation] = useState<OperationCreate>({
+    date: new Date().toISOString(),
+  });
   const accounts = useAppSelector((state) => state.accounts.accounts);
   const categories = useAppSelector(categoriesSelectorCreator(operationType));
   const dispatch = useAppDispatch();
@@ -32,8 +34,7 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
     accounts.find((account) => account.id === newOperation.accountId)?.currency.code
   );
   const amountOnChange = (e) => {
-    console.log("new amount value", e.target.value);
-    setNewOperation({ ...newOperation, amount: e.target.value });
+    setNewOperation({ ...newOperation, amount: e.target.value.replace(",", ".") });
   };
 
   return (
