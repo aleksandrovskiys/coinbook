@@ -6,6 +6,7 @@ export const APPLICATION_URLS = {
   logout: "/logout",
   register: "/register",
   login: "/login",
+  reports: "/reports",
   home: "/",
 };
 
