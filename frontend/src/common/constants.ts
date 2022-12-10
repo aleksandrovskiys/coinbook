@@ -20,6 +20,7 @@ export const API_URLS = {
   operations: "/operations",
   currencies: "/currencies",
   categories: "/categories",
+  netWorthReport: "/reports/net_worth",
 };
 
 export const API_URL: string = process.env.REACT_APP_APPLICATION_API as string;

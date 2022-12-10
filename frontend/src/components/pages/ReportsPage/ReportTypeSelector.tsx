@@ -19,7 +19,9 @@ const ReportTypeSelector = ({ reportType, setReportType }: IProps): JSX.Element 
         onChange={(e) => setReportType(e.target.value as ReportTypes)}
       >
         {Object.values(ReportTypes).map((el) => (
-          <MenuItem value={el}>{snakeToReadable(el)}</MenuItem>
+          <MenuItem value={el} key={el}>
+            {snakeToReadable(el)}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>

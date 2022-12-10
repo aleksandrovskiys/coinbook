@@ -14,7 +14,7 @@ const ReportsContainer = (): JSX.Element => {
       <h1>Reports</h1>
       <ReportIntervalsBox startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} />
       <ReportTypeSelector reportType={reportType} setReportType={setReportType} />
-      <ReportWindow {...{ reportType }} />
+      <ReportWindow reportType={reportType} startDate={startDate} endDate={endDate} />
     </>
   );
 };
