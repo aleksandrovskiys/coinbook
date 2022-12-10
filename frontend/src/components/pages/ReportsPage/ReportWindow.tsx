@@ -1,9 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import * as React from "react";
+import useNetWorthData from "src/components/pages/ReportsPage/hooks/useNetWorthData";
 import NetWorthChart from "src/components/pages/ReportsPage/reportCharts/NetWorthChart";
 import { NetWorthPeriodType, ReportTypes } from "src/interfaces/reports";
-import { fetchNetWorthData } from "src/redux/features/reports/netWorthReportSlice";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 import { snakeToReadable } from "src/utils/common";
 
 interface IProps {
@@ -13,21 +12,7 @@ interface IProps {
 }
 
 const ReportWindow = ({ reportType, startDate, endDate }: IProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const reportInfo = useAppSelector((state) => state.netWorthReport);
-  const reportIsReady = reportInfo.status === "succeeded";
-  React.useEffect(() => {
-    dispatch(
-      fetchNetWorthData({
-        startDate,
-        endDate,
-        periodType: NetWorthPeriodType.day,
-      })
-    );
-  }, [dispatch, endDate, startDate]);
-
-  const labels = reportInfo.data.map((el) => el.period.toLocaleDateString());
-  const data = reportInfo.data.map((el) => el.amount);
+  const { labels, data, reportIsReady } = useNetWorthData({ startDate, endDate, periodType: NetWorthPeriodType.day });
 
   return (
     <Box>
