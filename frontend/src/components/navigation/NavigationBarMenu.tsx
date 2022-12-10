@@ -57,20 +57,17 @@ export function NavigationBarMenu({
         <NavigationMenuItem
           setting="Profile"
           onClick={(e) => {
-            if (!(e.target instanceof HTMLButtonElement)) return;
+            const target = e.target as HTMLButtonElement;
             handleCloseUserMenu();
-            const target = e.target;
             navigate(target.dataset.pointer as string);
           }}
         />
         <NavigationMenuItem
           setting="Settings"
           onClick={(e) => {
-            if (e.target instanceof HTMLButtonElement) {
-              handleCloseUserMenu();
-              const target = e.target;
-              navigate(target.dataset.pointer as string);
-            }
+            const target = e.target as HTMLButtonElement;
+            handleCloseUserMenu();
+            navigate(target.dataset.pointer as string);
           }}
         />
         <NavigationMenuItem
