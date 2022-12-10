@@ -9,6 +9,7 @@ import Login from "src/components/pages/Login";
 import MainPage from "src/components/pages/MainPage";
 import Profile from "src/components/pages/Profile";
 import { SignUp } from "src/components/pages/Register";
+import ReportsPage from "src/components/pages/ReportsPage";
 import Settings from "src/components/pages/Settings";
 import { fetchUserInformation } from "src/redux/features/users/usersSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
@@ -34,6 +35,7 @@ function App() {
           <Route path={APPLICATION_URLS.settings} element={<Settings />} />
           <Route path={APPLICATION_URLS.register} element={<SignUp />} />
           <Route path={APPLICATION_URLS.login} element={<Login />} />
+          <Route path={APPLICATION_URLS.reports} element={<ReportsPage />} />
           <Route path="/" element={<MainPage />} />
         </Routes>
       </SnackbarProvider>

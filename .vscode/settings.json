@@ -12,6 +12,12 @@
   "[typescript]": {
     "editor.tabSize": 2
   },
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[typescriptreact]": {
+    "editor.tabSize": 2
+  },
   "editor.codeActionsOnSave": { "source.organizeImports": true },
   "python.analysis.diagnosticMode": "workspace",
   "python.linting.mypyEnabled": true,

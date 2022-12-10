@@ -30,6 +30,7 @@ export function NavigationBarMenu({
     <Box sx={{ flexGrow: 0, display: "flex" }}>
       {!isLoggedIn && <NavigationItem to={APPLICATION_URLS.register} text="Register" />}
       {!isLoggedIn && <NavigationItem to={APPLICATION_URLS.login} text="Login" />}
+      {isLoggedIn && <NavigationItem to={APPLICATION_URLS.reports} text="Reports" />}
       {isLoggedIn && (
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -56,17 +57,20 @@ export function NavigationBarMenu({
         <NavigationMenuItem
           setting="Profile"
           onClick={(e) => {
-            const target = e.target as HTMLButtonElement;
+            if (!(e.target instanceof HTMLButtonElement)) return;
             handleCloseUserMenu();
+            const target = e.target;
             navigate(target.dataset.pointer as string);
           }}
         />
         <NavigationMenuItem
           setting="Settings"
           onClick={(e) => {
-            const target = e.target as HTMLButtonElement;
-            handleCloseUserMenu();
-            navigate(target.dataset.pointer as string);
+            if (e.target instanceof HTMLButtonElement) {
+              handleCloseUserMenu();
+              const target = e.target;
+              navigate(target.dataset.pointer as string);
+            }
           }}
         />
         <NavigationMenuItem
