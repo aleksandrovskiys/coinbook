@@ -1,8 +1,11 @@
 import { API_URL, API_URLS } from "src/common/constants";
 import { ApiError } from "src/common/exceptions";
+import { NetWorthReportResponse } from "src/interfaces/reports";
 import { Account, AccountCreate, AccountUpdate, Currency } from "src/redux/features/accounts/accountsSlice";
 import { Category, CategoryCreate } from "src/redux/features/categories/categoriesSlice";
 import { Operation, OperationCreate } from "src/redux/features/operations/operationsSlice";
+import { NetWorthReportParameters } from "src/redux/features/reports/netWorthReportSlice";
+import { dateToISODate } from "src/utils/common";
 import { getTokenFromStorage } from "src/utils/localStorage";
 
 class ApiClient {
@@ -209,6 +212,15 @@ class ApiClient {
         method: "DELETE",
       })
     ).json();
+  }
+
+  async getNetWorthData(parameters: NetWorthReportParameters): Promise<NetWorthReportResponse> {
+    const requestParameters = new URLSearchParams({
+      start_date: dateToISODate(parameters.startDate),
+      end_date: dateToISODate(parameters.endDate),
+      period_type: parameters.periodType,
+    });
+    return (await this.secureFetch(`${API_URLS.netWorthReport}?${requestParameters}`, {})).json();
   }
 }
 
