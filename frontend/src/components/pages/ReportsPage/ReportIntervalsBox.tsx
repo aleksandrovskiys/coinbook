@@ -1,4 +1,4 @@
-import { Box } from "@mui/system";
+import { Grid } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import * as React from "react";
@@ -12,12 +12,16 @@ interface IProps {
 
 export function ReportIntervalsBox({ startDate, setStartDate, endDate, setEndDate }: IProps) {
   return (
-    <Box paddingBottom="15px" display="flex" justifyContent="space-between" maxWidth="480px">
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <MonthPicker date={startDate} setDate={setStartDate} />
-        <MonthPicker date={endDate} setDate={setEndDate} />
-      </LocalizationProvider>
-    </Box>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Grid container spacing={2} marginBottom="15px" maxWidth="480px">
+        <Grid item xs={12} sm={6}>
+          <MonthPicker date={startDate} setDate={setStartDate} label="Start date" />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <MonthPicker date={endDate} setDate={setEndDate} label="End date" />
+        </Grid>
+      </Grid>
+    </LocalizationProvider>
   );
 }
 
