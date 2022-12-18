@@ -85,7 +85,7 @@ export function AccountsList({ accounts }: IProps) {
             )}
           </List>
         }
-        <Divider textAlign="left">Total</Divider>
+        <Divider textAlign="right">Total</Divider>
         {currencyTotals.map((currencyTotal, index) => (
           <AccountsTotal {...currencyTotal} key={index} />
         ))}

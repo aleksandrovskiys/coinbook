@@ -46,7 +46,7 @@ export default function MainPage() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xl">
+      <Container component="main" maxWidth="lg">
         <Box
           sx={{
             marginTop: 2,

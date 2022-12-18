@@ -13,7 +13,7 @@ const AccountsTotal = ({ total, currencyCode }: CurrencyTotal) => {
     currency: currencyCode,
   });
   return (
-    <Typography textAlign="right" paddingRight="16px">
+    <Typography textAlign="right" paddingRight="16px" paddingBottom="15px">
       {formattedTotal}
     </Typography>
   );
