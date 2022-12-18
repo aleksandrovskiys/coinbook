@@ -8,8 +8,8 @@ import { useState } from "react";
 import { getCurrencySymbol } from "src/common/utils";
 import MoneyInput from "src/components/common/MoneyInput";
 import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
-import { categoriesSelectorCreator, UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
-import { createOperation, OperationCreate } from "src/redux/features/operations/operationsSlice";
+import { UserCategoryTypes, categoriesSelectorCreator } from "src/redux/features/categories/categoriesSlice";
+import { OperationCreate, createOperation } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 interface IProps {
