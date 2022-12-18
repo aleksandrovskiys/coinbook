@@ -18,12 +18,16 @@ interface IProps {
 }
 
 export function AddOperationForm({ setAddOperationToggle, operationType }: IProps): JSX.Element {
-  const [newOperation, setNewOperation] = useState<OperationCreate>({
-    date: new Date().toISOString(),
-  });
   const accounts = useAppSelector((state) => state.accounts.accounts);
   const categories = useAppSelector(categoriesSelectorCreator(operationType));
+
+  const [newOperation, setNewOperation] = useState<OperationCreate>({
+    date: new Date().toISOString(),
+    accountId: accounts.length > 0 ? accounts[0].id : undefined,
+    categoryId: categories.length > 0 ? categories[0].id : undefined,
+  });
   const dispatch = useAppDispatch();
+
   const onSubmit = (event) => {
     event.preventDefault();
 
