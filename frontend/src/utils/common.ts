@@ -9,3 +9,7 @@ export const dateToISODate = (date: Date): string => {
   date = new Date(date.getTime() - offset * 60 * 1000);
   return date.toISOString().split("T")[0];
 };
+
+export function roundToTwoDecimalPlaces(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}

@@ -5,11 +5,12 @@ import { AddCategoryForm } from "src/components/pages/MainPage/CategoriesList/Ad
 import { CategoryListItem } from "src/components/pages/MainPage/CategoriesList/CategoryListItem";
 import {
   Category,
+  UserCategoryTypes,
   clearNewCategory,
   createCategory,
-  UserCategoryTypes,
 } from "src/redux/features/categories/categoriesSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { roundToTwoDecimalPlaces } from "src/utils/common";
 
 interface IProps {
   categoryType: UserCategoryTypes;
@@ -23,7 +24,9 @@ export function CategoriesList({ categoryType, categories, header }: IProps): JS
   const newCategory = useAppSelector((state) => state.categories.newCategory[categoryType]);
   const categoryCreationStatus = useAppSelector((state) => state.categories.categoryCreationStatus[categoryType]);
   const [addCategoryToggle, setAddCategoryToggle] = React.useState<boolean>(false);
-  const total = categories.reduce((prev: number, next: Category) => prev + (next.monthExpenses || 0), 0);
+  const total = roundToTwoDecimalPlaces(
+    categories.reduce((prev: number, next: Category) => prev + (next.monthExpenses || 0), 0)
+  );
 
   React.useEffect(() => {
     if (categoryCreationStatus === "succeeded") {
