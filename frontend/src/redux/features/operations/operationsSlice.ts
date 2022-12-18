@@ -100,6 +100,9 @@ export const operationsSlice = createSlice({
         return element;
       });
     },
+    resetOperationCreationStatus(state) {
+      state.operationCreationStatus = "idle";
+    },
   },
   extraReducers(builder) {
     builder
@@ -137,6 +140,7 @@ export const operationsSlice = createSlice({
   },
 });
 
-export const { updateOperationsCategory, deleteOperationsCategory } = operationsSlice.actions;
+export const { updateOperationsCategory, deleteOperationsCategory, resetOperationCreationStatus } =
+  operationsSlice.actions;
 
 export default operationsSlice.reducer;

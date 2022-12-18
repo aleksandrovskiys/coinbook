@@ -4,7 +4,7 @@ import { FixedSizeList } from "react-window";
 import { AddOperationForm } from "src/components/pages/MainPage/OperationsList/AddOperationForm";
 import { OperationListItem } from "src/components/pages/MainPage/OperationsList/OperationListItem";
 import { UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
-import { Operation } from "src/redux/features/operations/operationsSlice";
+import { Operation, resetOperationCreationStatus } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 interface IProps {
@@ -22,6 +22,7 @@ export function OperationsList({ operations }: IProps) {
   React.useEffect(() => {
     if (operationCreationStatus === "succeeded") {
       setAddOperationToggle(false);
+      dispatch(resetOperationCreationStatus());
     }
   }, [dispatch, operationCreationStatus]);
 
