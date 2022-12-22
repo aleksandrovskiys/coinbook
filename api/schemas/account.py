@@ -34,5 +34,5 @@ class Account(AccountBase):
     user_id: int = Field(alias="userId")
 
     balance: Decimal = Decimal(0)
-    month_worth_change: int = Field(default=0, alias="monthWorthChange")
+    month_worth_change: Decimal = Field(default=Decimal(0), alias="monthWorthChange")
     currency: CurrencyBase
