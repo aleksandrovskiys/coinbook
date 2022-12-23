@@ -21,7 +21,7 @@ export default function Login() {
   const loginStatus = useAppSelector((state) => state.users.loginStatus);
 
   if (loginStatus === "succeeded") {
-    navigate(APPLICATION_URLS.home, { replace: true });
+    navigate(APPLICATION_URLS.home);
     return null;
   }
 
