@@ -38,7 +38,7 @@ def get_current_user(session: Session = Depends(get_db), token: str = Depends(re
             detail="Invalid credentials",
         )
 
-    user = crud.user.get(session=session, user_id=token_data.sub)
+    user = crud.user.get(session=session, id=token_data.sub)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_UNAUTHORIZED, detail="User not found")
 

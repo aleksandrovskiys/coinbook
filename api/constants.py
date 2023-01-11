@@ -11,3 +11,5 @@ class SwaggerTags(enum.Enum):
 
 
 PERMISSION_ERROR_TEXT_TEMPLATE = "Not enough permission to access this {0}"
+
+DEFAULT_CURRENCY_CODE = "EUR"

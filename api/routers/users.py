@@ -10,7 +10,9 @@ from sqlalchemy.orm import Session
 from api import constants
 from api import crud
 from api import deps
+from api import models
 from api.schemas.user import User
+from api.schemas.user import UserBase
 from api.schemas.user import UserCreate
 from api.schemas.user import UserLoginResponseSchema
 from api.security import create_access_token
@@ -29,7 +31,7 @@ async def register(
             status_code=400,
             detail="The user with this email already exists in the system.",
         )
-    created_user = crud.user.create(user=user, session=session)
+    created_user = crud.user.create(obj_in=user, session=session)
     return created_user
 
 
@@ -51,3 +53,12 @@ async def login(session: Session = Depends(deps.get_db), form_data: OAuth2Passwo
 @router.get("/me", response_model=User)
 async def get_user(current_user: User = Depends(deps.get_current_user)) -> User:
     return User.from_orm(current_user)
+
+
+@router.put("/me", response_model=User)
+async def update_user(
+    updated_user: UserBase,
+    current_user: models.User = Depends(deps.get_current_user),
+    session: Session = Depends(deps.get_db),
+):
+    return crud.user.update(session, obj_in=updated_user, db_obj=current_user)
