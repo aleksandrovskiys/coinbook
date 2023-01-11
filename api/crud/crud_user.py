@@ -1,32 +1,18 @@
 from sqlalchemy.orm import Session
 
+from api.crud.base import CRUDBase
 from api.models.user import User
+from api.schemas.user import UserBase
 from api.schemas.user import UserCreate
-from api.security import get_password_hash
 from api.security import verify_password
 
 
-class UserCrud:
+class UserCrud(CRUDBase[User, UserCreate, UserBase]):
     def __init__(self) -> None:
         self.model = User
 
     def get_by_email(self, session: Session, email: str) -> User | None:
         user = session.query(User).filter(self.model.email == email).first()
-        return user
-
-    def get(self, session: Session, user_id: int) -> User:
-        return session.query(self.model).filter(self.model.id == user_id).first()
-
-    def create(self, session: Session, user: UserCreate) -> User:
-        user = self.model(
-            email=user.email,
-            password=get_password_hash(user.password),
-            first_name=user.first_name,
-            last_name=user.last_name,
-        )
-
-        session.add(user)
-        session.commit()
         return user
 
     def authenticate(self, session: Session, *, email: str, password: str) -> User | None:

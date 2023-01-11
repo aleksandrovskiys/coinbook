@@ -21,7 +21,7 @@ class Settings(BaseSettings):
         return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     @validator("CORS_ORIGINS", pre=True)
-    def _assemble_cors_origins(cls, cors_origins):  # noqa
+    def _assemble_cors_origins(cls, cors_origins):
         if isinstance(cors_origins, str):
             return [item.strip() for item in cors_origins.split(",")]
         return cors_origins
