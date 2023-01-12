@@ -1,4 +1,4 @@
-import { Container, CssBaseline } from "@mui/material";
+import { Container } from "@mui/material";
 import * as React from "react";
 import ReportsContainer from "src/components/pages/ReportsPage/ReportsContainer";
 import { User } from "src/redux/features/users/usersSlice";
@@ -9,7 +9,6 @@ const ReportsPage = () => {
 
   return (
     <Container component="main" maxWidth="lg">
-      <CssBaseline />
       {!!currentUser ? <ReportsContainer /> : null}
     </Container>
   );

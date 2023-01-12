@@ -63,14 +63,6 @@ export function NavigationBarMenu({
           }}
         />
         <NavigationMenuItem
-          setting="Settings"
-          onClick={(e) => {
-            const target = e.target as HTMLButtonElement;
-            handleCloseUserMenu();
-            navigate(target.dataset.pointer as string);
-          }}
-        />
-        <NavigationMenuItem
           setting="Logout"
           onClick={(e) => {
             handleCloseUserMenu();
