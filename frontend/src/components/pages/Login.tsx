@@ -14,7 +14,7 @@ import { APPLICATION_URLS } from "src/common/constants";
 import { startLogin } from "src/redux/features/users/usersSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
-export default function Login() {
+export default function LoginPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const loginStatus = useAppSelector((state) => state.users.loginStatus);
