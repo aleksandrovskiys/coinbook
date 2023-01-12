@@ -3,7 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
@@ -36,7 +35,6 @@ export default function Login() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,

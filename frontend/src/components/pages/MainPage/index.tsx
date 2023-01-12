@@ -1,4 +1,4 @@
-import { Box, Container, createTheme, CssBaseline, Grid, Paper, styled, ThemeProvider } from "@mui/material";
+import { Box, Container, createTheme, Grid, Paper, styled, ThemeProvider } from "@mui/material";
 import * as React from "react";
 import { AccountsList } from "src/components/pages/MainPage/AccountsList";
 import { CategoriesList } from "src/components/pages/MainPage/CategoriesList";
@@ -42,7 +42,7 @@ export default function MainPage() {
     }
   }, [dispatch, operations, operationsFetchStatus]);
 
-  if (!userInfo) return <CssBaseline />;
+  if (!userInfo) return null;
 
   return (
     <ThemeProvider theme={theme}>
@@ -55,7 +55,6 @@ export default function MainPage() {
             alignItems: "center",
           }}
         >
-          <CssBaseline />
           <Grid container spacing={5} rowSpacing={5}>
             <Grid item sm={4} xs={12}>
               <AccountsList accounts={accounts} />
