@@ -6,10 +6,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { APPLICATION_URLS } from "src/common/constants";
 import ErrorAlerts from "src/components/common/ErrorAlerts/ErrorAlerts";
 import NavigationBar from "src/components/navigation/NavigationBar";
-import Login from "src/components/pages/Login";
+import LoginPage from "src/components/pages/Login";
 import MainPage from "src/components/pages/MainPage";
-import Profile from "src/components/pages/Profile";
-import { SignUp } from "src/components/pages/Register";
+import ProfilePage from "src/components/pages/ProfilePage";
+import SignUpPage from "src/components/pages/Register";
 import ReportsPage from "src/components/pages/ReportsPage";
 import { fetchUserInformation } from "src/redux/features/users/usersSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
@@ -32,9 +32,9 @@ function App() {
         <ErrorAlerts />
         <NavigationBar />
         <Routes>
-          <Route path={APPLICATION_URLS.profile} element={<Profile />} />
-          <Route path={APPLICATION_URLS.register} element={<SignUp />} />
-          <Route path={APPLICATION_URLS.login} element={<Login />} />
+          <Route path={APPLICATION_URLS.profile} element={<ProfilePage />} />
+          <Route path={APPLICATION_URLS.register} element={<SignUpPage />} />
+          <Route path={APPLICATION_URLS.login} element={<LoginPage />} />
           <Route path={APPLICATION_URLS.reports} element={<ReportsPage />} />
           <Route path="/" element={<MainPage />} />
         </Routes>

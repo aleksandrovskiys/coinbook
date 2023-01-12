@@ -51,6 +51,7 @@ export interface User {
 
   is_active: boolean | null;
   is_superuser: boolean;
+  default_currency_code: string;
 }
 
 interface UsersState {

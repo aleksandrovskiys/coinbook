@@ -1,11 +1,10 @@
 import { Container } from "@mui/material";
 import * as React from "react";
 import ReportsContainer from "src/components/pages/ReportsPage/ReportsContainer";
-import { User } from "src/redux/features/users/usersSlice";
-import { useAppSelector } from "src/redux/hooks";
+import { useUser } from "src/redux/features/users/hooks";
 
 const ReportsPage = () => {
-  const currentUser: User | null = useAppSelector((state) => state.users.userInfo);
+  const currentUser = useUser();
 
   return (
     <Container component="main" maxWidth="lg">
