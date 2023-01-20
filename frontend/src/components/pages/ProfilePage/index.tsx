@@ -1,14 +1,23 @@
 import { Button, Container, Paper } from "@mui/material";
 import * as React from "react";
+import { useEffect } from "react";
 import { useUser } from "src/redux/features/users/hooks";
 import { ProfileTextField } from "./ProfileTextField";
 
 export default function ProfilePage() {
   const currentUser = useUser();
   const [editMode, setEditMode] = React.useState<boolean>(false);
-  const [firstName, setFirstName] = React.useState<string | null>(currentUser!.first_name);
-  const [lastName, setLastName] = React.useState<string | null>(currentUser!.last_name);
-  const [defaultCurrency, setDefaultCurrency] = React.useState<string>(currentUser!.default_currency_code);
+  const [firstName, setFirstName] = React.useState<string>("");
+  const [lastName, setLastName] = React.useState<string>("");
+  const [defaultCurrency, setDefaultCurrency] = React.useState<string>("");
+
+  useEffect(() => {
+    if (currentUser) {
+      setFirstName(currentUser.first_name || "");
+      setLastName(currentUser.last_name || "");
+      setDefaultCurrency(currentUser.default_currency_code || "");
+    }
+  }, [currentUser]);
 
   if (currentUser == null) return <h1>Loading...</h1>;
 
