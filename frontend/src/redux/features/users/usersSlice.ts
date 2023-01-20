@@ -121,11 +121,6 @@ export const usersSlice = createSlice({
   },
 });
 
-export const userInfoSelector = (state) => {
-  if (!state.users.userInfo) {
-  }
-};
-
 export const { logout, login, setRegistrationStatusIdle, updateUserInfo } = usersSlice.actions;
 
 export default usersSlice.reducer;
