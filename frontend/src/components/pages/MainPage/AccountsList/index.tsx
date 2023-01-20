@@ -4,7 +4,8 @@ import { AccountsListItem } from "src/components/pages/MainPage/AccountsList/Acc
 import AccountsTotal, { CurrencyTotal } from "src/components/pages/MainPage/AccountsList/AccountsTotal";
 import { AddAccountForm } from "src/components/pages/MainPage/AccountsList/AddAccountForm";
 import { Account, AccountCreate, createAccount } from "src/redux/features/accounts/accountsSlice";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { useUser } from "src/redux/features/users/hooks";
+import { useAppDispatch } from "src/redux/hooks";
 
 interface IProps {
   accounts: Account[];
@@ -13,11 +14,13 @@ interface IProps {
 export function AccountsList({ accounts }: IProps) {
   const dispatch = useAppDispatch();
 
-  const userId = useAppSelector((state) => state.users.userInfo!.id);
+  const user = useUser();
 
   const [addAccountToggle, setAddAccountToggle] = React.useState<boolean>(false);
   const [currencyCode, setCurrencyCode] = React.useState<string>("");
   const [accountName, setAccountName] = React.useState<string>("");
+
+  if (user == null) return null;
 
   const addAccountOnSubmit = (event) => {
     event.preventDefault();
@@ -26,7 +29,7 @@ export function AccountsList({ accounts }: IProps) {
     const account: AccountCreate = {
       name: data.get("newAccountName") as string,
       currencyCode: data.get("newAccountCurrencyCode") as string,
-      userId: userId,
+      userId: user.id,
     };
     dispatch(createAccount(account));
     setAddAccountToggle(false);
