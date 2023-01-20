@@ -3,16 +3,17 @@ import * as React from "react";
 import { defaultLocale } from "src/common/constants";
 import { EditableTextField } from "src/components/common/EditableTextField";
 import { EditButtons } from "src/components/common/EditButtons";
+import { StyledInput } from "src/components/common/StyledInput";
 import { SubmitCancelButtons } from "src/components/common/SubmitCancelButtons";
 import { AccountBalanceChange } from "src/components/pages/MainPage/AccountsList/AccountBalanceChange";
 import { Account, AccountUpdate, deleteAccount, updateAccount } from "src/redux/features/accounts/accountsSlice";
+import { useCurrencies } from "src/redux/features/accounts/hooks/useCurrencies";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
-import { StyledInput } from "../../../common/StyledInput";
 
 export function AccountsListItem({ account }: { account: Account }) {
   const dispatch = useAppDispatch();
   const accountUpdateStatus = useAppSelector((state) => state.accounts.accountUpdateStatus);
-  const currencies = useAppSelector((state) => state.accounts.currencies);
+  const currencies = useCurrencies();
 
   const [isEditMode, setEditMode] = React.useState<boolean>(false);
   const [accountBalance, setAccountBalance] = React.useState<number>(account.balance);

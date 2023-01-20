@@ -42,6 +42,15 @@ export const startRegistration = createAsyncThunk(
   }
 );
 
+export const updateUserInformation = createAsyncThunk("users/updateUserInformation", async (user: User, thunkApi) => {
+  try {
+    const result = await api.updateUser(user);
+    return result;
+  } catch (err) {
+    parseErrors(err, thunkApi);
+  }
+});
+
 export interface User {
   id: number;
 
@@ -51,6 +60,10 @@ export interface User {
 
   is_active: boolean | null;
   is_superuser: boolean;
+  default_currency_code: string;
+}
+
+export interface UserUpdate {
   default_currency_code: string;
 }
 
@@ -117,6 +130,11 @@ export const usersSlice = createSlice({
       })
       .addCase(startRegistration.rejected, (state) => {
         state.registrationStatus = "failed";
+      })
+      .addCase(updateUserInformation.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.userInfo = action.payload;
+        }
       });
   },
 });
