@@ -5,7 +5,7 @@ import { ProfileTextField } from "./ProfileTextField";
 
 export default function ProfilePage() {
   const currentUser = useUser();
-  const [isDisabled, setIsDisabled] = React.useState<boolean>(true);
+  const [editMode, setEditMode] = React.useState<boolean>(false);
   const [firstName, setFirstName] = React.useState<string | null>(currentUser!.first_name);
   const [lastName, setLastName] = React.useState<string | null>(currentUser!.last_name);
   const [defaultCurrency, setDefaultCurrency] = React.useState<string>(currentUser!.default_currency_code);
@@ -20,23 +20,23 @@ export default function ProfilePage() {
           label={"First Name"}
           value={firstName}
           setValue={setFirstName}
-          isDisabled={isDisabled}
+          isDisabled={!editMode}
         />
         <ProfileTextField
           name={"lastName"}
           label={"Last Name"}
           value={lastName}
           setValue={setLastName}
-          isDisabled={isDisabled}
+          isDisabled={!editMode}
         />
         <ProfileTextField
           name={"defaultCurrency"}
           label={"Default Currency"}
           value={defaultCurrency}
           setValue={setDefaultCurrency}
-          isDisabled={isDisabled}
+          isDisabled={!editMode}
         />
-        <Button onClick={() => setIsDisabled(!isDisabled)}>Edit Profile</Button>
+        {!editMode && <Button onClick={() => setEditMode(!editMode)}>Edit Profile</Button>}
       </Paper>
     </Container>
   );
