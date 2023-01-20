@@ -44,7 +44,6 @@ class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
         end_date: datetime.date,
         period_type: PeriodTypes = PeriodTypes.day,
     ) -> list[SpendInPeriodSchema]:
-
         dates_list = func.generate_series(start_date, end_date, "1 " + period_type.value).alias("timeframe")
         timeframe_column_name = "timeframe"
         timeframe = column(timeframe_column_name)
