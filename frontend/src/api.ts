@@ -5,6 +5,7 @@ import { Account, AccountCreate, AccountUpdate, Currency } from "src/redux/featu
 import { Category, CategoryCreate } from "src/redux/features/categories/categoriesSlice";
 import { Operation, OperationCreate } from "src/redux/features/operations/operationsSlice";
 import { NetWorthReportParameters } from "src/redux/features/reports/netWorthReportSlice";
+import { User } from "src/redux/features/users/usersSlice";
 import { dateToISODate } from "src/utils/common";
 import { getTokenFromStorage } from "src/utils/localStorage";
 
@@ -221,6 +222,18 @@ class ApiClient {
       period_type: parameters.periodType,
     });
     return (await this.secureFetch(`${API_URLS.netWorthReport}?${requestParameters}`, {})).json();
+  }
+
+  async updateUser(user: User): Promise<User> {
+    return (
+      await this.secureFetch(API_URLS.userInfo, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      })
+    ).json();
   }
 }
 
