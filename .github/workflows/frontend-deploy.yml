@@ -12,6 +12,10 @@ env:
   AWS_REGION: eu-north-1
   S3_BUCKET_NAME: coinbook-ui
 
+defaults:
+  run:
+    working-directory: frontend
+
 jobs:
   deploy:
     name: Deploy FE
