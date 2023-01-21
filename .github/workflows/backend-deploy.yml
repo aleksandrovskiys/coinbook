@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+concurrency:
+  group: ${{ github.workflow }}
+
 env:
   AWS_REGION: eu-north-1
   ECR_REPOSITORY: coinbook

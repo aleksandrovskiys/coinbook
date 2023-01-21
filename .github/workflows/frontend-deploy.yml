@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+concurrency:
+  group: ${{ github.workflow }}
+
 env:
   AWS_REGION: eu-north-1
   S3_BUCKET_NAME: coinbook-ui
