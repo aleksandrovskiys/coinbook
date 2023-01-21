@@ -47,7 +47,7 @@ jobs:
       - name: Install package dependencies
         run: npm install
 
-      - name: Create test build
+      - name: Build application
         run: npm run build
 
       - name: Configure AWS credentials
