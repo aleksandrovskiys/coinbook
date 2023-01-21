@@ -10,12 +10,8 @@ env:
   S3_BUCKET_NAME: coinbook-ui
 
 jobs:
-  build:
-    name: Deploy
-    runs-on: ubuntu-latest
-
   deploy:
-    name: Deploy
+    name: Deploy FE
     runs-on: ubuntu-latest
     environment: production
 
