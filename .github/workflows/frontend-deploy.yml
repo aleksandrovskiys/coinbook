@@ -20,7 +20,7 @@ jobs:
   deploy:
     name: Deploy FE
     runs-on: ubuntu-latest
-    environment: production
+    environment: production-fe
 
     steps:
       - name: Checkout
