@@ -13,3 +13,13 @@ export const dateToISODate = (date: Date): string => {
 export function roundToTwoDecimalPlaces(value: number): number {
   return Math.round((value + Number.EPSILON) * 100) / 100;
 }
+
+export function formatDateWithoutSeconds(date: Date): string {
+  return date.toLocaleDateString([], {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
