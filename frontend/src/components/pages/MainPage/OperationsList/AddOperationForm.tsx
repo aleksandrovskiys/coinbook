@@ -1,15 +1,13 @@
-import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import { Box } from "@mui/system";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import * as React from "react";
 import { useState } from "react";
 import { getCurrencySymbol } from "src/common/utils";
+import DatePicker from "src/components/common/DatePicker";
 import MoneyInput from "src/components/common/MoneyInput";
 import { SaveObjectButtons } from "src/components/common/SaveObjectButtons";
-import { UserCategoryTypes, categoriesSelectorCreator } from "src/redux/features/categories/categoriesSlice";
-import { OperationCreate, createOperation } from "src/redux/features/operations/operationsSlice";
+import { categoriesSelectorCreator, UserCategoryTypes } from "src/redux/features/categories/categoriesSlice";
+import { createOperation, OperationCreate } from "src/redux/features/operations/operationsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 
 interface IProps {
@@ -96,15 +94,12 @@ export function AddOperationForm({ setAddOperationToggle, operationType }: IProp
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={3}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
-              label="Date"
+          {
+            <DatePicker
               value={newOperation.date}
-              ampm={false}
-              onChange={(newValue) => setNewOperation({ ...newOperation, date: newValue })}
-              renderInput={(params) => <TextField size="small" name="date" {...params} />}
+              setValue={(newValue) => setNewOperation({ ...newOperation, date: newValue })}
             />
-          </LocalizationProvider>
+          }
         </Grid>
         <Grid item xs={12} sm={3}>
           {<MoneyInput amount={newOperation.amount} onChange={amountOnChange} currencySymbol={currencySymbol} />}

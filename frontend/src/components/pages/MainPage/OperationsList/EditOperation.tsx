@@ -1,19 +1,34 @@
-import { Box, FormControl, InputAdornment, ListItemText, MenuItem, Select, TextField } from "@mui/material";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { Box, FormControl, InputAdornment, ListItemText, MenuItem, Select } from "@mui/material";
 import * as React from "react";
 import { getCurrencySymbol } from "src/common/utils";
+import DatePicker from "src/components/common/DatePicker";
 import { StyledInput } from "src/components/common/StyledInput";
 import { Operation } from "src/redux/features/operations/operationsSlice";
 import { useAppSelector } from "src/redux/hooks";
 
-export function EditOperation({ operation }: { operation: Operation }): JSX.Element {
+interface IProps {
+  operation: Operation;
+  setOperation: (value: Operation) => void;
+}
+
+export function EditOperation({ operation, setOperation }: IProps): JSX.Element {
   const accounts = useAppSelector((state) => state.accounts.accounts);
   const categories = useAppSelector((state) => state.categories.categories);
 
   const [accountId, setAccountId] = React.useState<number>(operation.account.id);
   const [categoryId, setCategoryId] = React.useState<number | undefined>(operation.category?.id);
-  const [amount, setAmount] = React.useState<string>(String(operation.amount));
+  const [amount, setAmount] = React.useState<number>(operation.amount);
+  const [date, setDate] = React.useState<string>(operation.date);
+
+  React.useEffect(() => {
+    setOperation({
+      ...operation,
+      date: date,
+      amount: amount,
+      account: accounts.find((account) => account.id === accountId)!,
+      category: categories.find((category) => category.id === categoryId)!,
+    });
+  }, [date, amount, accountId, categoryId, setOperation, operation, accounts, categories]);
 
   return (
     <ListItemText
@@ -24,10 +39,9 @@ export function EditOperation({ operation }: { operation: Operation }): JSX.Elem
             value={accountId}
             size="small"
             onChange={(event) => {
-              setAccountId(event.target.value as number);
               const account = accounts.find((element) => element.id === event.target.value);
               if (account) {
-                operation.account = account;
+                setAccountId(account.id);
               }
             }}
             sx={{ maxWidth: "25%", flexGrow: 1 }}
@@ -48,10 +62,9 @@ export function EditOperation({ operation }: { operation: Operation }): JSX.Elem
               name="amount"
               size="small"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setAmount(e.target.value);
-                const amount = parseFloat(e.target.value.replace(",", "."));
-                if (!isNaN(amount)) {
-                  operation.amount = amount;
+                const newAmount = parseFloat(e.target.value.replace(",", "."));
+                if (!isNaN(newAmount)) {
+                  setAmount(newAmount);
                 }
               }}
               endAdornment={
@@ -63,33 +76,24 @@ export function EditOperation({ operation }: { operation: Operation }): JSX.Elem
       }
       secondary={
         <Box flexDirection="row" display="flex" alignItems="center">
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
-              label="Date"
-              value={operation.date ? new Date(operation.date) : undefined}
-              ampm={false}
-              onChange={(value: Date | null) => {
-                try {
-                  if (value) {
-                    const operationDate = value.toISOString();
-                    operation.date = operationDate;
-                  } else {
-                    operation.date = "";
-                  }
-                } catch {}
-              }}
-              renderInput={(params) => <TextField variant="standard" size="small" name="date" {...params} />}
-            />
-          </LocalizationProvider>
+          <DatePicker
+            value={date}
+            setValue={(value) => {
+              if (value) {
+                setDate(value);
+              }
+            }}
+            variant="standard"
+            showLabel={false}
+          />
           <Select
             variant="standard"
             value={categoryId}
             size="small"
             onChange={(event) => {
-              setCategoryId(event.target.value as number);
               const category = categories.find((element) => element.id === event.target.value);
               if (category) {
-                operation.category = category;
+                setCategoryId(category.id);
               }
             }}
             sx={{ maxWidth: "25%", flexGrow: 1, marginLeft: "auto", input: { textAlign: "right" } }}
