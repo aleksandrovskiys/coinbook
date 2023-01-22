@@ -15,7 +15,7 @@ export interface Operation {
 }
 
 export interface OperationCreate {
-  date?: string | null;
+  date: string | null;
   accountId?: number;
   categoryId?: number;
   amount?: number;
