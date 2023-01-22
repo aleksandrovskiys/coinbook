@@ -4,6 +4,7 @@ import * as React from "react";
 import { defaultColor, expenseColor, incomeColor } from "src/common/colors";
 import { defaultLocale } from "src/common/constants";
 import { Operation } from "src/redux/features/operations/operationsSlice";
+import { formatDateWithoutSeconds } from "src/utils/common";
 
 export function ShowOperation({ operation }: { operation: Operation }): JSX.Element {
   const date = new Date(operation.date);
@@ -36,8 +37,8 @@ export function ShowOperation({ operation }: { operation: Operation }): JSX.Elem
       }
       secondary={
         <React.Fragment>
-          <Tooltip title={date.toLocaleString()} placement="right">
-            <Typography component="span">{relativeDate} ago</Typography>
+          <Tooltip title={`${relativeDate} ago`} placement="right">
+            <Typography component="span">{formatDateWithoutSeconds(date)}</Typography>
           </Tooltip>
           <Typography align="right" component="span" sx={{ display: "inline", float: "right" }}>
             {`${operation.category?.name || "Unknown"}`}
