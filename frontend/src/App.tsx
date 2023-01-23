@@ -8,7 +8,7 @@ import NavigationBar from "src/components/navigation/NavigationBar";
 import LoginPage from "src/components/pages/Login";
 import MainPage from "src/components/pages/MainPage";
 import ProfilePage from "src/components/pages/ProfilePage";
-import SignUpPage from "src/components/pages/Register";
+import SignUpPage from "src/components/pages/RegisterPage";
 import ReportsPage from "src/components/pages/ReportsPage";
 
 function App() {
