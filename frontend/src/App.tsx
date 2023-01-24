@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { APPLICATION_URLS } from "src/common/constants";
 import ErrorAlerts from "src/components/common/ErrorAlerts/ErrorAlerts";
 import NavigationBar from "src/components/navigation/NavigationBar";
-import LoginPage from "src/components/pages/Login";
+import LoginPage from "src/components/pages/LoginPage";
 import MainPage from "src/components/pages/MainPage";
 import ProfilePage from "src/components/pages/ProfilePage";
 import SignUpPage from "src/components/pages/RegisterPage";
