@@ -19,8 +19,9 @@ interface IProps<T extends FieldValues>
       | "maxRows"
       | "type"
       | "inputProps"
+      | "margin"
     > {
-  fullWidth: boolean;
+  fullWidth?: boolean;
 }
 
 function FormTextField<T extends FieldValues>(props: IProps<T>) {

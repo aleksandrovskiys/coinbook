@@ -7,6 +7,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { Link as RouterLink } from "react-router-dom";
 import { APPLICATION_URLS } from "src/common/constants";
 import FormTextField from "src/components/forms/inputs/FormTextField";
+import { emailValidationRules } from "src/components/forms/rules";
 
 interface IProps {
   onSubmit: (data: RegistrationFormValues) => void;
@@ -38,7 +39,7 @@ const RegistrationForm = ({ onSubmit }: IProps) => {
             name={"firstName"}
             label={"First Name"}
             rules={{
-              required: "First name is required field",
+              required: "First name is required field.",
             }}
             fullWidth
             control={control}
@@ -48,7 +49,7 @@ const RegistrationForm = ({ onSubmit }: IProps) => {
           <FormTextField
             name={"lastName"}
             label={"Last Name"}
-            rules={{ required: "Last name is required field" }}
+            rules={{ required: "Last name is required field." }}
             fullWidth
             control={control}
           />
@@ -57,13 +58,7 @@ const RegistrationForm = ({ onSubmit }: IProps) => {
           <FormTextField
             name={"email"}
             label={"Email Address"}
-            rules={{
-              required: "Email is required field",
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: "Entered value does not match email format",
-              },
-            }}
+            rules={emailValidationRules}
             fullWidth
             control={control}
           />
@@ -74,7 +69,7 @@ const RegistrationForm = ({ onSubmit }: IProps) => {
             label={"Password"}
             rules={{
               required: "Password is required",
-              minLength: { value: 6, message: "Password must have at least 6 characters" },
+              minLength: { value: 6, message: "Password must have at least 6 characters." },
             }}
             fullWidth
             control={control}
