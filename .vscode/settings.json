@@ -29,5 +29,6 @@
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.useAliasesForRenames": false,
   "python.linting.banditArgs": ["-c", "pyproject.toml"],
-  "git.branchProtection": ["master"]
+  "git.branchProtection": ["master"],
+  "jupyter.notebookFileRoot": "${workspaceFolder}"
 }

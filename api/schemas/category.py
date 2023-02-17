@@ -25,6 +25,16 @@ class CategoryInDB(CategoryBase):
         orm_mode = True
 
 
+class CategoryWithExpenses(CategoryBase):
+    id: int
+    expenses: Decimal = Field(default=0)
+    percentage_in_period: Decimal = Field(default=Decimal(0))
+
+    class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+
+
 class Category(CategoryBase):
     id: int
     month_expenses: Decimal = Field(alias="monthExpenses", default=0)

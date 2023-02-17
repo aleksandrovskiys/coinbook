@@ -1,5 +1,7 @@
 import datetime
 from decimal import Decimal
+from functools import reduce
+from itertools import groupby
 
 from sqlalchemy import and_
 from sqlalchemy import case
@@ -16,8 +18,10 @@ from api.models.account import Account
 from api.models.category import Category
 from api.models.category import CategoryType
 from api.models.operation import Operation
+from api.schemas.category import CategoryWithExpenses
 from api.schemas.operation import OperationBase
 from api.schemas.operation import OperationCreate
+from api.schemas.reports import PeriodCategoryExpenses
 from api.schemas.reports import PeriodTypes
 from api.schemas.reports import SpendInPeriodSchema
 
@@ -90,6 +94,66 @@ class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
 
     def _get_operation_amount_sum(self):
         return sum(case((Category.type == CategoryType.expense, -Operation.amount), else_=Operation.amount))
+
+    def get_expenses_by_period(
+        self,
+        session: Session,
+        user_id: int,
+        start_date: datetime.date,
+        end_date: datetime.date,
+        period_type: PeriodTypes = PeriodTypes.week,
+    ) -> list[PeriodCategoryExpenses]:
+        dates_list = func.generate_series(start_date, end_date, "1 " + period_type.value).alias("timeframe")
+        timeframe_column_name = "timeframe"
+        timeframe = column(timeframe_column_name)
+
+        select_stmt = (
+            select(
+                func.date_trunc(period_type.value, timeframe).label(timeframe_column_name),
+                Category.id.label("category_id"),
+                Category.name.label("category_name"),
+                Category.type.label("category_type"),
+                coalesce(
+                    self._get_operation_amount_sum(),
+                    0,
+                ).label("category_total"),
+            )
+            .select_from(dates_list)
+            .join(
+                Operation,
+                and_(
+                    func.date_trunc(period_type.value, Operation.date) == func.date_trunc(period_type.value, timeframe),
+                    Operation.user_id == user_id,
+                ),
+            )
+            .join(Category, Operation.category_id == Category.id)
+            .where(Category.type == CategoryType.expense)
+            .group_by(timeframe, Category.id)
+            .order_by(func.date_trunc(period_type.value, timeframe), Category.id)
+        )
+
+        results = session.execute(select_stmt).all()
+        period_category_spendings = []
+        for month, group in groupby(results, lambda x: x[timeframe_column_name]):
+            group_items = list(group)
+            total_period_spendings = reduce(lambda x, y: x + -y["category_total"], group_items, 0)
+            period_category_spendings.append(
+                PeriodCategoryExpenses(
+                    period=month,
+                    total_expenses=total_period_spendings,
+                    category_spendings=[
+                        CategoryWithExpenses(
+                            id=result["category_id"],
+                            name=result["category_name"],
+                            type=result["category_type"],
+                            expenses=result["category_total"] * -1,
+                            percentage_in_period=round(-result["category_total"] / total_period_spendings * 100, 2),
+                        )
+                        for result in group_items
+                    ],
+                )
+            )
+        return period_category_spendings
 
 
 operation = OperationCRUD(Operation)

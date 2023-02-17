@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from api import crud
 from api.models.user import User
 from api.schemas.reports import NetWorthReport
+from api.schemas.reports import PeriodCategoryExpenses
 from api.schemas.reports import PeriodTypes
 from api.schemas.reports import SpendInPeriodSchema
 
@@ -40,3 +41,14 @@ class ReportsService:
         )
 
         return NetWorthReport(data=accumulated_sums, period_type=period_type)
+
+    def expenses_report(self, period_type: PeriodTypes = PeriodTypes.month) -> list[PeriodCategoryExpenses]:
+        """Returns spendings in each category for each period since start date"""
+        data = crud.operation.get_expenses_by_period(
+            self.session,
+            user_id=self.user.id,
+            start_date=self.start_date,
+            end_date=self.end_date,
+            period_type=period_type,
+        )
+        return data
