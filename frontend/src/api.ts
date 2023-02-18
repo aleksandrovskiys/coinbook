@@ -1,9 +1,10 @@
 import { API_URL, API_URLS } from "src/common/constants";
 import { ApiError } from "src/common/exceptions";
-import { NetWorthReportResponse } from "src/interfaces/reports";
+import { ExpensesReportResponse, NetWorthReportResponse } from "src/interfaces/reports";
 import { Account, AccountCreate, AccountUpdate, Currency } from "src/redux/features/accounts/accountsSlice";
 import { Category, CategoryCreate } from "src/redux/features/categories/categoriesSlice";
 import { Operation, OperationCreate } from "src/redux/features/operations/operationsSlice";
+import { ExpensesReportParameters } from "src/redux/features/reports/expensesReportSlice";
 import { NetWorthReportParameters } from "src/redux/features/reports/netWorthReportSlice";
 import { User } from "src/redux/features/users/usersSlice";
 import { dateToISODate } from "src/utils/common";
@@ -222,6 +223,15 @@ class ApiClient {
       period_type: parameters.periodType,
     });
     return (await this.secureFetch(`${API_URLS.netWorthReport}?${requestParameters}`, {})).json();
+  }
+
+  async getExpensesData(parameters: ExpensesReportParameters): Promise<ExpensesReportResponse[]> {
+    const requestParameters = new URLSearchParams({
+      start_date: dateToISODate(parameters.startDate),
+      end_date: dateToISODate(parameters.endDate),
+      period_type: parameters.periodType,
+    });
+    return (await this.secureFetch(`${API_URLS.expensesReport}?${requestParameters}`, {})).json();
   }
 
   async updateUser(user: User): Promise<User> {

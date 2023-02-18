@@ -44,7 +44,7 @@ class ReportsService:
 
     def expenses_report(self, period_type: PeriodTypes = PeriodTypes.month) -> list[PeriodCategoryExpenses]:
         """Returns spendings in each category for each period since start date"""
-        data = crud.operation.get_expenses_by_period(
+        data = crud.operation.get_expenses_by_period_and_category(
             self.session,
             user_id=self.user.id,
             start_date=self.start_date,

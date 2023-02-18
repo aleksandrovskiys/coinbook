@@ -2,6 +2,7 @@ import datetime
 from decimal import Decimal
 from enum import Enum
 
+from dateutil import relativedelta
 from pydantic import BaseModel
 from pydantic import Field
 
@@ -12,7 +13,14 @@ class PeriodTypes(Enum):
     day = "day"
     week = "week"
     month = "month"
-    quarter = "quarter"
+
+    def get_relative_delta(self):
+        if self == PeriodTypes.day:
+            return relativedelta.relativedelta(days=1)
+        elif self == PeriodTypes.week:
+            return relativedelta.relativedelta(weeks=1)
+        elif self == PeriodTypes.month:
+            return relativedelta.relativedelta(months=1)
 
 
 class SpendInPeriodSchema(BaseModel):
@@ -26,6 +34,7 @@ class NetWorthReport(BaseModel):
 
 
 class PeriodCategoryExpenses(BaseModel):
-    period: datetime.date
-    category_spendings: list[CategoryWithExpenses]
+    period_start: datetime.date
+    period_end: datetime.date
+    category_expenses: list[CategoryWithExpenses]
     total_expenses: Decimal = Field(default=Decimal(0))

@@ -13,7 +13,7 @@ from api.schemas.reports import PeriodCategoryExpenses
 from api.schemas.reports import PeriodTypes
 from api.services.reports import ReportsService
 
-router = APIRouter(tags=[constants.SwaggerTags.CATEGORIES])
+router = APIRouter(tags=[constants.SwaggerTags.REPORTS])
 
 
 @dataclass
