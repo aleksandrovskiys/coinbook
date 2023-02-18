@@ -17,7 +17,7 @@ export const useNetWorthData = ({ startDate, endDate, periodType }: NetWorthRepo
     );
   }, [dispatch, endDate, periodType, startDate]);
 
-  const labels = reportInfo.data.map((el) => el.period.toLocaleDateString());
+  const labels = reportInfo.data.map((el) => el.period);
   const data = reportInfo.data.map((el) => el.amount);
 
   return { labels, data, reportIsReady };

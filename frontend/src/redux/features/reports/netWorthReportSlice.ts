@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "src/api";
 import { asyncThunkStatuses } from "src/interfaces/api";
-import { NetWorthPeriodType } from "src/interfaces/reports";
+import { ReportPeriodType } from "src/interfaces/reports";
 import { parseErrors } from "src/redux/features/errors/errorsSlice";
 
 interface NetWorthReportDataPoint {
-  period: Date;
+  period: string;
   amount: number;
 }
 
@@ -17,7 +17,7 @@ interface NetWorthReportState {
 export interface NetWorthReportParameters {
   startDate: Date;
   endDate: Date;
-  periodType: NetWorthPeriodType;
+  periodType: ReportPeriodType;
 }
 
 const initialState: NetWorthReportState = {
@@ -53,7 +53,7 @@ export const netWorthReportSlice = createSlice({
       .addCase(fetchNetWorthData.fulfilled, (state, action) => {
         state.status = "succeeded";
         if (action.payload) {
-          state.data = action.payload.data.map((el) => ({ ...el, period: new Date(el.period) }));
+          state.data = action.payload.data.map((el) => ({ ...el, period: new Date(el.period).toLocaleDateString() }));
         } else {
           state.data = [];
         }

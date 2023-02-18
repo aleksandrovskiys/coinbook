@@ -10,17 +10,20 @@ import {
 } from "chart.js";
 import * as React from "react";
 import { Line } from "react-chartjs-2";
+import useNetWorthData from "src/components/pages/ReportsPage/hooks/useNetWorthData";
+import { ReportPeriodType, ReportProps } from "src/interfaces/reports";
 
-interface IProps {
-  labels: string[];
-  data: number[];
-}
-
-const NetWorthChart = ({ labels, data }: IProps): JSX.Element => {
+const NetWorthChart = ({ startDate, endDate, periodType = ReportPeriodType.day }: ReportProps): JSX.Element => {
+  const { labels, data, reportIsReady } = useNetWorthData({ startDate, endDate, periodType });
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
   const options = {
     responsive: true,
+    plugins: {
+      datalabels: {
+        display: false,
+      },
+    },
   };
 
   const reportData = {
@@ -36,6 +39,8 @@ const NetWorthChart = ({ labels, data }: IProps): JSX.Element => {
       },
     ],
   };
+
+  if (!reportIsReady) return <div>Loading...</div>;
 
   return <Line options={options} data={reportData} />;
 };

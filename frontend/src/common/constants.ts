@@ -21,6 +21,7 @@ export const API_URLS = {
   currencies: "/currencies",
   categories: "/categories",
   netWorthReport: "/reports/net_worth",
+  expensesReport: "/reports/expenses",
 };
 
 export const API_URL: string = process.env.REACT_APP_APPLICATION_API as string;

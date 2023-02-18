@@ -24,6 +24,7 @@ from api.schemas.operation import OperationCreate
 from api.schemas.reports import PeriodCategoryExpenses
 from api.schemas.reports import PeriodTypes
 from api.schemas.reports import SpendInPeriodSchema
+from api.utils.date_utils import get_end_of_period_date
 
 
 class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
@@ -95,13 +96,13 @@ class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
     def _get_operation_amount_sum(self):
         return sum(case((Category.type == CategoryType.expense, -Operation.amount), else_=Operation.amount))
 
-    def get_expenses_by_period(
+    def get_expenses_by_period_and_category(
         self,
         session: Session,
         user_id: int,
         start_date: datetime.date,
         end_date: datetime.date,
-        period_type: PeriodTypes = PeriodTypes.week,
+        period_type: PeriodTypes = PeriodTypes.month,
     ) -> list[PeriodCategoryExpenses]:
         dates_list = func.generate_series(start_date, end_date, "1 " + period_type.value).alias("timeframe")
         timeframe_column_name = "timeframe"
@@ -139,9 +140,10 @@ class OperationCRUD(CRUDBase[Operation, OperationCreate, OperationBase]):
             total_period_spendings = reduce(lambda x, y: x + -y["category_total"], group_items, 0)
             period_category_spendings.append(
                 PeriodCategoryExpenses(
-                    period=month,
+                    period_start=month,
+                    period_end=get_end_of_period_date(start_date=month, period_type=period_type),
                     total_expenses=total_period_spendings,
-                    category_spendings=[
+                    category_expenses=[
                         CategoryWithExpenses(
                             id=result["category_id"],
                             name=result["category_name"],
