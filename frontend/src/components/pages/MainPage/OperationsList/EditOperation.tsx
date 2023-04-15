@@ -17,14 +17,14 @@ export function EditOperation({ operation, setOperation }: IProps): JSX.Element 
 
   const [accountId, setAccountId] = React.useState<number>(operation.account.id);
   const [categoryId, setCategoryId] = React.useState<number | undefined>(operation.category?.id);
-  const [amount, setAmount] = React.useState<number>(operation.amount);
+  const [amount, setAmount] = React.useState<string>(String(operation.amount));
   const [date, setDate] = React.useState<string>(operation.date);
 
   React.useEffect(() => {
     setOperation({
       ...operation,
       date: date,
-      amount: amount,
+      amount: Number.parseFloat(amount),
       account: accounts.find((account) => account.id === accountId)!,
       category: categories.find((category) => category.id === categoryId)!,
     });
@@ -62,10 +62,8 @@ export function EditOperation({ operation, setOperation }: IProps): JSX.Element 
               name="amount"
               size="small"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const newAmount = parseFloat(e.target.value.replace(",", "."));
-                if (!isNaN(newAmount)) {
-                  setAmount(newAmount);
-                }
+                const newAmount = e.target.value.replace(",", ".");
+                setAmount(newAmount);
               }}
               endAdornment={
                 <InputAdornment position="start">{getCurrencySymbol(operation.account.currency.code)}</InputAdornment>

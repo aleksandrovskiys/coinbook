@@ -1,14 +1,14 @@
-import { Box, CircularProgress, ListItem, ListItemText, MenuItem, Select, Typography } from "@mui/material";
+import { Box, CircularProgress, ListItem, ListItemText } from "@mui/material";
 import * as React from "react";
 import { defaultLocale } from "src/common/constants";
-import { EditableTextField } from "src/components/common/EditableTextField";
 import { EditButtons } from "src/components/common/EditButtons";
-import { StyledInput } from "src/components/common/StyledInput";
 import { SubmitCancelButtons } from "src/components/common/SubmitCancelButtons";
 import { AccountBalanceChange } from "src/components/pages/MainPage/AccountsList/AccountBalanceChange";
+import AccountListItemEdit from "src/components/pages/MainPage/AccountsList/AccountListItemEdit";
 import { Account, AccountUpdate, deleteAccount, updateAccount } from "src/redux/features/accounts/accountsSlice";
 import { useCurrencies } from "src/redux/features/accounts/hooks/useCurrencies";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { AccountListItemView } from "./AccountListItemView";
 
 export function AccountsListItem({ account }: { account: Account }) {
   const dispatch = useAppDispatch();
@@ -16,7 +16,7 @@ export function AccountsListItem({ account }: { account: Account }) {
   const currencies = useCurrencies();
 
   const [isEditMode, setEditMode] = React.useState<boolean>(false);
-  const [accountBalance, setAccountBalance] = React.useState<number>(account.balance);
+  const [accountBalance, setAccountBalance] = React.useState<string>(String(account.balance));
   const [accountName, setAccountName] = React.useState<string>(account.name);
   const [accountCurrencyCode, setAccountCurrencyCode] = React.useState<string>(account.currency.code);
   const [isEditButtonsShown, setIsEditButtonsShown] = React.useState<boolean>(false);
@@ -36,15 +36,20 @@ export function AccountsListItem({ account }: { account: Account }) {
     }
   }, [accountUpdateStatus]);
 
-  function clearEditFields() {
+  const updateEditFields = React.useCallback(() => {
     setEditMode(false);
-    setAccountBalance(account.balance);
+    setAccountBalance(String(account.balance));
     setAccountName(account.name);
     setAccountCurrencyCode(account.currency.code);
-  }
+  }, [account.balance, account.currency.code, account.name]);
+
+  React.useEffect(() => {
+    updateEditFields();
+  }, [account, updateEditFields]);
+
   const toggleIsEdit = () => setEditMode(!isEditMode);
-  const cancelIconOnClick = (e: React.FormEvent) => {
-    clearEditFields();
+  const cancelIconOnClick = () => {
+    updateEditFields();
   };
 
   const updateIconOnClick = () => {
@@ -52,7 +57,7 @@ export function AccountsListItem({ account }: { account: Account }) {
       name: accountName,
       currencyCode: accountCurrencyCode,
       userId: account.userId,
-      balance: accountBalance,
+      balance: Number.parseFloat(accountBalance),
       id: account.id,
     };
     dispatch(updateAccount(accountUpdateObject));
@@ -72,53 +77,24 @@ export function AccountsListItem({ account }: { account: Account }) {
       <ListItemText
         primary={
           <Box flexDirection="row" display="flex" alignItems="center">
-            <EditableTextField
-              isEditMode={isEditMode}
-              value={accountName}
-              setValue={setAccountName}
-              setEditMode={setEditMode}
-              textFieldSx={{ flexGrow: 1, maxWidth: "30%" }}
-            />
             {isEditMode ? (
-              <React.Fragment>
-                <StyledInput
-                  value={accountBalance}
-                  onChange={(e) => setAccountBalance(parseFloat(e.target.value))}
-                  className="amountInput"
-                  type="number"
-                  sx={{
-                    marginLeft: "auto",
-                    marginRight: "5px",
-                    maxWidth: "25%",
-                    input: { textAlign: "right" },
-                  }}
-                />
-                <Select
-                  variant="standard"
-                  value={accountCurrencyCode}
-                  onChange={(event) => {
-                    setAccountCurrencyCode(event.target.value);
-                  }}
-                  sx={{ maxWidth: "25%" }}
-                >
-                  {currencies.map((currency) => {
-                    return (
-                      <MenuItem key={currency.code} value={currency.code}>
-                        {currency.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </React.Fragment>
+              <AccountListItemEdit
+                accountBalance={accountBalance}
+                accountCurrencyCode={accountCurrencyCode}
+                accountName={accountName}
+                currencies={currencies}
+                isEditMode={isEditMode}
+                setAccountBalance={setAccountBalance}
+                setAccountCurrencyCode={setAccountCurrencyCode}
+                setAccountName={setAccountName}
+                setEditMode={setEditMode}
+              />
             ) : (
-              <Typography
-                onClick={() => {
-                  setEditMode(true);
-                }}
-                sx={{ marginLeft: "auto", marginRight: "5px" }}
-              >
-                {formattedBalance}
-              </Typography>
+              <AccountListItemView
+                formattedBalance={formattedBalance}
+                setEditMode={setEditMode}
+                accountName={accountName}
+              />
             )}
             {accountUpdateStatus === "pending" ? (
               <CircularProgress />
